@@ -1,0 +1,16 @@
+@use 'styles/variables' as *;
+@use 'styles/mixins' as *;
+
+/* Global Reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: $font-default;
+  line-height: 1.6;
+  color: #333;
+  background-color: #f5f5f5;
+}
