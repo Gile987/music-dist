@@ -1,0 +1,15 @@
+// Flex Center
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// Media Query
+@mixin respond($breakpoint) {
+  @if $breakpoint == md {
+    @media (min-width: 768px) {
+      @content;
+    }
+  }
+}

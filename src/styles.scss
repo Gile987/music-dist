@@ -1,6 +1,7 @@
-/* You can add global styles to this file, and also import other style files */
+@use 'styles/variables' as *;
+@use 'styles/mixins' as *;
 
-/* Basic CSS Reset and Global Styles */
+/* Global Reset */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -8,7 +9,7 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: $font-default;
   line-height: 1.6;
   color: #333;
   background-color: #f5f5f5;
