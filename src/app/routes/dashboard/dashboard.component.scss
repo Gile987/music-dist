@@ -1,0 +1,33 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+  padding: $spacing-lg;
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: $spacing-lg;
+  }
+
+  .content-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: $spacing-lg;
+
+    @include respond(md) {
+      grid-template-columns: 1fr;
+    }
+
+    .panel {
+      background-color: $color-card-bg;
+      padding: $spacing-md;
+      border-radius: 0.5rem;
+      border: 1px solid $color-border;
+      box-shadow: 0 1px 2px $color-shadow;
+    }
+  }
+}
