@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { StatCardComponent } from '../../components/stat-card/stat-card.component';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [],
+  imports: [CommonModule, StatCardComponent],
+  styleUrls: ['./dashboard.component.scss'],
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.scss'
 })
-export class DashboardComponent {
-
-}
+export class DashboardComponent {}
