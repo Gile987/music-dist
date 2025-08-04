@@ -1,0 +1,31 @@
+@use '../../../styles/variables' as *;
+
+.release-item {
+  background-color: $color-card-bg;
+  border: 1px solid $color-border;
+  border-radius: 0.5rem;
+  padding: $spacing-md;
+  margin-bottom: $spacing-md;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 1px 2px $color-shadow;
+  font-family: $font-default;
+  color: $color-text;
+
+  .release-info {
+    display: flex;
+    flex-direction: column;
+
+    .release-title {
+      font-weight: 600;
+      font-size: $font-md;
+      margin-bottom: $spacing-xs;
+    }
+
+    .release-date {
+      font-size: $font-sm;
+      color: $color-muted;
+    }
+  }
+}
