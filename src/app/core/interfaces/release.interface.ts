@@ -1,5 +1,7 @@
 export interface Release {
+  id: number;
   title: string;
-  date: string;
   status: 'active' | 'pending' | 'archived';
+  releaseDate: string;
+  streams: number;
 }

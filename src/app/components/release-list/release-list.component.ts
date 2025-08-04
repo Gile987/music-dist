@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { ReleaseItemComponent, Release } from '../release-item/release-item.component';
+import { ReleaseItemComponent } from '../release-item/release-item.component';
+import { Release } from '../../core/interfaces/release.interface';
 
 @Component({
   selector: 'app-release-list',

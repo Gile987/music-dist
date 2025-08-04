@@ -1,12 +1,8 @@
 <span
   class="status-badge"
-  @if (status === 'active') {
-    class="active"
-  } @else if (status === 'pending') {
-    class="pending"
-  } @else if (status === 'archived') {
-    class="archived"
-  }
+  [class.active]="status === 'active'"
+  [class.pending]="status === 'pending'"
+  [class.archived]="status === 'archived'"
 >
   {{ status }}
 </span>

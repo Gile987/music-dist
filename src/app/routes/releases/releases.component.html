@@ -1,1 +1,9 @@
-<p>releases works!</p>
+<section class="releases-page">
+  <header class="stats">
+    <app-stat-card title="Total Streams" [value]="totalStreams" icon="🎧"></app-stat-card>
+    <app-stat-card title="Active Releases" [value]="activeReleases" icon="✅"></app-stat-card>
+    <app-stat-card title="Pending Releases" [value]="pendingReleases" icon="⏳"></app-stat-card>
+  </header>
+
+  <app-release-list [releases]="releases"></app-release-list>
+</section>
