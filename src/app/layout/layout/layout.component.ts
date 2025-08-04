@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-layout',
-  standalone: true,
   imports: [CommonModule, RouterOutlet, RouterLink],
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss']

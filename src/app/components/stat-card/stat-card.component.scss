@@ -1,0 +1,30 @@
+@use '../../../styles/variables' as *;
+
+.stat-card {
+  background-color: $color-card-bg;
+  border: 1px solid $color-border;
+  border-radius: 0.5rem;
+  padding: $spacing-md;
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  box-shadow: 0 1px 2px $color-shadow;
+
+  .icon {
+    font-size: 1.75rem;
+    color: $color-primary;
+  }
+
+  .info {
+    .value {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: $color-text;
+    }
+
+    .title {
+      font-size: $font-sm;
+      color: $color-muted;
+    }
+  }
+}
