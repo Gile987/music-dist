@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-upload',
-  imports: [],
+  imports: [CommonModule],
+  styleUrls: ['./upload.component.scss'],
   templateUrl: './upload.component.html',
-  styleUrl: './upload.component.scss'
 })
-export class UploadComponent {
-
-}
+export class UploadComponent {}
