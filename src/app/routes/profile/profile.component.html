@@ -1,14 +1,16 @@
 <section class="profile-page">
-  <header class="profile-header">
-    <img class="avatar" [src]="user.avatarUrl" alt="User avatar" />
-    <div class="user-info">
-      <h2>{{ user.name }}</h2>
-      <p>{{ user.email }}</p>
-    </div>
-  </header>
+
+  <app-user-info-card
+    [name]="user.name"
+    [email]="user.email"
+    [avatarUrl]="user.avatarUrl"
+    [role]="user.role"
+    [joinedDate]="user.joinedDate"
+  />
 
   <section class="profile-actions">
     <button class="btn">Edit Profile</button>
     <button class="btn secondary">Change Password</button>
   </section>
+
 </section>
