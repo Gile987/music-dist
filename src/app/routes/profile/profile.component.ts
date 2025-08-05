@@ -1,16 +1,18 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { UserInfoCardComponent } from '../../components/user-info-card/user-info-card.component';
 
 @Component({
   selector: 'app-profile',
-  imports: [CommonModule],
+  imports: [UserInfoCardComponent],
   templateUrl: './profile.component.html',
-  styleUrl: './profile.component.scss'
+  styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent {
   user = {
-    name: 'Gile',
+    name: 'Gile Developer',
     email: 'gile@example.com',
-    avatarUrl: 'https://i.pravatar.cc/100?u=gile'
+    avatarUrl: 'https://i.pravatar.cc/150?img=3',
+    role: 'Artist',
+    joinedDate: '2024-11-10'
   };
 }
