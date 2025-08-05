@@ -11,8 +11,8 @@ export class ProfileComponent {
   user = {
     name: 'Gile Developer',
     email: 'gile@example.com',
-    avatarUrl: 'https://i.pravatar.cc/150?img=3',
-    role: 'Artist',
+    avatarUrl: `https://i.pravatar.cc/150?img=${Math.floor(Math.random() * 70) + 1}`,
+    role: 'Developer',
     joinedDate: '2024-11-10'
   };
 }
