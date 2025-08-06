@@ -6,5 +6,6 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./status-badge.component.scss']
 })
 export class StatusBadgeComponent {
-  @Input({ required: true }) status!: 'active' | 'pending' | 'archived';
+  @Input({ required: true }) status!: 'active' | 'pending' | 'archived' | 'paid';
+
 }

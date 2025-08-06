@@ -1,0 +1,39 @@
+@use '../../../styles/variables' as *;
+
+.royalty-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $spacing-md;
+  background-color: $color-card-bg;
+  border: 1px solid $color-border;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 2px $color-shadow;
+  margin-bottom: $spacing-sm;
+
+  .details {
+    .title {
+      font-weight: bold;
+      color: $color-text;
+    }
+    .date {
+      font-size: $font-sm;
+      color: $color-muted;
+    }
+  }
+
+  .metrics {
+    text-align: right;
+
+    p {
+      margin: 0;
+      font-size: $font-sm;
+    }
+
+    .total {
+      font-size: $font-md;
+      font-weight: bold;
+      color: $color-success;
+    }
+  }
+}
