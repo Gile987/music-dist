@@ -9,7 +9,7 @@
       <strong>{{ royalty.streams }}</strong> streams
     </p>
     <p>${{ royalty.rate.toFixed(4) }} / stream</p>
-    <p class="total">${{ royalty.total.toFixed(2) }}</p>
+    <p class="total">{{ royalty.total | appCurrency }}</p>
   </div>
 
   <app-status-badge [status]="royalty.status"></app-status-badge>
