@@ -1,4 +1,4 @@
-@use '../../../styles/variables' as *;
+@use "../../../styles/variables" as *;
 
 .profile-page {
   max-width: 600px;
@@ -44,26 +44,22 @@
 
   .profile-actions {
     display: flex;
-    gap: $spacing-md;
-    margin-top: $spacing-sm;
+    gap: $spacing-sm;
+    margin-top: $spacing-lg;
 
     .btn {
       padding: $spacing-sm $spacing-md;
       font-size: $font-sm;
       font-weight: 600;
+      border: 1px solid $color-border;
       border-radius: 0.5rem;
-      border: 1px solid transparent;
+      background-color: $color-primary;
+      color: $color-white;
       cursor: pointer;
-      font-family: $font-default;
       transition: background-color 0.2s ease;
 
-      &.primary {
-        background-color: $color-primary;
-        color: $color-white;
-
-        &:hover {
-          background-color: $color-hover;
-        }
+      &:hover {
+        background-color: $color-hover; // Already defined and slightly darker than primary
       }
 
       &.secondary {
@@ -72,7 +68,7 @@
         border: 1px solid $color-border;
 
         &:hover {
-          background-color: $color-primary-light;
+          background-color: $color-main-bg;
         }
       }
     }
