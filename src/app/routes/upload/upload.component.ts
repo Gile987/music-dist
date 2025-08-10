@@ -8,7 +8,7 @@ import { firstValueFrom } from 'rxjs';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './upload.component.html',
-  styleUrls: ['./upload.component.scss'],
+  styleUrl: './upload.component.scss'
 })
 export class UploadComponent {
   uploading = signal(false);
@@ -40,5 +40,12 @@ export class UploadComponent {
     } finally {
       this.uploading.set(false);
     }
+  }
+
+  reset(): void {
+    this.uploading.set(false);
+    this.progress.set(0);
+    this.uploadSuccess.set(false);
+    this.uploadError.set('');
   }
 }

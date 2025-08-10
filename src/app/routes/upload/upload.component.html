@@ -1,17 +1,33 @@
 <section class="upload-page">
   <h2>🎧 Upload New Release</h2>
 
-  <input type="file" (change)="onFileSelected($event)" />
+  <label
+    class="upload-button"
+    [class.disabled]="uploading() || uploadSuccess()"
+  >
+    Select Audio File
+    <input
+      type="file"
+      accept="audio/*"
+      (change)="onFileSelected($event)"
+      [disabled]="uploading() || uploadSuccess()"
+    />
+  </label>
 
   @if (uploading()) {
-    <div>Uploading: {{ progress() }}%</div>
-  }
-
-  @if (uploadSuccess()) {
-    <div>Upload complete!</div>
-  }
-
-  @if (uploadError()) {
-    <div class="error">{{ uploadError() }}</div>
+  <div class="progress-container">
+    <div class="progress-bar" [style.width.%]="progress()"></div>
+    <span class="progress-text">{{ progress() }}%</span>
+  </div>
+  } @if (uploadSuccess()) {
+  <div class="message success">
+    ✔ Upload complete!
+    <button class="reset-button" (click)="reset()">Upload Another</button>
+  </div>
+  } @if (uploadError()) {
+  <div class="message error">
+    ⚠ {{ uploadError() }}
+    <button class="reset-button" (click)="reset()">Try Again</button>
+  </div>
   }
 </section>
