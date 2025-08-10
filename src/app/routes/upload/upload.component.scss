@@ -1,30 +1,116 @@
-@use '../../../styles/variables' as *;
-@use '../../../styles/mixins' as *;
+@use "../../../styles/variables" as *;
+@use "../../../styles/mixins" as *;
 
 .upload-page {
   padding: $spacing-lg;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
+  gap: $spacing-md;
   height: calc(100vh - $header-height);
   background-color: $color-main-bg;
 
-  .upload-placeholder {
-    text-align: center;
-    padding: $spacing-lg;
-    border: 1px dashed $color-border;
-    background-color: $color-card-bg;
-    border-radius: 0.5rem;
-    box-shadow: 0 1px 2px $color-shadow;
+  h2 {
+    font-size: $font-md;
+    color: $color-text;
+  }
 
-    h2 {
-      font-size: $font-md;
-      margin-bottom: $spacing-sm;
+  .upload-button {
+    position: relative;
+    display: inline-block;
+    padding: $spacing-sm $spacing-lg;
+    background-color: $color-primary;
+    color: $color-white;
+    font-weight: 600;
+    font-size: $font-md;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.3s ease;
+
+    &:hover:not(.disabled) {
+      background-color: $color-primary-dark;
     }
 
-    p {
+    &.disabled {
+      background-color: $color-muted;
+      cursor: not-allowed;
+      pointer-events: none;
+
+      input[type="file"] {
+        cursor: not-allowed;
+      }
+    }
+
+    input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+  }
+
+  .progress-container {
+    position: relative;
+    width: 300px;
+    height: 1.25rem;
+    background-color: $color-primary-light;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+
+    .progress-bar {
+      height: 100%;
+      background-color: $color-primary;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .progress-text {
+      position: absolute;
+      right: 0.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-weight: 600;
       font-size: $font-sm;
-      color: $color-text-secondary;
+      color: $color-white;
+      text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+    }
+  }
+
+  .message {
+    padding: $spacing-sm $spacing-md;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    font-size: $font-md;
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+
+    &.success {
+      background-color: $color-success-bg;
+      color: $color-success;
+    }
+
+    &.error {
+      background-color: $color-danger-bg;
+      color: $color-danger;
+    }
+
+    .reset-button {
+      margin-left: auto;
+      background: none;
+      border: none;
+      color: currentColor;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: $font-sm;
+      padding: 0;
+      text-decoration: underline;
+
+      &:hover {
+        color: $color-danger;
+      }
     }
   }
 }
