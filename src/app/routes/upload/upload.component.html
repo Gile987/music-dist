@@ -1,6 +1,17 @@
 <section class="upload-page">
-  <div class="upload-placeholder">
-    <h2>🎧 Upload New Release</h2>
-    <p>This will be the interface for uploading tracks and cover art.</p>
-  </div>
+  <h2>🎧 Upload New Release</h2>
+
+  <input type="file" (change)="onFileSelected($event)" />
+
+  @if (uploading()) {
+    <div>Uploading: {{ progress() }}%</div>
+  }
+
+  @if (uploadSuccess()) {
+    <div>Upload complete!</div>
+  }
+
+  @if (uploadError()) {
+    <div class="error">{{ uploadError() }}</div>
+  }
 </section>
