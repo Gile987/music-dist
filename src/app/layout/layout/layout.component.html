@@ -1,12 +1,16 @@
 <div class="layout-container">
   <!-- Sidebar -->
   <aside class="sidebar">
-    <div class="sidebar-header">
-      🎵 ArtistPanel
-    </div>
+    <div class="sidebar-header">🎵 ArtistPanel</div>
     <nav class="sidebar-nav">
       <a routerLink="/dashboard" class="nav-link">Dashboard</a>
-      <a routerLink="/upload" class="nav-link">Upload</a>
+
+      @if (user$ | async; as user) {
+        @if (canUpload(user.role)) {
+          <a routerLink="/upload" class="nav-link">Upload</a>
+        }
+      }
+
       <a routerLink="/releases" class="nav-link">Releases</a>
       <a routerLink="/royalties" class="nav-link">Royalties</a>
       <a routerLink="/profile" class="nav-link">Profile</a>
@@ -18,9 +22,16 @@
     <!-- Topbar -->
     <header class="topbar">
       <div class="mobile-logo">🎵</div>
+
       <div class="user-section">
-        <span class="welcome-text">Welcome, Artist</span>
-        <button class="logout-btn">Logout</button>
+        @if (isAuthenticated$ | async) {
+          @if (user$ | async; as user) {
+            <span class="welcome-text">Welcome, {{ user.name }}</span>
+            <button class="logout-btn" (click)="logout()">Logout</button>
+          }
+        } @else {
+          <a routerLink="/login" class="login-btn">Login</a>
+        }
       </div>
     </header>
 
