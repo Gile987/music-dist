@@ -1,7 +1,8 @@
 import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { AuthService, Role } from '../../core/services/auth.service';
+import { AuthService } from '../../core/services/auth.service';
+import { Role } from '../../core/interfaces/auth.interface';
 
 @Component({
   selector: 'app-layout',

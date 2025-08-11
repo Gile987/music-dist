@@ -1,67 +1,59 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, catchError, map, switchMap, tap, throwError } from 'rxjs';
 import { Router } from '@angular/router';
-
-export type Role = 'artist' | 'admin';
-
-export type AuthUser = {
-  id: number;
-  email: string;
-  name: string;
-  role: Role;
-};
+import { AuthUser, LoginCredentials } from '../interfaces/auth.interface';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private http = inject(HttpClient);
-  private router = inject(Router);
+  private readonly http: HttpClient = inject(HttpClient);
+  private readonly router: Router = inject(Router);
 
-  private userSubject = new BehaviorSubject<AuthUser | null>(null);
-  readonly user$ = this.userSubject.asObservable();
-  readonly isAuthenticated$ = this.user$.pipe(map((u) => !!u));
+  private readonly userSubject: BehaviorSubject<AuthUser | null> = new BehaviorSubject<AuthUser | null>(null);
+  public readonly user$: Observable<AuthUser | null> = this.userSubject.asObservable();
+  public readonly isAuthenticated$: Observable<boolean> = this.user$.pipe(map((user: AuthUser | null): boolean => !!user));
 
   constructor() {
     this.me().subscribe({
-      next: () => {},
-      error: () => {
+      next: (): void => {},
+      error: (): void => {
         this.userSubject.next(null);
       },
     });
   }
 
-  login(email: string, password: string): Observable<void> {
+  public login(email: string, password: string): Observable<void> {
     return this.http
-      .post('/api/auth/login', { email, password }, { withCredentials: true })
+      .post<void>('/api/auth/login', { email, password }, { withCredentials: true })
       .pipe(
-        switchMap(() => this.me()),
-        map(() => void 0),
-        catchError((err) => throwError(() => err))
+        switchMap((): Observable<AuthUser> => this.me()),
+        map((): void => void 0),
+        catchError((error: HttpErrorResponse) => throwError((): Error => error))
       );
   }
 
-  me(): Observable<AuthUser> {
+  public me(): Observable<AuthUser> {
     return this.http.get<AuthUser>('/api/auth/me', { withCredentials: true }).pipe(
-      tap((user) => this.userSubject.next(user)),
-      catchError((err) => {
+      tap((user: AuthUser): void => this.userSubject.next(user)),
+      catchError((error: HttpErrorResponse) => {
         this.userSubject.next(null);
-        return throwError(() => err);
+        return throwError((): Error => error);
       })
     );
   }
 
-  logout(): Observable<void> {
-    return this.http.post('/api/auth/logout', {}, { withCredentials: true }).pipe(
-      tap(() => {
+  public logout(): Observable<void> {
+    return this.http.post<void>('/api/auth/logout', {}, { withCredentials: true }).pipe(
+      tap((): void => {
         this.userSubject.next(null);
         void this.router.navigateByUrl('/login');
       }),
-      map(() => void 0),
-      catchError((err) => throwError(() => err))
+      map((): void => void 0),
+      catchError((error: HttpErrorResponse) => throwError((): Error => error))
     );
   }
 
-  get userValue(): AuthUser | null {
+  public get userValue(): AuthUser | null {
     return this.userSubject.getValue();
   }
 }
