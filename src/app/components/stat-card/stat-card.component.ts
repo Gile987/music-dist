@@ -8,7 +8,7 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./stat-card.component.scss']
 })
 export class StatCardComponent {
-  @Input() title!: string;
-  @Input() value!: string | number;
+  @Input({ required: true }) title!: string;
+  @Input({ required: true }) value!: string | number;
   @Input() icon: string = '📊';
 }
