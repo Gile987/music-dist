@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, catchError, map, of, tap } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, map, of, switchMap, tap, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 
 export type Role = 'artist' | 'admin';
@@ -12,100 +12,78 @@ export type AuthUser = {
   role: Role;
 };
 
-type JwtPayload = {
-  sub: number;
-  email: string;
-  name: string;
-  role: string;
-  exp: number;
-};
-
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
 
-  private readonly tokenKey = 'auth_token';
-
-  private userSubject = new BehaviorSubject<AuthUser | null>(
-    this.loadStoredUser()
-  );
+  private userSubject = new BehaviorSubject<AuthUser | null>(null);
   readonly user$ = this.userSubject.asObservable();
-  readonly isAuthenticated$: Observable<boolean> = this.user$.pipe(
-    map((user) => !!user)
-  );
+  readonly isAuthenticated$ = this.user$.pipe(map((u) => !!u));
 
+  constructor() {
+    // Try to load current user when the app starts (silent auth check)
+    this.me().subscribe({
+      next: () => {},
+      error: () => {
+        // not authenticated, that's fine — leave userSubject as null
+      },
+    });
+  }
+
+  /**
+   * Login: backend sets an HttpOnly cookie. After successful login request,
+   * call /auth/me to get the user object and store it in memory.
+   */
   login(email: string, password: string): Observable<void> {
     return this.http
-      .post<{ token: string }>('/api/auth/login', { email, password })
+      .post('/api/auth/login', { email, password }, { withCredentials: true })
       .pipe(
-        map((response) => {
-          const user = this.decodeJWT(response.token);
-          if (!user)
-            throw new Error('Invalid token structure or expired token');
-
-          this.setToken(response.token);
-          this.userSubject.next(user);
-        }),
+        switchMap(() => this.me()),
+        map(() => void 0),
         catchError((err) => {
-          console.error('Login failed', err);
-          throw err;
+          // rethrow so callers can display errors
+          return throwError(() => err);
         })
       );
   }
 
-  async logout(): Promise<void> {
-    this.clearToken();
-    this.userSubject.next(null);
-    await this.router.navigateByUrl('/login');
+  /**
+   * Fetch the current user from backend (uses cookie auth).
+   * Updates the in-memory user state.
+   */
+  me(): Observable<AuthUser> {
+    return this.http.get<AuthUser>('/api/auth/me', { withCredentials: true }).pipe(
+      tap((user) => this.userSubject.next(user)),
+      catchError((err) => {
+        // clear user on error
+        this.userSubject.next(null);
+        return throwError(() => err);
+      })
+    );
   }
 
-  private setToken(token: string): void {
-    localStorage.setItem(this.tokenKey, token);
+  /**
+   * Logout: call backend to clear cookie, then clear local user state.
+   */
+  logout(): Observable<void> {
+    return this.http.post('/api/auth/logout', {}, { withCredentials: true }).pipe(
+      tap(() => {
+        this.userSubject.next(null);
+        // navigate to login screen
+        void this.router.navigateByUrl('/login');
+      }),
+      map(() => void 0),
+      catchError((err) => {
+        return throwError(() => err);
+      })
+    );
   }
 
-  private getToken(): string | null {
-    return localStorage.getItem(this.tokenKey);
-  }
-
-  private loadStoredUser(): AuthUser | null {
-    const token = this.getToken();
-    if (!token) return null;
-
-    const user = this.decodeJWT(token);
-    if (!user) {
-      this.clearToken();
-      return null;
-    }
-
-    return user;
-  }
-
-  private clearToken(): void {
-    localStorage.removeItem(this.tokenKey);
-  }
-
-  private decodeJWT(token: string): AuthUser | null {
-    try {
-      const [, payloadBase64] = token.split('.');
-      const payloadJson = atob(payloadBase64);
-      const payload: JwtPayload = JSON.parse(payloadJson);
-
-      // Expiry check
-      const nowInSec = Math.floor(Date.now() / 1000);
-      if (payload.exp < nowInSec) return null;
-
-      // Role validation
-      if (payload.role !== 'artist' && payload.role !== 'admin') return null;
-
-      return {
-        id: payload.sub,
-        email: payload.email,
-        name: payload.name,
-        role: payload.role as Role,
-      };
-    } catch {
-      return null;
-    }
+  /**
+   * Synchronous helper to read latest user value.
+   */
+  get userValue(): AuthUser | null {
+    return this.userSubject.getValue();
   }
 }
