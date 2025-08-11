@@ -7,8 +7,10 @@ export class UploadService {
   private http = inject(HttpClient);
 
   getSignedUrl(filename: string, contentType: string): Observable<{ url: string }> {
+    const params = { filename, contentType };
     return this.http.get<{ url: string }>('/api/upload/signed-url', {
-      params: { filename, contentType }
+      params: { filename, contentType },
+      withCredentials: true,
     });
   }
 
