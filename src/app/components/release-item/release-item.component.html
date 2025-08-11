@@ -1,7 +1,10 @@
 <div class="release-item">
+  @if (release.coverUrl) {
+    <img src="{{ release.coverUrl }}" alt="{{ release.title }}" class="release-cover" />
+  }
   <div class="release-info">
     <p class="release-title">{{ release.title }}</p>
-    <p class="release-date">{{ release.releaseDate }}</p>
+    <p class="release-date">{{ formattedDate }}</p>
   </div>
   <app-status-badge [status]="release.status"></app-status-badge>
 </div>

@@ -1,4 +1,4 @@
-@use '../../../styles/variables' as *;
+@use "../../../styles/variables" as *;
 
 .release-item {
   background-color: $color-card-bg;
@@ -27,5 +27,13 @@
       font-size: $font-sm;
       color: $color-muted;
     }
+  }
+
+  .release-cover {
+    width: 100px;
+    height: auto;
+    border-radius: 4px;
+    margin-right: 1rem;
+    object-fit: cover;
   }
 }

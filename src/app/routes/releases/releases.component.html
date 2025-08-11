@@ -1,9 +1,24 @@
 <section class="releases-page">
   <header class="stats">
-    <app-stat-card title="Total Streams" [value]="totalStreams" icon="🎧"></app-stat-card>
-    <app-stat-card title="Active Releases" [value]="activeReleases" icon="✅"></app-stat-card>
-    <app-stat-card title="Pending Releases" [value]="pendingReleases" icon="⏳"></app-stat-card>
+    <app-stat-card title="Total Streams" [value]="totalStreams()" icon="🎧"></app-stat-card>
+    <app-stat-card title="Active Releases" [value]="activeReleases()" icon="✅"></app-stat-card>
+    <app-stat-card title="Pending Releases" [value]="pendingReleases()" icon="⏳"></app-stat-card>
   </header>
 
-  <app-release-list [releases]="releases"></app-release-list>
+  <form (ngSubmit)="onSubmit()" [formGroup]="releaseForm" class="release-form">
+    <input formControlName="title" placeholder="Release Title" />
+    <input formControlName="releaseDate" type="date" />
+    <input formControlName="coverUrl" placeholder="Cover URL (optional)" />
+    <button type="submit" [disabled]="releaseForm.invalid">Create Release</button>
+  </form>
+
+  @if (error()) {
+    <div class="error">{{ error() }}</div>
+  }
+
+  @if (loading()) {
+    <div>Loading releases...</div>
+  }
+
+  <app-release-list [releases]="releases()"></app-release-list>
 </section>
