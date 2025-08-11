@@ -1,6 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UploadService } from '../../core/interfaces/services/upload.service';
+import { UploadService } from '../../core/services/upload.service';
 import { firstValueFrom } from 'rxjs';
 
 @Component({

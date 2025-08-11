@@ -11,4 +11,9 @@ import { Release } from '../../core/interfaces/release.interface';
 })
 export class ReleaseItemComponent {
   @Input({ required: true }) release!: Release;
+
+  get formattedDate(): string {
+    const d = new Date(this.release.releaseDate);
+    return d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+  }
 }

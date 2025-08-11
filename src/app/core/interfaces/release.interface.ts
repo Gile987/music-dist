@@ -4,4 +4,5 @@ export interface Release {
   status: 'active' | 'pending' | 'archived';
   releaseDate: string;
   streams: number;
+  coverUrl?: string;
 }
