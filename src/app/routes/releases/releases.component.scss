@@ -1,0 +1,87 @@
+@use '../../../styles/variables' as *;
+
+.releases-page {
+  background-color: $color-main-bg;
+  padding: $spacing-lg;
+  font-family: $font-default;
+  color: $color-text;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  $content-max: 1200px;
+
+  .stats {
+    width: 100%;
+    max-width: $content-max;
+    margin: 0 auto $spacing-lg;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: $spacing-md;
+    flex-wrap: wrap;
+  }
+
+  .release-form {
+    background-color: $color-card-bg;
+    padding: $spacing-lg;
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 3px $color-shadow;
+    border: 1px solid $color-border;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto $spacing-lg;
+    box-sizing: border-box;
+
+    input {
+      padding: $spacing-sm $spacing-md;
+      border: 1px solid $color-border;
+      border-radius: 0.5rem;
+      font-size: $font-md;
+      outline: none;
+      transition: border-color 0.2s ease;
+
+      &:focus {
+        border-color: $color-primary;
+        box-shadow: 0 0 0 3px $color-primary-light;
+      }
+    }
+
+    button {
+      padding: $spacing-sm $spacing-md;
+      background-color: $color-primary;
+      color: $color-white;
+      border: none;
+      border-radius: 0.5rem;
+      font-size: $font-md;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+
+      &:hover:not(:disabled) {
+        background-color: $color-primary-dark;
+      }
+
+      &:disabled {
+        background-color: $color-muted;
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  .error {
+    background-color: $color-danger-bg;
+    color: $color-danger;
+    padding: $spacing-sm $spacing-md;
+    border-radius: 0.5rem;
+    margin-bottom: $spacing-lg;
+    max-width: $content-max;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+  }
+}
