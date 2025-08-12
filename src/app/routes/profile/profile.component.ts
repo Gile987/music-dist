@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { UserInfoCardComponent } from '../../components/user-info-card/user-info-card.component';
+import { Role } from '../../core/interfaces/auth.interface';
 
 @Component({
   selector: 'app-profile',
@@ -12,7 +13,7 @@ export class ProfileComponent {
     name: 'Gile Developer',
     email: 'gile@example.com',
     avatarUrl: `https://i.pravatar.cc/150?img=${Math.floor(Math.random() * 70) + 1}`,
-    role: 'Developer',
+    role: 'artist' as Role,
     joinedDate: '2024-11-10'
   };
 }
