@@ -4,7 +4,7 @@
   <form [formGroup]="uploadForm" (ngSubmit)="onSubmit()">
     <div class="form-group">
       <label for="releaseId">Select Release:</label>
-      <select formControlName="releaseId" id="releaseId" [disabled]="loadingReleases()">
+      <select formControlName="releaseId" id="releaseId">
         <option value="">Select a release</option>
         @for (release of releases(); track release.id) {
           <option [value]="release.id">{{ release.title }}</option>
@@ -44,7 +44,6 @@
         type="file"
         accept="audio/*"
         (change)="onFileSelected($event)"
-        [disabled]="uploading() || uploadSuccess()"
       />
     </label>
 
@@ -66,8 +65,8 @@
 
     <button 
       type="submit" 
-      class="submit-button" 
-      [disabled]="uploadForm.invalid || !uploadedFileUrl"
+      class="submit-button"
+      [class.disabled]="uploadForm.invalid || !uploadedFileUrl"
     >
       Save Track
     </button>
