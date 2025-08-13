@@ -23,7 +23,6 @@
   .actions {
     display: flex;
     gap: $spacing-sm;
-    margin-left: 0.75rem;
     
     @media (max-width: 768px) {
       margin-left: 0;
