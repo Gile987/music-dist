@@ -40,20 +40,35 @@ export class UploadComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadReleases();
+    this.uploading.set(false);
+    this.uploadSuccess.set(false);
+    this.updateFormControlsBasedOnState();
+  }
+  
+  private updateFormControlsBasedOnState(): void {
+    if (this.loadingReleases()) {
+      this.uploadForm.get('releaseId')?.disable();
+    } else {
+      this.uploadForm.get('releaseId')?.enable();
+    }
   }
 
   loadReleases(): void {
     this.loadingReleases.set(true);
+    this.updateFormControlsBasedOnState();
+    
     const user = this.authService.userValue;
     if (user) {
       this.releaseService.getReleasesByArtist(user.id).subscribe({
         next: (data) => {
           this.releases.set(data);
           this.loadingReleases.set(false);
+          this.updateFormControlsBasedOnState();
         },
         error: (err) => {
           this.uploadError.set('Failed to load releases');
           this.loadingReleases.set(false);
+          this.updateFormControlsBasedOnState();
         }
       });
     }
@@ -62,6 +77,7 @@ export class UploadComponent implements OnInit {
   async onFileSelected(event: Event): Promise<void> {
     this.uploadError.set('');
     this.uploadSuccess.set(false);
+    this.updateFormControlsBasedOnState();
     this.progress.set(0);
 
     const input = event.target as HTMLInputElement;
@@ -69,6 +85,7 @@ export class UploadComponent implements OnInit {
 
     const file = input.files[0];
     this.uploading.set(true);
+    this.updateFormControlsBasedOnState();
 
     try {
       // Get file duration (example, in a real app you'd use the Web Audio API)
@@ -92,10 +109,12 @@ export class UploadComponent implements OnInit {
       // Save the URL for later submission
       this.uploadedFileUrl = url.split('?')[0]; // Remove query parameters to get the base URL
       this.uploadSuccess.set(true);
+      this.updateFormControlsBasedOnState();
     } catch (err: any) {
       this.uploadError.set(err?.message ?? 'Upload failed');
     } finally {
       this.uploading.set(false);
+      this.updateFormControlsBasedOnState();
     }
   }
 
@@ -145,5 +164,6 @@ export class UploadComponent implements OnInit {
     this.uploadForm.reset();
     this.uploadedFileUrl = null;
     this.uploadedFileMetadata = null;
+    this.updateFormControlsBasedOnState();
   }
 }
