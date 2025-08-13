@@ -6,7 +6,7 @@
   border-radius: 9999px;
   font-size: $font-sm;
 
-  &.active {
+  &.approved {
     background-color: $color-success-bg;
     color: $color-success;
   }
@@ -16,13 +16,8 @@
     color: $color-warning;
   }
 
-  &.archived {
+  &.rejected {
     background-color: $color-danger-bg;
     color: $color-danger;
-  }
-
-  &.paid {
-    background-color: $color-primary-light;
-    color: $color-primary;
   }
 }
