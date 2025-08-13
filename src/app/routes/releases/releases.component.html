@@ -12,23 +12,44 @@
 
   <div class="form-container">
     <form (ngSubmit)="onSubmit()" [formGroup]="releaseForm" class="release-form">
+      <h2 class="form-title">{{ editedReleaseId() ? 'Update Release Details' : 'Create New Release' }}</h2>
       <div class="form-group">
         <label for="title">Release Title</label>
-        <input formControlName="title" id="title" placeholder="Enter release title" />
+        <input 
+          formControlName="title" 
+          id="title" 
+          placeholder="Enter your release title"
+          [class.ng-invalid]="releaseForm.get('title')?.invalid && releaseForm.get('title')?.touched" />
+        @if (releaseForm.get('title')?.invalid && releaseForm.get('title')?.touched) {
+          <small class="error-message">Title is required for your release</small>
+        }
       </div>
       
       <div class="form-group">
         <label for="releaseDate">Release Date</label>
-        <input formControlName="releaseDate" id="releaseDate" type="date" />
+        <input 
+          formControlName="releaseDate" 
+          id="releaseDate" 
+          type="date"
+          [class.ng-invalid]="releaseForm.get('releaseDate')?.invalid && releaseForm.get('releaseDate')?.touched" />
+        @if (releaseForm.get('releaseDate')?.invalid && releaseForm.get('releaseDate')?.touched) {
+          <small class="error-message">Please select a valid release date</small>
+        }
       </div>
       
       <div class="form-group">
         <label for="coverUrl">Cover URL (optional)</label>
-        <input formControlName="coverUrl" id="coverUrl" placeholder="https://example.com/cover.jpg" />
+        <input 
+          formControlName="coverUrl" 
+          id="coverUrl" 
+          placeholder="https://example.com/cover.jpg" />
       </div>
 
       <div class="form-actions">
-        <button type="submit" [class.disabled]="releaseForm.invalid">
+        <button 
+          type="submit" 
+          [disabled]="releaseForm.invalid"
+          [class.disabled]="releaseForm.invalid">
           <span class="material-icons">{{ editedReleaseId() ? 'update' : 'add_circle' }}</span>
           {{ editedReleaseId() ? 'Update Release' : 'Create Release' }}
         </button>
