@@ -36,8 +36,9 @@ form {
     font-size: $font-sm;
     color: $color-text;
   }
-
-  input, select {
+  
+  input,
+  select {
     padding: $spacing-sm;
     border: 1px solid $color-border;
     border-radius: 0.25rem;
@@ -157,14 +158,13 @@ form {
   transition: background-color 0.3s ease;
   align-self: center;
 
-  &:hover:not(.disabled) {
+  &:hover:not(:disabled) {
     background-color: $color-primary-dark;
   }
 
-  &.disabled {
+  &:disabled {
     background-color: $color-muted;
     cursor: not-allowed;
-    pointer-events: none;
   }
 }
 

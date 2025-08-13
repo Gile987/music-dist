@@ -1,17 +1,27 @@
 <div class="release-item">
   @if (release.coverUrl) {
     <img src="{{ release.coverUrl }}" alt="{{ release.title }}" class="release-cover" />
+  } @else {
+    <div class="release-cover"></div>
   }
+  
   <div class="release-info">
     <p class="release-title">{{ release.title }}</p>
-    <p class="release-date">{{ formattedDate }}</p>
+    <p class="release-date">
+      <span class="material-icons">calendar_today</span>
+      {{ formattedDate }}
+    </p>
   </div>
 
   <app-status-badge [status]="release.status"></app-status-badge>
 
   <div class="actions">
-    <button class="edit-btn" (click)="onEditClick()">Edit</button>
+    <button class="edit-btn" (click)="onEditClick()">
+      <span class="material-icons">edit</span>
+      Edit
+    </button>
     <button class="tracks-btn" (click)="toggleTracks()">
+      <span class="material-icons">{{ showTracks ? 'visibility_off' : 'visibility' }}</span>
       {{ showTracks ? 'Hide Tracks' : 'Show Tracks' }}
     </button>
     <button class="delete-btn" (click)="onDeleteClick()" title="Delete release">
