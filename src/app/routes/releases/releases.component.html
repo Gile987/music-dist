@@ -12,7 +12,9 @@
 
   <div class="form-container">
     <form (ngSubmit)="onSubmit()" [formGroup]="releaseForm" class="release-form">
-      <h2 class="form-title">{{ editedReleaseId() ? 'Update Release Details' : 'Create New Release' }}</h2>
+      <div class="form-title">
+        <h2>{{ editedReleaseId() ? 'Update Release Details' : 'Create New Release' }}</h2>
+      </div>
       <div class="form-group">
         <label for="title">Release Title</label>
         <input 

@@ -28,23 +28,58 @@
     }
   }
   
-  // Page title section
-  .page-title {
+  // Section title styling - shared across all sections
+  .section-title, .page-title, .form-title, .releases-header {
     margin-bottom: $spacing-md;
+    position: relative;
+    
+    h1, h2 {
+      font-weight: 700;
+      position: relative;
+      padding-left: $spacing-md;
+      display: flex;
+      align-items: center;
+      
+      &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        height: 70%;
+        width: 4px;
+        background: linear-gradient(180deg, $color-primary, $color-primary-dark);
+        border-radius: 2px;
+      }
+    }
     
     h1 {
       font-size: 1.8rem;
-      font-weight: 700;
       margin-bottom: $spacing-xs;
-      background: linear-gradient(90deg, $color-primary, $color-primary-dark);
-      background-clip: text;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+    }
+    
+    h2 {
+      font-size: 1.5rem;
+      margin-bottom: 0;
     }
     
     p {
       color: $color-muted;
       font-size: $font-sm;
+      margin-top: $spacing-xs;
+      padding-left: $spacing-md;
+    }
+  }
+  
+  // Page title section
+  .page-title {
+    margin-bottom: $spacing-lg;
+    
+    h1 {
+      background: linear-gradient(90deg, $color-primary, $color-primary-dark);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
   }
 
@@ -84,24 +119,10 @@
     }
     
     .form-title {
-      font-size: 1.5rem;
-      font-weight: 600;
       margin-bottom: $spacing-lg;
-      color: $color-text;
-      display: flex;
-      align-items: center;
       border-bottom: 1px solid $color-border;
       padding-bottom: $spacing-md;
-      
-      &::before {
-        content: '';
-        width: 4px;
-        height: 1.5rem;
-        background: linear-gradient(180deg, $color-primary, $color-primary-dark);
-        margin-right: $spacing-sm;
-        border-radius: 2px;
-        display: inline-block;
-      }
+      width: 100%;
     }
     
     @media (max-width: 768px) {
@@ -333,18 +354,13 @@
   
   // Releases list container
   .releases-container {
-    margin-top: $spacing-lg;
+    margin-top: $spacing-xl;
     
     .releases-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: $spacing-md;
-      
-      h2 {
-        font-size: $font-md;
-        font-weight: 600;
-      }
+      margin-bottom: $spacing-lg;
       
       .view-options {
         display: flex;
