@@ -36,7 +36,7 @@
       font-size: 1.8rem;
       font-weight: 700;
       margin-bottom: $spacing-xs;
-      background: linear-gradient(90deg, $color-primary, darken($color-primary, 15%));
+      background: linear-gradient(90deg, $color-primary, $color-primary-dark);
       background-clip: text;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
