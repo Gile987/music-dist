@@ -1,4 +1,5 @@
 import { ReleaseStatusType } from './release-status.interface';
+import { Track } from './track.interface';
 
 export interface Release {
   id: number;
@@ -7,4 +8,5 @@ export interface Release {
   releaseDate: string;
   streams: number;
   coverUrl?: string;
+  tracks?: Track[];
 }

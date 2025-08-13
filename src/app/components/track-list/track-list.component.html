@@ -1,0 +1,10 @@
+<div class="track-list">
+  <h3 class="track-list-title">Tracks</h3>
+  @if (tracks && tracks.length > 0) {
+    @for (track of tracks; track track.id) {
+      <app-track-item [track]="track"></app-track-item>
+    }
+  } @else {
+    <p class="no-tracks">No tracks available for this release.</p>
+  }
+</div>

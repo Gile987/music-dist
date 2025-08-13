@@ -17,6 +17,7 @@ $color-success-bg: #ecfdf5;
 $color-warning: #f59e0b;
 $color-warning-bg: #fffbeb;
 $color-muted: #6b7280;
+$color-muted-light: #e5e7eb;
 $color-card-bg: #ffffff;
 $color-shadow: rgba(0, 0, 0, 0.04);
 $color-text-secondary: $color-muted;
@@ -34,6 +35,11 @@ $sidebar-width: 18rem;
 $header-height: 4rem;
 
 // Typography
+$font-xs: 0.75rem;
 $font-sm: 0.875rem;
 $font-md: 1.125rem;
+$font-lg: 1.25rem;
 $font-default: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+// Borders
+$border-radius: 0.5rem;

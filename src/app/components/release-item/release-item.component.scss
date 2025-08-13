@@ -19,8 +19,13 @@
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
   }
 
-  .edit-btn {
+  .actions {
+    display: flex;
+    gap: $spacing-sm;
     margin-left: 0.75rem;
+  }
+
+  .edit-btn, .tracks-btn {
     padding: 0.25rem 0.6rem;
     border: 1px solid $color-border;
     border-radius: 0.375rem;
@@ -29,7 +34,6 @@
     font-size: $font-sm;
     &:hover { border-color: $color-primary; }
   }
-
 
   .release-cover {
     width: 100px;
@@ -64,4 +68,10 @@
   app-status-badge {
     margin-left: auto;
   }
+}
+
+.tracks-container {
+  margin-top: -0.5rem;
+  margin-bottom: 1rem;
+  padding: 0 1rem;
 }
