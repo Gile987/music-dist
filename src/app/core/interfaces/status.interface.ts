@@ -1,1 +1,2 @@
-export type StatusType = 'active' | 'pending' | 'archived' | 'paid';
+// Valid status values: PENDING, APPROVED, REJECTED
+export type StatusType = 'PENDING' | 'APPROVED' | 'REJECTED';

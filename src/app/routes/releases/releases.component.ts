@@ -23,7 +23,7 @@ export class ReleasesComponent implements OnInit {
   error = signal<string | null>(null);
 
   totalStreams = signal(0);
-  activeReleases = signal(0);
+  approvedReleases = signal(0);
   pendingReleases = signal(0);
 
   editedReleaseId = signal<number | null>(null);
@@ -62,13 +62,14 @@ export class ReleasesComponent implements OnInit {
   }
 
   updateStats(releases: Release[]): void {
-    // Case-insensitive matching for statuses
-    const activeCount = releases.filter(r => r.status.toLowerCase() === 'active').length;
-    const pendingCount = releases.filter(r => r.status.toLowerCase() === 'pending').length;
+    // Check for the exact status values: APPROVED, PENDING, REJECTED
+    const approvedCount = releases.filter(r => r.status === 'APPROVED').length;
+    const pendingCount = releases.filter(r => r.status === 'PENDING'
+    ).length;
     const totalStreamsCount = releases.reduce((acc, r) => acc + (r.streams ?? 0), 0);
     
     this.totalStreams.set(totalStreamsCount);
-    this.activeReleases.set(activeCount);
+    this.approvedReleases.set(approvedCount);
     this.pendingReleases.set(pendingCount);
   }
 

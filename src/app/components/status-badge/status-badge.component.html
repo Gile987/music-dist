@@ -1,9 +1,8 @@
 <span
   class="status-badge"
-  [class.active]="status.toLowerCase() === 'active'"
-  [class.pending]="status.toLowerCase() === 'pending'"
-  [class.archived]="status.toLowerCase() === 'archived'"
-  [class.paid]="status.toLowerCase() === 'paid'"
+  [class.approved]="status === 'APPROVED'"
+  [class.pending]="status === 'PENDING'"
+  [class.rejected]="status === 'REJECTED'"
 >
   {{ status }}
 </span>
