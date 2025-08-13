@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { StatusType } from '../../core/interfaces/status.interface';
+import { ReleaseStatusType } from '../../core/interfaces/release-status.interface';
+import { RoyaltyStatusType } from '../../core/interfaces/royalty-status.interface';
 
 @Component({
   selector: 'app-status-badge',
@@ -7,5 +8,5 @@ import { StatusType } from '../../core/interfaces/status.interface';
   styleUrls: ['./status-badge.component.scss']
 })
 export class StatusBadgeComponent {
-  @Input({ required: true }) status!: StatusType;
+  @Input() status!: ReleaseStatusType | RoyaltyStatusType;
 }
