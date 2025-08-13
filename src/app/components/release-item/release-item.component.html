@@ -9,5 +9,16 @@
 
   <app-status-badge [status]="release.status"></app-status-badge>
 
-  <button class="edit-btn" (click)="onEditClick()">Edit</button>
+  <div class="actions">
+    <button class="edit-btn" (click)="onEditClick()">Edit</button>
+    <button class="tracks-btn" (click)="toggleTracks()">
+      {{ showTracks ? 'Hide Tracks' : 'Show Tracks' }}
+    </button>
+  </div>
 </div>
+
+@if (showTracks) {
+  <div class="tracks-container">
+    <app-track-list [tracks]="tracks"></app-track-list>
+  </div>
+}

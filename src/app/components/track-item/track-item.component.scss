@@ -1,0 +1,25 @@
+@use "../../../styles/variables" as *;
+
+.track-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  border-bottom: 1px solid $color-border;
+}
+
+.track-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.track-title {
+  font-weight: 500;
+  margin: 0;
+}
+
+.track-duration, .track-isrc {
+  font-size: $font-xs;
+  color: $color-muted;
+  margin: 0;
+}

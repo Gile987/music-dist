@@ -1,0 +1,9 @@
+<div class="track-item">
+  <div class="track-info">
+    <p class="track-title">{{ track.title }}</p>
+    <p class="track-duration">{{ formatDuration(track.duration) }}</p>
+  </div>
+  @if (track.isrc) {
+    <p class="track-isrc">ISRC: {{ track.isrc }}</p>
+  }
+</div>

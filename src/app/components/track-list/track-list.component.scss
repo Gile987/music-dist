@@ -1,0 +1,24 @@
+@use "../../../styles/variables" as *;
+
+.track-list {
+  margin-top: $spacing-md;
+  border: 1px solid $color-border;
+  border-radius: $border-radius;
+  overflow: hidden;
+}
+
+.track-list-title {
+  padding: $spacing-sm $spacing-md;
+  margin: 0;
+  background-color: $color-card-bg;
+  border-bottom: 1px solid $color-border;
+  font-size: $font-md;
+}
+
+.no-tracks {
+  padding: $spacing-md;
+  color: $color-muted;
+  font-style: italic;
+  text-align: center;
+  font-size: $font-sm;
+}
