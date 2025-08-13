@@ -1,28 +1,41 @@
 @use '../../../styles/variables' as *;
-
-$container-max: 1200px;
-$gap: $spacing-md;
+@use '../../../styles/mixins' as *;
 
 .release-list {
   width: 100%;
-  max-width: $container-max;
-  margin: 0 auto;
-  display: flex;
-  flex-wrap: wrap;
-  gap: $gap;
-  padding: $spacing-md;
-  box-sizing: border-box;
-
-  > * {
-    flex: 1 1 calc(50% - (#{$gap} / 1));
-    max-width: calc(50% - (#{$gap} / 1));
-    box-sizing: border-box;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: $spacing-lg;
+  padding: $spacing-md 0;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: $spacing-md;
   }
-
-  @media (max-width: 800px) {
-    > * {
-      flex-basis: 100%;
-      max-width: 100%;
+  
+  .empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: $spacing-xl;
+    background-color: $color-card-bg;
+    border-radius: 0.5rem;
+    border: 1px dashed $color-border;
+    
+    h3 {
+      font-size: $font-md;
+      color: $color-muted;
+      margin-bottom: $spacing-md;
+    }
+    
+    p {
+      color: $color-text-secondary;
+      margin-bottom: $spacing-md;
+    }
+    
+    .material-icons {
+      font-size: 48px;
+      color: $color-muted-light;
+      margin-bottom: $spacing-md;
     }
   }
 }

@@ -1,9 +1,17 @@
 <div class="release-list">
-  @for (release of releases; track release.id) {
-    <app-release-item
-      [release]="release"
-      (edit)="onEdit($event)"
-      (deleted)="onReleaseDeleted($event)">
-    </app-release-item>
+  @if (releases.length > 0) {
+    @for (release of releases; track release.id) {
+      <app-release-item
+        [release]="release"
+        (edit)="onEdit($event)"
+        (deleted)="onReleaseDeleted($event)">
+      </app-release-item>
+    }
+  } @else {
+    <div class="empty-state">
+      <span class="material-icons">album</span>
+      <h3>No Releases Yet</h3>
+      <p>You haven't created any releases. Create your first release using the form above.</p>
+    </div>
   }
 </div>

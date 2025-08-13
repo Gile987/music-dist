@@ -1,37 +1,71 @@
 <section class="releases-page">
+  <div class="page-title">
+    <h1>Your Music Releases</h1>
+    <p>Manage your albums, singles, and EPs all in one place</p>
+  </div>
+
   <header class="stats">
     <app-stat-card title="Total Streams" [value]="totalStreams()" icon="🎧"></app-stat-card>
     <app-stat-card title="Active Releases" [value]="activeReleases()" icon="✅"></app-stat-card>
     <app-stat-card title="Pending Releases" [value]="pendingReleases()" icon="⏳"></app-stat-card>
   </header>
 
-  <form (ngSubmit)="onSubmit()" [formGroup]="releaseForm" class="release-form">
-    <input formControlName="title" placeholder="Release Title" />
-    <input formControlName="releaseDate" type="date" />
-    <input formControlName="coverUrl" placeholder="Cover URL (optional)" />
+  <div class="form-container">
+    <form (ngSubmit)="onSubmit()" [formGroup]="releaseForm" class="release-form">
+      <div class="form-group">
+        <label for="title">Release Title</label>
+        <input formControlName="title" id="title" placeholder="Enter release title" />
+      </div>
+      
+      <div class="form-group">
+        <label for="releaseDate">Release Date</label>
+        <input formControlName="releaseDate" id="releaseDate" type="date" />
+      </div>
+      
+      <div class="form-group">
+        <label for="coverUrl">Cover URL (optional)</label>
+        <input formControlName="coverUrl" id="coverUrl" placeholder="https://example.com/cover.jpg" />
+      </div>
 
-    <div class="form-actions">
-      <button type="submit" [disabled]="releaseForm.invalid">
-        {{ editedReleaseId() ? 'Update Release' : 'Create Release' }}
-      </button>
+      <div class="form-actions">
+        <button type="submit" [class.disabled]="releaseForm.invalid">
+          <span class="material-icons">{{ editedReleaseId() ? 'update' : 'add_circle' }}</span>
+          {{ editedReleaseId() ? 'Update Release' : 'Create Release' }}
+        </button>
 
-      @if (editedReleaseId()) {
-        <button type="button" class="secondary" (click)="cancelEdit()">Cancel</button>
-      }
-    </div>
-  </form>
+        @if (editedReleaseId()) {
+          <button type="button" class="secondary" (click)="cancelEdit()">
+            <span class="material-icons">cancel</span>
+            Cancel
+          </button>
+        }
+      </div>
+    </form>
+  </div>
 
   @if (error()) {
-    <div class="error">{{ error() }}</div>
+    <div class="notification error">
+      <span class="material-icons">error</span>
+      {{ error() }}
+    </div>
   }
 
   @if (loading()) {
-    <div>Loading releases...</div>
+    <div class="notification loading">
+      <span class="material-icons">hourglass_top</span>
+      Loading releases...
+    </div>
   }
 
-  <app-release-list
-    [releases]="releases()"
-    (editRelease)="onEditRelease($event)"
-    (releaseDeleted)="onReleaseDeleted($event)">
-  </app-release-list>
+  <div class="releases-container">
+    <div class="releases-header">
+      <h2>Your Releases</h2>
+    </div>
+    
+    <app-release-list
+      [releases]="releases()"
+      (editRelease)="onEditRelease($event)"
+      (releaseDeleted)="onReleaseDeleted($event)">
+    </app-release-list>
+  </div>
 </section>
