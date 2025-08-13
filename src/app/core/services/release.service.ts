@@ -21,4 +21,9 @@ export class ReleaseService {
         catchError((error: HttpErrorResponse) => throwError((): Error => error))
       );
   }
+
+  public updateRelease(id: number, data: Partial<ReleaseCreateDto>): Observable<Release> {
+    return this.http.patch<Release>(`/api/releases/${id}`, data, { withCredentials: true })
+      .pipe(catchError((error: HttpErrorResponse) => throwError((): Error => error)));
+  }
 }

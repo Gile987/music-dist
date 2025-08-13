@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ReleaseItemComponent } from '../release-item/release-item.component';
 import { Release } from '../../core/interfaces/release.interface';
 
@@ -10,4 +10,9 @@ import { Release } from '../../core/interfaces/release.interface';
 })
 export class ReleaseListComponent {
   @Input() releases: Release[] = [];
+  @Output() editRelease = new EventEmitter<Release>();
+
+  onEdit(r: Release) {
+    this.editRelease.emit(r);
+  }
 }

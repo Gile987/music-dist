@@ -1,5 +1,4 @@
-
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { StatusBadgeComponent } from '../status-badge/status-badge.component';
 import { Release } from '../../core/interfaces/release.interface';
 
@@ -11,9 +10,14 @@ import { Release } from '../../core/interfaces/release.interface';
 })
 export class ReleaseItemComponent {
   @Input({ required: true }) release!: Release;
+  @Output() edit = new EventEmitter<Release>();
 
   public get formattedDate(): string {
     const d: Date = new Date(this.release.releaseDate);
     return d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+  }
+
+  onEditClick(): void {
+    this.edit.emit(this.release);
   }
 }

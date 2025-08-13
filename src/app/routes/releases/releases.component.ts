@@ -26,6 +26,8 @@ export class ReleasesComponent implements OnInit {
   activeReleases = signal(0);
   pendingReleases = signal(0);
 
+  editedReleaseId = signal<number | null>(null);
+
   releaseForm = new FormGroup({
     title: new FormControl('', [Validators.required, Validators.maxLength(255)]),
     releaseDate: new FormControl('', [Validators.required]),
@@ -37,7 +39,6 @@ export class ReleasesComponent implements OnInit {
     if (user) {
       this.fetchReleases(user.id);
     } else {
-      // Optionally, listen for user changes if async:
       this.authService.user$.subscribe(u => {
         if (u) this.fetchReleases(u.id);
       });
@@ -66,6 +67,25 @@ export class ReleasesComponent implements OnInit {
     this.pendingReleases.set(releases.filter(r => r.status === 'pending').length);
   }
 
+  // 🔹 when user clicks "Edit" on a release
+  onEditRelease(r: Release): void {
+    this.editedReleaseId.set(r.id);
+    this.releaseForm.setValue({
+      title: r.title,
+      // convert stored ISO/string to yyyy-MM-dd for <input type="date">
+      releaseDate: this.toDateInputValue(r.releaseDate),
+      coverUrl: r.coverUrl ?? ''
+    });
+    this.error.set(null);
+  }
+
+  // 🔹 cancel edit and reset to create mode
+  cancelEdit(): void {
+    this.editedReleaseId.set(null);
+    this.releaseForm.reset();
+    this.error.set(null);
+  }
+
   onSubmit(): void {
     if (this.releaseForm.invalid) return;
 
@@ -76,32 +96,63 @@ export class ReleasesComponent implements OnInit {
     }
 
     const formValue = this.releaseForm.value;
-
     if (!formValue.title || !formValue.releaseDate) {
       this.error.set('Title and release date are required');
       return;
     }
 
-    const newRelease = {
+    const payload = {
       artistId: user.id,
       title: formValue.title,
-      releaseDate: new Date(formValue.releaseDate!).toISOString(),
+      releaseDate: new Date(formValue.releaseDate).toISOString(),
       coverUrl: formValue.coverUrl?.trim() || undefined,
     };
 
     this.loading.set(true);
-    this.releaseService.createRelease(newRelease).subscribe({
-      next: (created) => {
-        this.releases.update(releases => [...releases, created]);
-        this.updateStats([...this.releases()]);
-        this.releaseForm.reset();
-        this.error.set(null);
-        this.loading.set(false);
-      },
-      error: () => {
-        this.error.set('Failed to create release');
-        this.loading.set(false);
-      },
-    });
+
+    const editingId = this.editedReleaseId();
+    if (editingId) {
+      // 🔹 UPDATE
+      this.releaseService.updateRelease(editingId, payload).subscribe({
+        next: (updated) => {
+          this.releases.update(list =>
+            list.map(r => (r.id === updated.id ? { ...r, ...updated } : r))
+          );
+          this.updateStats([...this.releases()]);
+          this.releaseForm.reset();
+          this.editedReleaseId.set(null);
+          this.error.set(null);
+          this.loading.set(false);
+        },
+        error: () => {
+          this.error.set('Failed to update release');
+          this.loading.set(false);
+        }
+      });
+    } else {
+      // 🔹 CREATE
+      this.releaseService.createRelease(payload).subscribe({
+        next: (created) => {
+          this.releases.update(releases => [...releases, created]);
+          this.updateStats([...this.releases()]);
+          this.releaseForm.reset();
+          this.error.set(null);
+          this.loading.set(false);
+        },
+        error: () => {
+          this.error.set('Failed to create release');
+          this.loading.set(false);
+        },
+      });
+    }
+  }
+
+  // helper: ISO/string -> yyyy-MM-dd for date input
+  private toDateInputValue(d: string): string {
+    const date = new Date(d);
+    const y = date.getFullYear();
+    const m = `${date.getMonth() + 1}`.padStart(2, '0');
+    const day = `${date.getDate()}`.padStart(2, '0');
+    return `${y}-${m}-${day}`;
   }
 }
