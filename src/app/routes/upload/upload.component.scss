@@ -1,53 +1,67 @@
+
 @use '../../../styles/variables' as *;
 
-
 .upload-page {
-  padding: $spacing-lg;
+  padding: $spacing-xl;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: $spacing-md;
-  height: calc(100vh - $header-height);
+  gap: $spacing-lg;
+  min-height: calc(100vh - $header-height);
   background-color: $color-main-bg;
   overflow-y: auto;
 
   h2 {
-    font-size: $font-md;
-    color: $color-text;
-    margin-bottom: $spacing-md;
+    font-size: 2rem;
+    font-weight: 700;
+    color: $color-primary;
+    margin-bottom: $spacing-lg;
+    letter-spacing: 0.01em;
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
   }
 }
 
 form {
   width: 100%;
-  max-width: 500px;
+  max-width: 480px;
+  background: $color-card-bg;
+  border-radius: 1rem;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+  padding: $spacing-xl $spacing-lg;
   display: flex;
   flex-direction: column;
-  gap: $spacing-md;
+  gap: $spacing-lg;
+  border: 1px solid $color-border;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
   gap: $spacing-xs;
+  width: 100%;
 
   label {
     font-weight: 600;
     font-size: $font-sm;
     color: $color-text;
+    margin-bottom: 2px;
   }
   
   input,
   select {
-    padding: $spacing-sm;
-    border: 1px solid $color-border;
-    border-radius: 0.25rem;
-    font-size: $font-sm;
-    background-color: $color-card-bg;
+    padding: $spacing-md;
+    border: 1.5px solid $color-border;
+    border-radius: 0.5rem;
+    font-size: $font-md;
+    background-color: $color-main-bg;
+    transition: border-color 0.2s;
 
     &:focus {
       border-color: $color-primary;
       outline: none;
+      box-shadow: 0 0 0 2px rgba($color-primary, 0.12);
     }
 
     &:disabled {
@@ -66,24 +80,27 @@ form {
 .upload-button {
   position: relative;
   display: inline-block;
-  padding: $spacing-sm $spacing-lg;
-  background-color: $color-primary;
+  padding: $spacing-md $spacing-xl;
+  background: linear-gradient(90deg, $color-primary, $color-primary-dark);
   color: $color-white;
   font-weight: 600;
   font-size: $font-md;
-  border-radius: 0.5rem;
+  border-radius: 2rem;
   cursor: pointer;
   user-select: none;
-  transition: background-color 0.3s ease;
+  transition: background 0.3s;
   align-self: center;
   margin: $spacing-md 0;
+  box-shadow: 0 2px 8px rgba($color-primary, 0.10);
+  border: none;
 
   &:hover:not(.disabled) {
-    background-color: $color-primary-dark;
+    background: linear-gradient(90deg, $color-primary-dark, $color-primary);
+    box-shadow: 0 4px 16px rgba($color-primary, 0.18);
   }
 
   &.disabled {
-    background-color: $color-muted;
+    background: $color-muted;
     cursor: not-allowed;
     pointer-events: none;
 
@@ -107,24 +124,24 @@ form {
   background-color: $color-primary-light;
   border-radius: 0.5rem;
   overflow: hidden;
-  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.08);
 
   .progress-bar {
     height: 100%;
-    background-color: $color-primary;
+    background: linear-gradient(90deg, $color-primary, $color-primary-dark);
     width: 0%;
     transition: width 0.3s ease;
   }
 
   .progress-text {
     position: absolute;
-    right: 0.5rem;
+    right: 0.75rem;
     top: 50%;
     transform: translateY(-50%);
     font-weight: 600;
     font-size: $font-sm;
     color: $color-white;
-    text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
   }
 }
 
@@ -134,6 +151,7 @@ form {
   border-radius: 0.5rem;
   padding: $spacing-md;
   margin: $spacing-md 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
 
   p {
     margin: $spacing-xs 0;
@@ -147,35 +165,39 @@ form {
 }
 
 .submit-button {
-  padding: $spacing-sm $spacing-lg;
-  background-color: $color-primary;
+  padding: $spacing-md $spacing-xl;
+  background: linear-gradient(90deg, $color-primary, $color-primary-dark);
   color: $color-white;
   font-weight: 600;
   font-size: $font-md;
-  border-radius: 0.5rem;
+  border-radius: 2rem;
   border: none;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background 0.3s;
   align-self: center;
+  box-shadow: 0 2px 8px rgba($color-primary, 0.10);
 
   &:hover:not(:disabled) {
-    background-color: $color-primary-dark;
+    background: linear-gradient(90deg, $color-primary-dark, $color-primary);
+    box-shadow: 0 4px 16px rgba($color-primary, 0.18);
   }
 
-  &:disabled {
-    background-color: $color-muted;
+  &:disabled,
+  &.disabled {
+    background: $color-muted;
     cursor: not-allowed;
+    box-shadow: none;
   }
 }
 
 .message {
-  padding: $spacing-sm $spacing-md;
+  padding: $spacing-md $spacing-lg;
   border-radius: 0.5rem;
   font-weight: 600;
   font-size: $font-md;
   display: flex;
   align-items: center;
-  gap: $spacing-sm;
+  gap: $spacing-md;
   width: 100%;
 
   &.success {
