@@ -1,9 +1,9 @@
 <span
   class="status-badge"
-  [class.active]="status === 'active'"
-  [class.pending]="status === 'pending'"
-  [class.archived]="status === 'archived'"
-  [class.paid]="status === 'paid'"
+  [class.active]="status.toLowerCase() === 'active'"
+  [class.pending]="status.toLowerCase() === 'pending'"
+  [class.archived]="status.toLowerCase() === 'archived'"
+  [class.paid]="status.toLowerCase() === 'paid'"
 >
   {{ status }}
 </span>

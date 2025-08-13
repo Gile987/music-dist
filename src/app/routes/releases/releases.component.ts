@@ -62,9 +62,14 @@ export class ReleasesComponent implements OnInit {
   }
 
   updateStats(releases: Release[]): void {
-    this.totalStreams.set(releases.reduce((acc, r) => acc + (r.streams ?? 0), 0));
-    this.activeReleases.set(releases.filter(r => r.status === 'active').length);
-    this.pendingReleases.set(releases.filter(r => r.status === 'pending').length);
+    // Case-insensitive matching for statuses
+    const activeCount = releases.filter(r => r.status.toLowerCase() === 'active').length;
+    const pendingCount = releases.filter(r => r.status.toLowerCase() === 'pending').length;
+    const totalStreamsCount = releases.reduce((acc, r) => acc + (r.streams ?? 0), 0);
+    
+    this.totalStreams.set(totalStreamsCount);
+    this.activeReleases.set(activeCount);
+    this.pendingReleases.set(pendingCount);
   }
 
   // 🔹 when user clicks "Edit" on a release
