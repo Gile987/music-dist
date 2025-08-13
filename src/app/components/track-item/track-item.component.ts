@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Track } from '../../core/interfaces/track.interface';
 
@@ -11,10 +11,15 @@ import { Track } from '../../core/interfaces/track.interface';
 })
 export class TrackItemComponent {
   @Input({ required: true }) track!: Track;
+  @Output() deleteTrack = new EventEmitter<Track>();
 
   formatDuration(seconds: number): string {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = Math.floor(seconds % 60);
     return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+  }
+
+  onDeleteClick(): void {
+    this.deleteTrack.emit(this.track);
   }
 }

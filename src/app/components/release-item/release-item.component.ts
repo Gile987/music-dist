@@ -5,9 +5,11 @@ import { TrackListComponent } from '../track-list/track-list.component';
 import { Release } from '../../core/interfaces/release.interface';
 import { Track } from '../../core/interfaces/track.interface';
 import { TrackService } from '../../core/services/track.service';
+import { ReleaseService } from '../../core/services/release.service';
 
 @Component({
   selector: 'app-release-item',
+  standalone: true,
   imports: [CommonModule, StatusBadgeComponent, TrackListComponent],
   templateUrl: './release-item.component.html',
   styleUrls: ['./release-item.component.scss']
@@ -15,8 +17,10 @@ import { TrackService } from '../../core/services/track.service';
 export class ReleaseItemComponent implements OnInit {
   @Input({ required: true }) release!: Release;
   @Output() edit = new EventEmitter<Release>();
+  @Output() deleted = new EventEmitter<number>();
 
   private trackService = inject(TrackService);
+  private releaseService = inject(ReleaseService);
   
   showTracks = false;
   tracks: Track[] = [];
@@ -39,6 +43,19 @@ export class ReleaseItemComponent implements OnInit {
     this.edit.emit(this.release);
   }
 
+  onDeleteClick(): void {
+    if (confirm(`Are you sure you want to delete the release "${this.release.title}"? This will also delete all associated tracks.`)) {
+      this.releaseService.deleteRelease(this.release.id).subscribe({
+        next: () => {
+          this.deleted.emit(this.release.id);
+        },
+        error: () => {
+          alert('Failed to delete release. Please try again.');
+        }
+      });
+    }
+  }
+
   toggleTracks(): void {
     this.showTracks = !this.showTracks;
     
@@ -48,14 +65,19 @@ export class ReleaseItemComponent implements OnInit {
     }
   }
 
+  onTrackDeleted(trackId: number): void {
+    // Remove the track from the local array
+    this.tracks = this.tracks.filter(track => track.id !== trackId);
+  }
+
   private loadTracks(): void {
     this.trackService.getTracksByRelease(this.release.id).subscribe({
       next: (tracks) => {
         this.tracks = tracks;
         this.tracksLoaded = true;
       },
-      error: (error) => {
-        console.error('Failed to load tracks', error);
+      error: () => {
+        alert('Failed to load tracks. Please try again.');
       }
     });
   }

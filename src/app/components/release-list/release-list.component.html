@@ -2,7 +2,8 @@
   @for (release of releases; track release.id) {
     <app-release-item
       [release]="release"
-      (edit)="onEdit($event)">
+      (edit)="onEdit($event)"
+      (deleted)="onReleaseDeleted($event)">
     </app-release-item>
   }
 </div>

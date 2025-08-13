@@ -31,6 +31,7 @@
 
   <app-release-list
     [releases]="releases()"
-    (editRelease)="onEditRelease($event)">
+    (editRelease)="onEditRelease($event)"
+    (releaseDeleted)="onReleaseDeleted($event)">
   </app-release-list>
 </section>

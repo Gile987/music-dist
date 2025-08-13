@@ -6,11 +6,13 @@
   align-items: center;
   padding: 8px 12px;
   border-bottom: 1px solid $color-border;
+  position: relative;
 }
 
 .track-info {
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
 }
 
 .track-title {
@@ -22,4 +24,26 @@
   font-size: $font-xs;
   color: $color-muted;
   margin: 0;
+}
+
+.delete-btn {
+  background: none;
+  border: none;
+  color: $color-danger;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  opacity: 0.7;
+  
+  &:hover {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+  
+  .material-icons {
+    font-size: 18px;
+  }
 }

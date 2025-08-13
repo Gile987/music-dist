@@ -35,6 +35,28 @@
     &:hover { border-color: $color-primary; }
   }
 
+  .delete-btn {
+    background: none;
+    border: none;
+    color: $color-danger;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    opacity: 0.7;
+    
+    &:hover {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+    
+    .material-icons {
+      font-size: 18px;
+    }
+  }
+
   .release-cover {
     width: 100px;
     height: 100px;
