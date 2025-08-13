@@ -1,5 +1,5 @@
-@use "../../../styles/variables" as *;
-@use "../../../styles/mixins" as *;
+@use '../../../styles/variables' as *;
+
 
 .upload-page {
   padding: $spacing-lg;
@@ -36,7 +36,7 @@ form {
     font-size: $font-sm;
     color: $color-text;
   }
-
+  
   input,
   select {
     padding: $spacing-sm;
