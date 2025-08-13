@@ -6,5 +6,8 @@
     <p class="release-title">{{ release.title }}</p>
     <p class="release-date">{{ formattedDate }}</p>
   </div>
+
   <app-status-badge [status]="release.status"></app-status-badge>
+
+  <button class="edit-btn" (click)="onEditClick()">Edit</button>
 </div>

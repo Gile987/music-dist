@@ -1,5 +1,8 @@
 <div class="release-list">
-  @for (release of releases; track release.title) {
-    <app-release-item [release]="release"></app-release-item>
+  @for (release of releases; track release.id) {
+    <app-release-item
+      [release]="release"
+      (edit)="onEdit($event)">
+    </app-release-item>
   }
 </div>

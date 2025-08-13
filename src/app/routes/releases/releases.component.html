@@ -9,7 +9,16 @@
     <input formControlName="title" placeholder="Release Title" />
     <input formControlName="releaseDate" type="date" />
     <input formControlName="coverUrl" placeholder="Cover URL (optional)" />
-    <button type="submit" [disabled]="releaseForm.invalid">Create Release</button>
+
+    <div class="form-actions">
+      <button type="submit" [disabled]="releaseForm.invalid">
+        {{ editedReleaseId() ? 'Update Release' : 'Create Release' }}
+      </button>
+
+      @if (editedReleaseId()) {
+        <button type="button" class="secondary" (click)="cancelEdit()">Cancel</button>
+      }
+    </div>
   </form>
 
   @if (error()) {
@@ -20,5 +29,8 @@
     <div>Loading releases...</div>
   }
 
-  <app-release-list [releases]="releases()"></app-release-list>
+  <app-release-list
+    [releases]="releases()"
+    (editRelease)="onEditRelease($event)">
+  </app-release-list>
 </section>

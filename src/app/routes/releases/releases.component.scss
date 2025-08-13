@@ -70,6 +70,18 @@
         cursor: not-allowed;
       }
     }
+
+    .form-actions {
+      display: flex;
+      gap: $spacing-sm;
+      align-items: center;
+
+      .secondary {
+        background: $color-card-bg;
+        color: $color-text;
+        border: 1px solid $color-border;
+      }
+    }
   }
 
   .error {
