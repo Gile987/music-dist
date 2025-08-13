@@ -26,4 +26,9 @@ export class ReleaseService {
     return this.http.patch<Release>(`/api/releases/${id}`, data, { withCredentials: true })
       .pipe(catchError((error: HttpErrorResponse) => throwError((): Error => error)));
   }
+
+  public deleteRelease(id: number): Observable<void> {
+    return this.http.delete<void>(`/api/releases/${id}`, { withCredentials: true })
+      .pipe(catchError((error: HttpErrorResponse) => throwError((): Error => error)));
+  }
 }

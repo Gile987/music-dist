@@ -14,11 +14,14 @@
     <button class="tracks-btn" (click)="toggleTracks()">
       {{ showTracks ? 'Hide Tracks' : 'Show Tracks' }}
     </button>
+    <button class="delete-btn" (click)="onDeleteClick()" title="Delete release">
+      <span class="material-icons">delete</span>
+    </button>
   </div>
 </div>
 
 @if (showTracks) {
   <div class="tracks-container">
-    <app-track-list [tracks]="tracks"></app-track-list>
+    <app-track-list [tracks]="tracks" (trackDeleted)="onTrackDeleted($event)"></app-track-list>
   </div>
 }

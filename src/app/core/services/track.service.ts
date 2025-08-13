@@ -28,4 +28,11 @@ export class TrackService {
         catchError((error: HttpErrorResponse) => throwError((): Error => error))
       );
   }
+
+  public deleteTrack(trackId: number): Observable<void> {
+    return this.http.delete<void>(`/api/tracks/${trackId}`, { withCredentials: true })
+      .pipe(
+        catchError((error: HttpErrorResponse) => throwError((): Error => error))
+      );
+  }
 }

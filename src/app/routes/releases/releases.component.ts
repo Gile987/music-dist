@@ -79,6 +79,14 @@ export class ReleasesComponent implements OnInit {
     this.error.set(null);
   }
 
+  // 🔹 when a release is deleted
+  onReleaseDeleted(releaseId: number): void {
+    // Filter out the deleted release from the releases signal
+    this.releases.update(releases => releases.filter(r => r.id !== releaseId));
+    // Update statistics
+    this.updateStats([...this.releases()]);
+  }
+
   // 🔹 cancel edit and reset to create mode
   cancelEdit(): void {
     this.editedReleaseId.set(null);
