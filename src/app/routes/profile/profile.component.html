@@ -1,16 +1,18 @@
 <section class="profile-page">
-
-  <app-user-info-card
-    [name]="user.name"
-    [email]="user.email"
-    [avatarUrl]="user.avatarUrl"
-    [role]="user.role"
-    [joinedDate]="user.joinedDate"
-  />
-
-  <section class="profile-actions">
-    <button class="btn">Edit Profile</button>
-    <button class="btn secondary">Change Password</button>
-  </section>
-
+  @if (user()) {
+    <app-user-info-card
+      [name]="user()!.name"
+      [email]="user()!.email"
+      [avatarUrl]="avatarUrl()"
+      [role]="user()!.role"
+      [joinedDate]="user()!.createdAt"
+    />
+    <section class="profile-actions">
+      <button class="btn">Edit Profile</button>
+      <button class="btn secondary">Change Password</button>
+    </section>
+  }
+  @else {
+    <div class="profile-loading">Loading profile...</div>
+  }
 </section>

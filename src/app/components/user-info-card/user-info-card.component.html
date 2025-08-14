@@ -7,7 +7,7 @@
       <p class="meta">Role: {{ role }}</p>
     }
     @if (joinedDate) {
-      <p class="meta">Joined: {{ joinedDate }}</p>
+      <p class="meta">Joined: {{ joinedDate | dateFormat }}</p>
     }
   </div>
 </div>

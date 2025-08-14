@@ -3,6 +3,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, catchError, map, switchMap, tap, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { AuthUser, LoginCredentials } from '../interfaces/auth.interface';
+import { UserProfile } from '../interfaces/user-profile.interface';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -55,5 +56,9 @@ export class AuthService {
 
   public get userValue(): AuthUser | null {
     return this.userSubject.getValue();
+  }
+
+  public getProfile(): Observable<UserProfile> {
+    return this.http.get<UserProfile>('/api/auth/me', { withCredentials: true });
   }
 }
