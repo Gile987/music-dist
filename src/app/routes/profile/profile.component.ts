@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, signal, OnInit, inject } from '@angular/core';
 import { UserInfoCardComponent } from '../../components/user-info-card/user-info-card.component';
-import { Role } from '../../core/interfaces/auth.interface';
+import { AuthService } from '../../core/services/auth.service';
+import { UserProfile } from '../../core/interfaces/user-profile.interface';
 
 @Component({
   selector: 'app-profile',
@@ -8,12 +9,21 @@ import { Role } from '../../core/interfaces/auth.interface';
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
-export class ProfileComponent {
-  user = {
-    name: 'Gile Developer',
-    email: 'gile@example.com',
-    avatarUrl: `https://i.pravatar.cc/150?img=${Math.floor(Math.random() * 70) + 1}`,
-    role: 'artist' as Role,
-    joinedDate: '2024-11-10'
-  };
+export class ProfileComponent implements OnInit {
+  private authService = inject(AuthService);
+  user = signal<UserProfile | null>(null);
+  avatarUrl = signal<string>('https://www.gravatar.com/avatar/?d=mp');
+
+  ngOnInit(): void {
+    this.authService.getProfile().subscribe({
+      next: (profile) => {
+        this.user.set(profile);
+        // Optionally, generate a gravatar or avtar URL based on email or name
+        this.avatarUrl.set(`https://i.pravatar.cc/150?u=${encodeURIComponent(profile.email)}`);
+      },
+      error: () => {
+        this.user.set(null);
+      }
+    });
+  }
 }
