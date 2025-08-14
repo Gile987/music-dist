@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { LayoutComponent } from './layout/layout/layout.component';
+import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
   {
@@ -20,7 +21,8 @@ export const routes: Routes = [
       {
         path: 'upload',
         loadComponent: () =>
-          import('./routes/upload/upload.component').then((m) => m.UploadComponent)
+          import('./routes/upload/upload.component').then((m) => m.UploadComponent),
+        canActivate: [authGuard]
       },
       {
         path: 'releases',
