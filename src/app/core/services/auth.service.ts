@@ -59,6 +59,7 @@ export class AuthService {
   }
 
   public getProfile(): Observable<UserProfile> {
+    //
     return this.http.get<UserProfile>('/api/auth/me', { withCredentials: true });
   }
 }

@@ -18,7 +18,7 @@ export class ProfileComponent implements OnInit {
     this.authService.getProfile().subscribe({
       next: (profile) => {
         this.user.set(profile);
-        // Optionally, generate a gravatar or avatar URL based on email or name
+        // Optionally, generate a gravatar or avtar URL based on email or name
         this.avatarUrl.set(`https://i.pravatar.cc/150?u=${encodeURIComponent(profile.email)}`);
       },
       error: () => {

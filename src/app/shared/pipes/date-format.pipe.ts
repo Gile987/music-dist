@@ -6,7 +6,7 @@ export class DateFormatPipe implements PipeTransform {
     if (!value) return '';
     const date = typeof value === 'string' ? new Date(value) : value;
     if (isNaN(date.getTime())) return value.toString();
-    // customize formats as needed
+    // customize format as needed
     const options: Intl.DateTimeFormatOptions =
       format === 'short'
         ? { year: 'numeric', month: 'short', day: 'numeric' }
