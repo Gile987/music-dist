@@ -16,7 +16,8 @@ export const routes: Routes = [
       {
         path: 'dashboard',
         loadComponent: () =>
-          import('./routes/dashboard/dashboard.component').then((m) => m.DashboardComponent)
+          import('./routes/dashboard/dashboard.component').then((m) => m.DashboardComponent),
+        canActivate: [authGuard]
       },
       {
         path: 'upload',
