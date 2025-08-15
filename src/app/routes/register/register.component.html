@@ -1,0 +1,39 @@
+<section class="register-page">
+  <h1>Sign Up</h1>
+  <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input id="name" formControlName="name" type="text" [class.invalid]="form.get('name')?.invalid && form.get('name')?.touched" />
+      @if (form.get('name')?.invalid && form.get('name')?.touched) {
+        <div class="error">Name is required and must be less than 50 characters.</div>
+      }
+    </div>
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input id="email" formControlName="email" type="email" [class.invalid]="form.get('email')?.invalid && form.get('email')?.touched" />
+      @if (form.get('email')?.invalid && form.get('email')?.touched) {
+        <div class="error">Please enter a valid email address.</div>
+      }
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input id="password" formControlName="password" type="password" [class.invalid]="form.get('password')?.invalid && form.get('password')?.touched" />
+      @if (form.get('password')?.invalid && form.get('password')?.touched) {
+        <div class="error">Password must be at least 6 characters.</div>
+      }
+    </div>
+    <button class="btn" type="submit" [disabled]="form.invalid || loading()">Register</button>
+    @if (loading()) {
+      <div class="loading">Registering...</div>
+    }
+    @if (error()) {
+      <div class="error">{{ error() }}</div>
+    }
+    @if (success()) {
+      <div class="success">Registration successful! Redirecting...</div>
+    }
+  </form>
+  <div class="login-link">
+    Already have an account? <a routerLink="/login">Login</a>
+  </div>
+</section>

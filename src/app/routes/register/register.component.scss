@@ -1,0 +1,123 @@
+@use "../../../styles/variables" as *;
+
+.register-page {
+  min-height: calc(100vh - $header-height);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: $color-main-bg;
+  padding: $spacing-xl $spacing-md;
+
+  h1 {
+    text-align: center;
+    margin-bottom: $spacing-lg;
+    font-size: 2rem;
+    font-weight: 700;
+    color: $color-primary;
+  }
+
+  form {
+    width: 100%;
+    max-width: 400px;
+    background: $color-card-bg;
+    border-radius: 1rem;
+    box-shadow: 0 4px 16px $color-shadow;
+    padding: $spacing-xl $spacing-lg;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-lg;
+    border: 1px solid $color-border;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xs;
+    width: 100%;
+    margin-bottom: $spacing-md;
+
+    label {
+      font-weight: 600;
+      font-size: $font-sm;
+      color: $color-text;
+      margin-bottom: 2px;
+    }
+
+    input {
+      width: 100%;
+      padding: $spacing-md;
+      border: 1.5px solid $color-border;
+      border-radius: $border-radius;
+      font-size: $font-md;
+      background-color: $color-main-bg;
+      transition: border-color 0.2s;
+
+      &.invalid {
+        border-color: $color-danger;
+      }
+      &:focus {
+        border-color: $color-primary;
+        outline: none;
+        box-shadow: 0 0 0 2px rgba($color-primary, 0.12);
+      }
+      &:disabled {
+        background-color: $color-muted-light;
+        cursor: not-allowed;
+      }
+    }
+
+    .error {
+      color: $color-danger;
+      font-size: $font-xs;
+      margin-top: $spacing-xs;
+    }
+  }
+
+  .btn {
+    width: 100%;
+    padding: $spacing-md;
+    background: $color-primary;
+    color: $color-white;
+    border: none;
+    border-radius: $border-radius;
+    font-size: $font-md;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: $spacing-sm;
+    transition: background 0.2s;
+    &:hover:not(:disabled) {
+      background: $color-primary-dark;
+    }
+    &:disabled {
+      background: $color-muted-light;
+      cursor: not-allowed;
+    }
+  }
+
+  .loading {
+    text-align: center;
+    color: $color-muted;
+    margin-top: $spacing-md;
+  }
+  .success {
+    text-align: center;
+    color: $color-success;
+    margin-top: $spacing-md;
+  }
+  .error {
+    text-align: center;
+    color: $color-danger;
+    margin-top: $spacing-md;
+  }
+  .login-link {
+    text-align: center;
+    margin-top: $spacing-lg;
+    a {
+      color: $color-primary;
+      text-decoration: underline;
+      font-weight: 500;
+      cursor: pointer;
+    }
+  }
+}
