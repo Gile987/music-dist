@@ -12,11 +12,19 @@
     align-items: center;
     justify-content: center;
     padding: $spacing-xl $spacing-md $spacing-lg $spacing-md;
-    background: linear-gradient(90deg, $color-primary-light 60%, $color-card-bg 100%);
+    background-image: url('/landing-hero.svg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     gap: $spacing-xl;
 
     .hero-content {
-      max-width: 500px;
+      max-width: 700px;
+      background: rgba($color-card-bg, 0.85);
+      box-shadow: 0 4px 32px rgba($color-primary, 0.08);
+      border-radius: 1.5rem;
+      padding: $spacing-xl $spacing-lg;
+      backdrop-filter: blur(2px);
       h1 {
         font-size: 2.5rem;
         font-weight: 800;
@@ -30,6 +38,7 @@
       }
       .hero-actions {
         display: flex;
+        ;
         gap: $spacing-md;
         .btn {
           padding: $spacing-md $spacing-xl;
