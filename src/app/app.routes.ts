@@ -27,17 +27,20 @@ export const routes: Routes = [
       {
         path: 'releases',
         loadComponent: () =>
-          import('./routes/releases/releases.component').then((m) => m.ReleasesComponent)
+          import('./routes/releases/releases.component').then((m) => m.ReleasesComponent),
+        canActivate: [authGuard]
       },
       {
         path: 'royalties',
         loadComponent: () =>
-          import('./routes/royalties/royalties.component').then((m) => m.RoyaltiesComponent)
+          import('./routes/royalties/royalties.component').then((m) => m.RoyaltiesComponent),
+        canActivate: [authGuard]
       },
       {
         path: 'profile',
         loadComponent: () =>
-          import('./routes/profile/profile.component').then((m) => m.ProfileComponent)
+          import('./routes/profile/profile.component').then((m) => m.ProfileComponent),
+        canActivate: [authGuard]
       }
     ]
   }
