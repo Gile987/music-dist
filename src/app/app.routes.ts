@@ -15,11 +15,13 @@ export const routes: Routes = [
   },
   {
     path: '',
+    loadComponent: () => import('./routes/landing/landing.component').then(m => m.LandingComponent)
+  },
+  {
+    path: '',
     component: LayoutComponent,
     children: [
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-      {
-        path: 'dashboard',
+      { path: 'dashboard',
         loadComponent: () =>
           import('./routes/dashboard/dashboard.component').then((m) => m.DashboardComponent),
         canActivate: [authGuard]
