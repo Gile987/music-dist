@@ -3,9 +3,8 @@
   <aside class="sidebar">
     <div class="sidebar-header">🎵 ArtistPanel</div>
     <nav class="sidebar-nav">
-      <a routerLink="/dashboard" class="nav-link">Dashboard</a>
-
       @if (user$ | async; as user) {
+        <a routerLink="/dashboard" class="nav-link">Dashboard</a>
         @if (canUpload(user.role)) {
           <a routerLink="/upload" class="nav-link">Upload</a>
         }

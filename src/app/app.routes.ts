@@ -9,6 +9,11 @@ export const routes: Routes = [
       import('./routes/login/login.component').then((m) => m.LoginComponent)
   },
   {
+    path: 'register',
+    loadComponent: () =>
+      import('./routes/register/register.component').then((m) => m.RegisterComponent)
+  },
+  {
     path: '',
     component: LayoutComponent,
     children: [
@@ -16,7 +21,8 @@ export const routes: Routes = [
       {
         path: 'dashboard',
         loadComponent: () =>
-          import('./routes/dashboard/dashboard.component').then((m) => m.DashboardComponent)
+          import('./routes/dashboard/dashboard.component').then((m) => m.DashboardComponent),
+        canActivate: [authGuard]
       },
       {
         path: 'upload',
