@@ -15,9 +15,9 @@
         <div class="error">Password is required.</div>
       }
     </div>
-    <button class="btn" type="submit" [disabled]="form.invalid || loading()">
+    <app-button type="submit" [disabled]="form.invalid || loading()">
       {{ loading() ? 'Logging in…' : 'Login' }}
-    </button>
+    </app-button>
     @if (loading()) {
       <div class="loading">Logging in...</div>
     }

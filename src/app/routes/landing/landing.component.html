@@ -4,8 +4,8 @@
       <h1>Distribute Your Music Everywhere</h1>
       <p>Reach Spotify, Apple Music, YouTube, and more. Keep 100% of your royalties. No hidden fees.</p>
       <div class="hero-actions">
-        <a routerLink="/register" class="btn primary">Get Started Free</a>
-        <a routerLink="/login" class="btn secondary">Login</a>
+        <app-button variant="primary" [routerLink]="'/register'">Get Started Free</app-button>
+        <app-button variant="secondary" [routerLink]="'/login'">Login</app-button>
       </div>
     </div>
     <div class="hero-image">
@@ -41,6 +41,6 @@
 
   <section class="cta">
     <h2>Ready to share your music with the world?</h2>
-    <a routerLink="/register" class="btn primary large">Start for Free</a>
+  <app-button variant="primary" size="large" [routerLink]="'/register'">Start for Free</app-button>
   </section>
 </section>

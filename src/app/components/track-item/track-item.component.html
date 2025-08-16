@@ -6,7 +6,7 @@
   @if (track.isrc) {
     <p class="track-isrc">ISRC: {{ track.isrc }}</p>
   }
-  <button class="delete-btn" title="Delete track" (click)="onDeleteClick()">
+  <app-button variant="secondary" title="Delete track" (click)="onDeleteClick()">
     <span class="material-icons">delete</span>
-  </button>
+  </app-button>
 </div>
