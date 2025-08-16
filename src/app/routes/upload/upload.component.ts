@@ -7,10 +7,11 @@ import { ReleaseService } from '../../core/services/release.service';
 import { AuthService } from '../../core/services/auth.service';
 import { Release } from '../../core/interfaces/release.interface';
 import { firstValueFrom } from 'rxjs';
+import { ButtonComponent } from '../../shared/button.component';
 
 @Component({
   selector: 'app-upload',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [ReactiveFormsModule, ButtonComponent, CommonModule],
   templateUrl: './upload.component.html',
   styleUrl: './upload.component.scss'
 })

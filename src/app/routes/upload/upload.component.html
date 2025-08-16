@@ -7,43 +7,54 @@
       <select formControlName="releaseId" id="releaseId">
         <option value="">Select a release</option>
         @for (release of releases(); track release.id) {
-          <option [value]="release.id">{{ release.title }}</option>
+        <option [value]="release.id">{{ release.title }}</option>
         }
       </select>
       @if (loadingReleases()) {
-        <div class="loading-message">Loading releases...</div>
+      <div class="loading-message">Loading releases...</div>
       }
     </div>
 
     <div class="form-group">
       <label for="title">Track Title:</label>
-      <input 
-        type="text" 
-        formControlName="title" 
-        id="title" 
+      <input
+        type="text"
+        formControlName="title"
+        id="title"
         placeholder="Enter track title"
       />
     </div>
 
     <div class="form-group">
       <label for="isrc">ISRC (optional):</label>
-      <input 
-        type="text" 
-        formControlName="isrc" 
-        id="isrc" 
+      <input
+        type="text"
+        formControlName="isrc"
+        id="isrc"
         placeholder="Enter ISRC code"
       />
     </div>
 
     <label
-      class="upload-button"
+      class="app-btn primary"
       [class.disabled]="uploading() || uploadSuccess()"
+      tabindex="0"
+      style="width: fit-content; cursor: pointer"
     >
-      Select Audio File
+      <span>Select Audio File</span>
       <input
         type="file"
         accept="audio/*"
         (change)="onFileSelected($event)"
+        tabindex="-1"
+        style="
+          position: absolute;
+          opacity: 0;
+          width: 0;
+          height: 0;
+          pointer-events: none;
+        "
+        [disabled]="uploading() || uploadSuccess()"
       />
     </label>
 
@@ -52,37 +63,34 @@
       <div class="progress-bar" [style.width.%]="progress()"></div>
       <span class="progress-text">{{ progress() }}%</span>
     </div>
-    }
-
-    @if (uploadedFileUrl) {
+    } @if (uploadedFileUrl) {
     <div class="file-info">
       <p>File uploaded successfully!</p>
-      <p>Title: {{ uploadForm.get('title')?.value }}</p>
+      <p>Title: {{ uploadForm.get("title")?.value }}</p>
       @if (uploadedFileMetadata) {
-        <p>Duration: {{ uploadedFileMetadata.duration | number:'1.0-0' }} seconds</p>
+      <p>
+        Duration: {{ uploadedFileMetadata.duration | number : "1.0-0" }} seconds
+      </p>
       }
     </div>
 
-    <button 
-      type="submit" 
-      class="submit-button"
-      [class.disabled]="uploadForm.invalid || !uploadedFileUrl"
+    <app-button
+      type="submit"
+      [disabled]="uploadForm.invalid || !uploadedFileUrl"
     >
       Save Track
-    </button>
-    }
-
-    @if (uploadSuccess()) {
+    </app-button>
+    } @if (uploadSuccess()) {
     <div class="message success">
       ✔ Track saved successfully!
-      <button class="reset-button" (click)="reset()">Upload Another</button>
+      <app-button variant="secondary" (click)="reset()"
+        >Upload Another</app-button
+      >
     </div>
-    } 
-    
-    @if (uploadError()) {
+    } @if (uploadError()) {
     <div class="message error">
       ⚠ {{ uploadError() }}
-      <button class="reset-button" (click)="reset()">Try Again</button>
+      <app-button variant="secondary" (click)="reset()">Try Again</app-button>
     </div>
     }
   </form>

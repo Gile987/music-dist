@@ -1,5 +1,5 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { ButtonComponent } from '../../shared/button.component';
 import { ReleaseListComponent } from '../../components/release-list/release-list.component';
 import { StatCardComponent } from '../../components/stat-card/stat-card.component';
 import { ReleaseService } from '../../core/services/release.service';
@@ -9,7 +9,7 @@ import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angula
 
 @Component({
   selector: 'app-releases',
-  imports: [CommonModule, ReleaseListComponent, StatCardComponent, ReactiveFormsModule],
+  imports: [ReleaseListComponent, StatCardComponent, ReactiveFormsModule, ButtonComponent],
   templateUrl: './releases.component.html',
   styleUrls: ['./releases.component.scss']
 })
