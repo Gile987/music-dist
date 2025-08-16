@@ -10,7 +10,6 @@ import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-upload',
-  standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './upload.component.html',
   styleUrl: './upload.component.scss'

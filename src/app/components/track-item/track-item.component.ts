@@ -4,7 +4,6 @@ import { Track } from '../../core/interfaces/track.interface';
 
 @Component({
   selector: 'app-track-item',
-  standalone: true,
   imports: [CommonModule],
   templateUrl: './track-item.component.html',
   styleUrls: ['./track-item.component.scss']

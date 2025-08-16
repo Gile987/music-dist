@@ -6,7 +6,6 @@ import { TrackService } from '../../core/services/track.service';
 
 @Component({
   selector: 'app-track-list',
-  standalone: true,
   imports: [CommonModule, TrackItemComponent],
   templateUrl: './track-list.component.html',
   styleUrls: ['./track-list.component.scss']

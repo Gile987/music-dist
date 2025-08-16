@@ -3,7 +3,6 @@ import { CurrencyPipe as NgCurrencyPipe } from '@angular/common';
 
 @Pipe({
   name: 'appCurrency',
-  standalone: true,
   pure: true
 })
 export class AppCurrencyPipe implements PipeTransform {

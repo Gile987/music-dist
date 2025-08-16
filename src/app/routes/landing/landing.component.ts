@@ -1,11 +1,12 @@
+
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { StatCardComponent } from '../../components/stat-card/stat-card.component';
 
 @Component({
   selector: 'app-landing',
-  standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, StatCardComponent],
   templateUrl: './landing.component.html',
   styleUrls: ['./landing.component.scss']
 })

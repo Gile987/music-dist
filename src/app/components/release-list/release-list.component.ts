@@ -5,7 +5,6 @@ import { Release } from '../../core/interfaces/release.interface';
 
 @Component({
   selector: 'app-release-list',
-  standalone: true,
   imports: [CommonModule, ReleaseItemComponent],
   templateUrl: './release-list.component.html',
   styleUrls: ['./release-list.component.scss']

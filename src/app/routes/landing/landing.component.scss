@@ -88,31 +88,23 @@
     .features-list {
       display: flex;
       flex-wrap: wrap;
-      gap: $spacing-lg;
       justify-content: center;
-      .feature {
-        background: $color-main-bg;
-        border-radius: 1rem;
-        box-shadow: 0 2px 12px $color-shadow;
-        padding: $spacing-lg;
-        max-width: 260px;
-        min-width: 200px;
-        flex: 1 1 200px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        .icon {
-          font-size: 2.5rem;
-          margin-bottom: $spacing-md;
-        }
-        h3 {
-          font-size: 1.2rem;
-          font-weight: 700;
-          margin-bottom: $spacing-xs;
-        }
-        p {
-          color: $color-text-secondary;
-          font-size: $font-sm;
+      gap: $spacing-lg;
+
+      app-stat-card {
+        flex: 0 1 calc(50% - #{$spacing-lg});
+        width: calc(50% - #{$spacing-lg});
+        max-width: 420px;
+        min-width: 260px;
+        margin: 0;
+        box-sizing: border-box;
+      }
+
+      @media (max-width: 900px) {
+        app-stat-card {
+          flex-basis: 100%;
+          width: 100%;
+          max-width: 100%;
         }
       }
     }
