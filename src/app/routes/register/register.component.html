@@ -22,7 +22,7 @@
         <div class="error">Password must be at least 6 characters.</div>
       }
     </div>
-    <button class="btn" type="submit" [disabled]="form.invalid || loading()">Register</button>
+  <app-button type="submit" [disabled]="form.invalid || loading()">Register</app-button>
     @if (loading()) {
       <div class="loading">Registering...</div>
     }

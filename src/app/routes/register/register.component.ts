@@ -1,11 +1,12 @@
 import { Component, signal } from '@angular/core';
+import { ButtonComponent } from '../../shared/button.component';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, ButtonComponent],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
