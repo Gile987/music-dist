@@ -12,6 +12,6 @@ export class ButtonComponent {
   /** Variant: 'primary' | 'secondary' */
   @Input() variant: 'primary' | 'secondary' = 'primary';
   @Input() type: 'button' | 'submit' = 'button';
-  @Input() size: 'default' | 'large' = 'default';
+  @Input() size: 'default' | 'large' | 'small' = 'default';
   @Input() disabled = false;
 }

@@ -16,6 +16,7 @@ import { ButtonComponent } from '../../shared/button.component';
   styleUrl: './upload.component.scss'
 })
 export class UploadComponent implements OnInit {
+  fileInputEnabled = signal(true);
   private uploadService = inject(UploadService);
   private trackService = inject(TrackService);
   private releaseService = inject(ReleaseService);
@@ -108,7 +109,7 @@ export class UploadComponent implements OnInit {
       
       // Save the URL for later submission
       this.uploadedFileUrl = url.split('?')[0]; // Remove query parameters to get the base URL
-      this.uploadSuccess.set(true);
+      this.fileInputEnabled.set(false); // Disable file input after upload
       this.updateFormControlsBasedOnState();
     } catch (err: any) {
       this.uploadError.set(err?.message ?? 'Upload failed');
@@ -164,6 +165,7 @@ export class UploadComponent implements OnInit {
     this.uploadForm.reset();
     this.uploadedFileUrl = null;
     this.uploadedFileMetadata = null;
+    this.fileInputEnabled.set(true); // Re-enable file input on reset
     this.updateFormControlsBasedOnState();
   }
 }
