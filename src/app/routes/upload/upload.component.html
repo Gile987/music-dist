@@ -37,7 +37,7 @@
 
     <label
       class="app-btn primary"
-      [class.disabled]="uploading() || uploadSuccess()"
+      [class.disabled]="!fileInputEnabled()"
       tabindex="0"
       style="width: fit-content; cursor: pointer"
     >
@@ -54,7 +54,7 @@
           height: 0;
           pointer-events: none;
         "
-        [disabled]="uploading() || uploadSuccess()"
+        [disabled]="!fileInputEnabled()"
       />
     </label>
 
@@ -83,9 +83,7 @@
     } @if (uploadSuccess()) {
     <div class="message success">
       ✔ Track saved successfully!
-      <app-button variant="secondary" (click)="reset()"
-        >Upload Another</app-button
-      >
+  <app-button variant="secondary" size="small" (click)="reset()">Upload Another</app-button>
     </div>
     } @if (uploadError()) {
     <div class="message error">
