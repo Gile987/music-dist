@@ -1,5 +1,4 @@
 import { Component, Input, Output, EventEmitter, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { StatusBadgeComponent } from '../status-badge/status-badge.component';
 import { TrackListComponent } from '../track-list/track-list.component';
 import { Release } from '../../core/interfaces/release.interface';
@@ -9,7 +8,7 @@ import { ReleaseService } from '../../core/services/release.service';
 
 @Component({
   selector: 'app-release-item',
-  imports: [CommonModule, StatusBadgeComponent, TrackListComponent],
+  imports: [StatusBadgeComponent, TrackListComponent],
   templateUrl: './release-item.component.html',
   styleUrls: ['./release-item.component.scss']
 })

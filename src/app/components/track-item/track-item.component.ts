@@ -1,11 +1,8 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { Track } from '../../core/interfaces/track.interface';
-import { ButtonComponent } from '../../shared/button.component';
 
 @Component({
   selector: 'app-track-item',
-  imports: [CommonModule, ButtonComponent],
   templateUrl: './track-item.component.html',
   styleUrls: ['./track-item.component.scss']
 })
