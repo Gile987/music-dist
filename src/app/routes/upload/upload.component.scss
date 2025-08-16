@@ -1,5 +1,4 @@
-
-@use '../../../styles/variables' as *;
+@use "../../../styles/variables" as *;
 
 .upload-page {
   padding: $spacing-xl;
@@ -28,7 +27,7 @@ form {
   max-width: 480px;
   background: $color-card-bg;
   border-radius: 1rem;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
   padding: $spacing-xl $spacing-lg;
   display: flex;
   flex-direction: column;
@@ -48,7 +47,7 @@ form {
     color: $color-text;
     margin-bottom: 2px;
   }
-  
+
   input,
   select {
     padding: $spacing-md;
@@ -91,30 +90,51 @@ form {
   transition: background 0.3s;
   align-self: center;
   margin: $spacing-md 0;
-  box-shadow: 0 2px 8px rgba($color-primary, 0.10);
+  box-shadow: 0 2px 8px rgba($color-primary, 0.1);
   border: none;
 
-  &:hover:not(.disabled) {
-    background: linear-gradient(90deg, $color-primary-dark, $color-primary);
-    box-shadow: 0 4px 16px rgba($color-primary, 0.18);
-  }
+  all: unset;
+}
 
-  &.disabled {
-    background: $color-muted;
-    cursor: not-allowed;
-    pointer-events: none;
-
-    input[type="file"] {
-      cursor: not-allowed;
-    }
-  }
-
-  input[type="file"] {
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    cursor: pointer;
-  }
+// Ensure .app-btn can be used on a label and looks like a button
+label.app-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: $font-default;
+  font-weight: 600;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.65em 2.2em;
+  font-size: $font-md;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s, box-shadow 0.18s,
+    border-color 0.18s;
+  box-shadow: 0 2px 8px 0 rgba($color-shadow, 0.1);
+  outline: none;
+  letter-spacing: 0.01em;
+  min-width: 120px;
+  min-height: 2.5em;
+  background: $color-primary;
+  color: $color-white;
+  border: 1.5px solid $color-primary-dark;
+  box-shadow: 0 2px 12px 0 rgba($color-primary, 0.1);
+}
+label.app-btn.primary:hover:not(.disabled),
+label.app-btn.primary:focus-visible:not(.disabled) {
+  background: $color-primary-dark;
+  border: 1.5px solid $color-primary;
+  outline: 2px solid $color-primary-light;
+  outline-offset: 2px;
+  box-shadow: 0 2px 16px 0 rgba($color-primary, 0.13);
+  filter: brightness(0.98);
+}
+label.app-btn.primary.disabled,
+label.app-btn.primary[disabled] {
+  opacity: 0.55;
+  cursor: not-allowed;
+  pointer-events: none;
+  box-shadow: none;
 }
 
 .progress-container {
@@ -151,7 +171,7 @@ form {
   border-radius: 0.5rem;
   padding: $spacing-md;
   margin: $spacing-md 0;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 
   p {
     margin: $spacing-xs 0;
@@ -175,7 +195,7 @@ form {
   cursor: pointer;
   transition: background 0.3s;
   align-self: center;
-  box-shadow: 0 2px 8px rgba($color-primary, 0.10);
+  box-shadow: 0 2px 8px rgba($color-primary, 0.1);
 
   &:hover:not(:disabled) {
     background: linear-gradient(90deg, $color-primary-dark, $color-primary);

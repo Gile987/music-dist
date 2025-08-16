@@ -1,42 +1,66 @@
 @use '../../styles/variables' as *;
 
+
 .app-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   font-family: $font-default;
-  font-weight: 700;
+  font-weight: 600;
   border: none;
-  border-radius: 2rem;
-  padding: $spacing-md $spacing-xl;
+  border-radius: 0.5rem;
+  padding: 0.65em 2.2em;
   font-size: $font-md;
   cursor: pointer;
-  transition: background 0.18s, color 0.18s, box-shadow 0.18s;
-  box-shadow: 0 1px 2px $color-shadow;
+  transition: background 0.18s, color 0.18s, box-shadow 0.18s, border-color 0.18s;
+  box-shadow: 0 2px 8px 0 rgba($color-shadow, 0.10);
   outline: none;
+  letter-spacing: 0.01em;
+  min-width: 120px;
+  min-height: 2.5em;
+
+
   &.primary {
     background: $color-primary;
     color: $color-white;
-    &:hover:not(.disabled) {
+    border: 1.5px solid $color-primary-dark;
+    box-shadow: 0 2px 12px 0 rgba($color-primary, 0.10);
+    &:hover:not(.disabled), &:focus-visible:not(.disabled) {
       background: $color-primary-dark;
+      border: 1.5px solid $color-primary;
+      outline: 2px solid $color-primary-light;
+      outline-offset: 2px;
+      box-shadow: 0 2px 16px 0 rgba($color-primary, 0.13);
+      filter: brightness(0.98);
     }
   }
+
   &.secondary {
     background: $color-card-bg;
     color: $color-primary;
-    border: 2px solid $color-primary;
-    &:hover:not(.disabled) {
-      background: $color-primary-light;
+    border: 1.5px solid $color-primary;
+    &:hover:not(.disabled), &:focus-visible:not(.disabled) {
+      background: $color-card-bg;
+      color: $color-primary-dark;
+      border: 1.5px solid $color-primary-dark;
+      outline: 2px solid $color-primary-light;
+      outline-offset: 2px;
+      box-shadow: 0 2px 16px 0 rgba($color-primary, 0.10);
+      filter: brightness(0.98);
     }
   }
+
   &.large {
-    padding: $spacing-lg $spacing-xl;
+    padding: 1em 2.8em;
     font-size: $font-lg;
+    min-height: 3.2em;
   }
+
   &.disabled,
   &:disabled {
-    opacity: 0.6;
+    opacity: 0.55;
     cursor: not-allowed;
     pointer-events: none;
+    box-shadow: none;
   }
 }

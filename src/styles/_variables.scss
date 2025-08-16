@@ -1,27 +1,33 @@
-// Colors: Base
-$color-bg: #f9fafb;
-$color-text: #111827;
-$color-sidebar-bg: #ffffff;
-$color-border: #e5e7eb;
-$color-hover: #2563eb;
-$color-danger: #ef4444;
-$color-danger-bg: #fef2f2;
-$color-main-bg: #f3f4f6;
 
-// Colors: Extended UI
-$color-primary: #3b82f6;
-$color-primary-light: #dbeafe;
-$color-primary-dark: #2c6cdf;
-$color-success: #10b981;
-$color-success-bg: #ecfdf5;
-$color-warning: #f59e0b;
-$color-warning-bg: #fffbeb;
-$color-muted: #6b7280;
+// Colors
+$color-bg: #f7f8fa;
+$color-main-bg: #f4f5f7;
+$color-sidebar-bg: #fcfcfd;
+$color-card-bg: #fff;
+$color-border: #e0e3ea;
+$color-shadow: rgba(16, 30, 54, 0.06);
+
+$color-text: #23272f;
+$color-text-secondary: #5c6370;
+$color-muted: #7a7f8c;
 $color-muted-light: #e5e7eb;
-$color-card-bg: #ffffff;
-$color-shadow: rgba(0, 0, 0, 0.04);
-$color-text-secondary: $color-muted;
-$color-white: #ffffff;
+$color-white: #fff;
+
+// Primary accent: bold teal
+$color-primary: #16b1a6;
+$color-primary-light: #e0f7f5;
+$color-primary-dark: #0e8078;
+
+// Success/Warning/Danger (muted)
+$color-success: #22b07d;
+$color-success-bg: #eafaf3;
+$color-warning: #f5b759;
+$color-warning-bg: #fff8e6;
+$color-danger: #e5484d;
+$color-danger-bg: #fbeaec;
+
+$color-hover: #4731b6;
+
 
 // Spacing
 $spacing-xs: 0.25rem;
@@ -30,16 +36,20 @@ $spacing-md: 1rem;
 $spacing-lg: 1.5rem;
 $spacing-xl: 4rem;
 
+
 // Layout dimensions
 $sidebar-width: 18rem;
 $header-height: 4rem;
+
 
 // Typography
 $font-xs: 0.75rem;
 $font-sm: 0.875rem;
 $font-md: 1.125rem;
 $font-lg: 1.25rem;
-$font-default: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+$font-default: 'Inter', 'SF Pro Display', 'Roboto', 'Segoe UI', Arial, sans-serif;
+
 
 // Borders
 $border-radius: 0.5rem;

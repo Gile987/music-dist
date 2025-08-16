@@ -48,19 +48,19 @@
       </div>
 
       <div class="form-actions">
-        <button 
+        <app-button 
           type="submit" 
           [disabled]="releaseForm.invalid"
-          [class.disabled]="releaseForm.invalid">
+        >
           <span class="material-icons">{{ editedReleaseId() ? 'update' : 'add_circle' }}</span>
           {{ editedReleaseId() ? 'Update Release' : 'Create Release' }}
-        </button>
+        </app-button>
 
         @if (editedReleaseId()) {
-          <button type="button" class="secondary" (click)="cancelEdit()">
+          <app-button type="button" variant="secondary" (click)="cancelEdit()">
             <span class="material-icons">cancel</span>
             Cancel
-          </button>
+          </app-button>
         }
       </div>
     </form>
