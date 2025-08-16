@@ -9,7 +9,6 @@ import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angula
 
 @Component({
   selector: 'app-releases',
-  standalone: true,
   imports: [CommonModule, ReleaseListComponent, StatCardComponent, ReactiveFormsModule],
   templateUrl: './releases.component.html',
   styleUrls: ['./releases.component.scss']

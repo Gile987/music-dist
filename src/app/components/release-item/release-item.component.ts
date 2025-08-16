@@ -9,7 +9,6 @@ import { ReleaseService } from '../../core/services/release.service';
 
 @Component({
   selector: 'app-release-item',
-  standalone: true,
   imports: [CommonModule, StatusBadgeComponent, TrackListComponent],
   templateUrl: './release-item.component.html',
   styleUrls: ['./release-item.component.scss']
