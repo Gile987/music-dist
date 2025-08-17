@@ -95,43 +95,58 @@
         <h3>Change Password</h3>
         <form [formGroup]="passwordForm" (ngSubmit)="updatePassword()">
           <div class="form-group">
-            <label for="password">New Password</label>
+            <label for="currentPassword">Current Password</label>
             <input
-              id="password"
+              id="currentPassword"
               type="password"
-              formControlName="password"
+              formControlName="currentPassword"
               class="form-input"
-              [class.error]="passwordForm.get('password')?.touched && passwordForm.get('password')?.errors"
+              [class.error]="passwordForm.get('currentPassword')?.touched && passwordForm.get('currentPassword')?.errors"
             />
-            @if (passwordForm.get('password')?.touched && passwordForm.get('password')?.errors) {
+            @if (passwordForm.get('currentPassword')?.touched && passwordForm.get('currentPassword')?.errors) {
               <div class="form-error">
-                @if (passwordForm.get('password')?.errors?.['required']) {
-                  Password is required
-                }
-                @if (passwordForm.get('password')?.errors?.['minlength']) {
-                  Password must be at least 6 characters
-                }
+                @if (passwordForm.get('currentPassword')?.errors?.['required']) { Current password is required }
+                @if (passwordForm.get('currentPassword')?.errors?.['minlength']) { Current password must be at least 6 characters }
               </div>
             }
           </div>
-
+          <div class="form-group">
+            <label for="confirmCurrentPassword">Confirm Current Password</label>
+            <input
+              id="confirmCurrentPassword"
+              type="password"
+              formControlName="confirmCurrentPassword"
+              class="form-input"
+              [class.error]="passwordForm.get('confirmCurrentPassword')?.touched && passwordForm.get('confirmCurrentPassword')?.errors"
+            />
+            @if (passwordForm.get('confirmCurrentPassword')?.touched && passwordForm.get('confirmCurrentPassword')?.errors) {
+              <div class="form-error">
+                @if (passwordForm.get('confirmCurrentPassword')?.errors?.['required']) { Confirmation is required }
+                @if (passwordForm.get('confirmCurrentPassword')?.errors?.['minlength']) { Must be at least 6 characters }
+              </div>
+            }
+          </div>
+          <div class="form-group">
+            <label for="newPassword">New Password</label>
+            <input
+              id="newPassword"
+              type="password"
+              formControlName="newPassword"
+              class="form-input"
+              [class.error]="passwordForm.get('newPassword')?.touched && passwordForm.get('newPassword')?.errors"
+            />
+            @if (passwordForm.get('newPassword')?.touched && passwordForm.get('newPassword')?.errors) {
+              <div class="form-error">
+                @if (passwordForm.get('newPassword')?.errors?.['required']) { New password is required }
+                @if (passwordForm.get('newPassword')?.errors?.['minlength']) { New password must be at least 6 characters }
+              </div>
+            }
+          </div>
           <div class="form-actions">
-            <app-button 
-              type="submit" 
-              [disabled]="isLoading() || passwordForm.invalid"
-            >
-              @if (isLoading()) {
-                Updating...
-              } @else {
-                Update Password
-              }
+            <app-button type="submit" [disabled]="isLoading() || passwordForm.invalid">
+              @if (isLoading()) { Updating... } @else { Update Password }
             </app-button>
-            <app-button 
-              variant="secondary" 
-              type="button" 
-              (click)="togglePasswordForm()"
-              [disabled]="isLoading()"
-            >
+            <app-button variant="secondary" type="button" (click)="togglePasswordForm()" [disabled]="isLoading()">
               Cancel
             </app-button>
           </div>
