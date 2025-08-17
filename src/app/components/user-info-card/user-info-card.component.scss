@@ -1,42 +1,56 @@
 @use '../../../styles/variables' as *;
 
+:host {
+  display: block;
+  background-color: $color-white;
+  border: 1px solid $color-border;
+  border-radius: 0.75rem;
+  padding: $spacing-lg;
+  transition: box-shadow 0.2s ease-in-out;
+  cursor: default;
+}
+
+:host(:hover) {
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
 .user-info-card {
   display: flex;
   align-items: center;
-  background-color: $color-card-bg;
-  padding: $spacing-md;
-  border: 1px solid $color-border;
-  border-radius: 0.75rem;
-  box-shadow: 0 1px 2px $color-shadow;
   gap: $spacing-md;
+
+  .avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid $color-primary;
+    transition: transform 0.3s ease;
+  }
+
+  .details {
+    flex: 1;
+
+    h2 {
+      margin: 0;
+      font-size: $font-lg;
+      color: $color-text;
+    }
+
+    p {
+      margin: $spacing-xs 0 0;
+      font-size: $font-sm;
+      color: $color-text-secondary;
+    }
+  }
 }
 
-.avatar {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid $color-border;
-}
-
-.details {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.name {
-  font-size: $font-md;
-  font-weight: 600;
-  color: $color-text;
-}
-
-.email {
-  font-size: $font-sm;
-  color: $color-muted;
-}
-
-.meta {
-  font-size: $font-sm;
-  color: $color-text-secondary;
+@media (max-width: 600px) {
+  .user-info-card {
+    flex-direction: column;
+    text-align: center;
+    .avatar {
+      margin-bottom: $spacing-md;
+    }
+  }
 }
