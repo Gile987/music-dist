@@ -38,7 +38,9 @@ export class ProfileComponent implements OnInit {
     });
 
     this.passwordForm = this.fb.group({
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      currentPassword: ['', [Validators.required, Validators.minLength(6)]],
+      confirmCurrentPassword: ['', [Validators.required, Validators.minLength(6)]],
+      newPassword: ['', [Validators.required, Validators.minLength(6)]]
     });
   }
 
@@ -124,6 +126,11 @@ export class ProfileComponent implements OnInit {
       return;
     }
 
+    if (this.passwordForm.value.currentPassword !== this.passwordForm.value.confirmCurrentPassword) {
+      this.errorMessage.set('Current passwords do not match');
+      return;
+    }
+
     const currentAuthUser = this.authService.userValue;
     if (!currentAuthUser) {
       this.errorMessage.set('User not found');
@@ -133,9 +140,7 @@ export class ProfileComponent implements OnInit {
     this.isLoading.set(true);
     this.clearMessages();
 
-    const passwordUpdate = this.passwordForm.value;
-    
-    this.authService.updateUser(currentAuthUser.id.toString(), passwordUpdate).subscribe({
+    this.authService.updateUser(currentAuthUser.id.toString(), { password: this.passwordForm.value.newPassword }).subscribe({
       next: () => {
         this.isLoading.set(false);
         this.showPasswordForm.set(false);
