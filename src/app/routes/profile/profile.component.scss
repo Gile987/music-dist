@@ -59,7 +59,7 @@
       transition: background-color 0.2s ease;
 
       &:hover {
-        background-color: $color-hover; // Already defined and slightly darker than primary
+        background-color: $color-hover;
       }
 
       &.secondary {
@@ -71,6 +71,88 @@
           background-color: $color-main-bg;
         }
       }
+    }
+  }
+
+  .message {
+    padding: $spacing-sm $spacing-md;
+    margin: $spacing-md 0;
+    border-radius: 0.5rem;
+    font-size: $font-sm;
+    font-weight: 500;
+
+    &.success-message {
+      background-color: #d1f2eb;
+      color: #0d7754;
+      border: 1px solid #a3e4d7;
+    }
+
+    &.error-message {
+      background-color: #fdeaea;
+      color: #c62d42;
+      border: 1px solid #f5b7b1;
+    }
+  }
+
+  .edit-profile-form,
+  .password-form {
+    margin-top: $spacing-lg;
+    padding: $spacing-lg;
+    background-color: $color-white;
+    border: 1px solid $color-border;
+    border-radius: 0.75rem;
+
+    h3 {
+      margin: 0 0 $spacing-lg 0;
+      font-size: $font-md;
+      color: $color-text;
+      font-weight: 600;
+    }
+
+    .form-group {
+      margin-bottom: $spacing-md;
+
+      label {
+        display: block;
+        margin-bottom: $spacing-xs;
+        font-size: $font-sm;
+        font-weight: 500;
+        color: $color-text;
+      }
+
+      .form-input {
+        width: 100%;
+        padding: $spacing-sm $spacing-md;
+        font-size: $font-sm;
+        border: 1px solid $color-border;
+        border-radius: 0.5rem;
+        background-color: $color-white;
+        color: $color-text;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+        &:focus {
+          outline: none;
+          border-color: $color-primary;
+          box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        &.error {
+          border-color: #dc2626;
+          box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+        }
+      }
+
+      .form-error {
+        margin-top: $spacing-xs;
+        font-size: $font-xs;
+        color: #dc2626;
+      }
+    }
+
+    .form-actions {
+      display: flex;
+      gap: $spacing-sm;
+      margin-top: $spacing-lg;
     }
   }
 }

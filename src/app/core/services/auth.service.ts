@@ -97,4 +97,18 @@ export class AuthService {
   public getProfile(): Observable<UserProfile> {
     return this.http.get<UserProfile>('/api/auth/me', { withCredentials: true });
   }
+
+  public updateUser(userId: string, updates: Partial<{ name: string; email: string; password: string }>): Observable<UserProfile> {
+    return this.http.patch<UserProfile>(`/api/users/${userId}`, updates, { withCredentials: true }).pipe(
+      tap((updatedUser: UserProfile): void => {
+        const currentUser = this.userSubject.getValue();
+        if (currentUser && currentUser.id.toString() === userId) {
+          const newUser: AuthUser = { ...currentUser, ...updatedUser };
+          this.userSubject.next(newUser);
+          AuthService.storeUser(newUser);
+        }
+      }),
+      catchError((error: HttpErrorResponse) => throwError((): Error => error))
+    );
+  }
 }
