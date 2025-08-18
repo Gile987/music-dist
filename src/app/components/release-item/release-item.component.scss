@@ -12,12 +12,12 @@
   font-family: $font-default;
   color: $color-text;
   gap: $spacing-md;
-  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  transition: box-shadow 0.18s ease, background-color 0.18s ease;
   flex-wrap: wrap;
 
   &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    background-color: $color-sidebar-bg;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
   }
 
   .actions {
@@ -136,6 +136,7 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      cursor: default;
 
       @media (max-width: 480px) {
         font-size: $font-sm;
@@ -148,6 +149,7 @@
       display: flex;
       align-items: center;
       gap: $spacing-xs;
+      cursor: default;
 
       .material-icons {
         font-size: 16px;
@@ -157,6 +159,7 @@
 
   app-status-badge {
     margin-left: auto;
+    cursor: default;
 
     @media (max-width: 768px) {
       margin-left: 0;
