@@ -92,10 +92,10 @@
   }
   
   .release-form {
-    background-color: $color-card-bg;
+    background-color: $color-sidebar-bg;
     padding: $spacing-xl;
     border-radius: 1rem;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
     border: 1px solid $color-border;
     display: flex;
     flex-direction: column;
@@ -114,7 +114,7 @@
       left: 0;
       width: 100%;
       height: 4px;
-      background: linear-gradient(90deg, $color-primary, $color-primary-dark);
+      background: $color-border;
     }
     
     .form-title {
@@ -122,6 +122,9 @@
       border-bottom: 1px solid $color-border;
       padding-bottom: $spacing-md;
       width: 100%;
+      color: $color-primary;
+      font-size: $font-lg;
+      font-weight: bold;
     }
     
     @media (max-width: 768px) {
@@ -145,87 +148,41 @@
         margin-bottom: 2px;
         letter-spacing: 0.01em;
         width: 100%;
-        
-        &::after {
-          content: "*";
-          color: $color-danger;
-          margin-left: 2px;
-          font-size: 14px;
-          font-weight: bold;
-        }
-        
-        &[for="coverUrl"]::after {
-          display: none;
-        }
       }
-      
-      .error-message {
-        color: $color-danger;
-        display: flex;
-        align-items: center;
-        gap: 4px;
-        font-size: 12px;
-        margin-top: 4px;
-        animation: fadeIn 0.3s ease;
-        
-        &::before {
-          content: "⚠️";
-          font-size: 11px;
-        }
-        font-size: 12px;
-        margin-top: 4px;
-        animation: fadeIn 0.3s ease;
-      }
-    }
-    
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(-5px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
 
-    input {
-      padding: $spacing-md $spacing-lg;
-      border: 2px solid $color-border;
-      border-radius: 0.75rem;
-      font-size: $font-md;
-      outline: none;
-      transition: all 0.2s ease;
-      background-color: $color-main-bg;
-      height: 3.5rem;
-      width: 100%;
-      box-sizing: border-box;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+      input {
+        padding: $spacing-md $spacing-lg;
+        border: 2px solid $color-border;
+        border-radius: 0.75rem;
+        font-size: $font-md;
+        outline: none;
+        transition: all 0.2s ease;
+        background-color: $color-card-bg;
+        height: 3.5rem;
+        width: 100%;
+        box-sizing: border-box;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        color: $color-text;
 
-      &:focus {
-        border-color: $color-primary;
-        box-shadow: 0 0 0 4px rgba($color-primary, 0.15);
-      }
-      
-      &::placeholder {
-        color: $color-muted;
-        font-size: $font-sm;
-      }
-      
-      &.ng-invalid.ng-touched {
-        border-color: $color-danger;
-        background-color: rgba($color-danger, 0.04);
-        box-shadow: 0 0 0 4px rgba($color-danger, 0.1);
-      }
-      
-      &[type="date"] {
-        appearance: none;
+        &:focus {
+          border-color: $color-primary;
+          box-shadow: 0 0 0 4px rgba($color-primary, 0.15);
+        }
         
-        &::-webkit-calendar-picker-indicator {
-          background-color: transparent;
-          cursor: pointer;
-          color: $color-primary;
-          padding: 5px;
+        &::placeholder {
+          color: $color-text;
+          font-size: $font-sm;
+        }
+
+        &[type="date"] {
+          appearance: none;
+
+          &::-webkit-calendar-picker-indicator {
+            background-color: transparent;
+            cursor: pointer;
+            color: $color-primary;
+            padding: 5px;
+          }
         }
       }
     }
@@ -235,11 +192,6 @@
       gap: $spacing-md;
       align-items: center;
       margin-top: $spacing-lg;
-      
-      @media (max-width: 480px) {
-        flex-direction: column;
-        width: 100%;
-      }
       
       button {
         padding: $spacing-md $spacing-xl;
@@ -255,40 +207,12 @@
         align-items: center;
         justify-content: center;
         gap: $spacing-xs;
-        flex-grow: 1;
         height: 3.5rem;
         box-shadow: 0 4px 12px rgba($color-primary, 0.25);
-        position: relative;
-        overflow: hidden;
-        
-        .material-icons {
-          font-size: 20px;
-        }
 
         &:hover:not(:disabled):not(.disabled) {
           transform: translateY(-2px);
           box-shadow: 0 6px 15px rgba($color-primary, 0.35);
-          
-          &::after {
-            opacity: 1;
-          }
-        }
-        
-        &::after {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: rgba(255, 255, 255, 0.1);
-          opacity: 0;
-          transition: opacity 0.3s ease;
-        }
-
-        &:active:not(:disabled):not(.disabled) {
-          transform: translateY(0);
-          box-shadow: 0 2px 8px rgba($color-primary, 0.2);
         }
 
         &:disabled, &.disabled {
@@ -297,22 +221,6 @@
           opacity: 0.7;
           box-shadow: none;
           pointer-events: none;
-        }
-      }
-
-      .secondary {
-        background: transparent;
-        background-image: none;
-        color: $color-text;
-        border: 2px solid $color-border;
-        box-shadow: none;
-        
-        &:hover {
-          background-color: $color-main-bg;
-          border-color: $color-primary;
-          color: $color-primary;
-          transform: translateY(-2px);
-          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
         }
       }
     }
