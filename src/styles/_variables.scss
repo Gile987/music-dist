@@ -1,17 +1,16 @@
-
 // Colors
-$color-bg: #f7f8fa;
-$color-main-bg: #f4f5f7;
-$color-sidebar-bg: #fcfcfd;
-$color-card-bg: #fff;
-$color-border: #e0e3ea;
-$color-shadow: rgba(16, 30, 54, 0.06);
+$color-bg: #1a1a2e;
+$color-main-bg: #16213e;
+$color-sidebar-bg: #0f3460;
+$color-card-bg: #1b1b2f;
+$color-border: #e94560;
+$color-shadow: rgba(16, 30, 54, 0.1);
 
-$color-text: #23272f;
-$color-text-secondary: #5c6370;
+$color-text: #ffffff;
+$color-text-secondary: #dcdde1;
 $color-muted: #7a7f8c;
-$color-muted-light: #e5e7eb;
-$color-white: #fff;
+$color-muted-light: #2c2c54;
+$color-white: #ffffff;
 
 // Primary accent: bold teal
 $color-primary: #16b1a6;
@@ -28,7 +27,6 @@ $color-danger-bg: #fbeaec;
 
 $color-hover: #4731b6;
 
-
 // Spacing
 $spacing-xs: 0.25rem;
 $spacing-sm: 0.5rem;
@@ -36,11 +34,9 @@ $spacing-md: 1rem;
 $spacing-lg: 1.5rem;
 $spacing-xl: 4rem;
 
-
 // Layout dimensions
 $sidebar-width: 18rem;
 $header-height: 4rem;
-
 
 // Typography
 $font-xs: 0.75rem;
@@ -49,7 +45,6 @@ $font-md: 1.125rem;
 $font-lg: 1.25rem;
 
 $font-default: 'Inter', 'SF Pro Display', 'Roboto', 'Segoe UI', Arial, sans-serif;
-
 
 // Borders
 $border-radius: 0.5rem;
