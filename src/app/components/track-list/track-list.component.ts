@@ -1,4 +1,4 @@
-import { Component, Input, EventEmitter, Output } from '@angular/core';
+import { Component, Input, EventEmitter, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Track } from '../../core/interfaces/track.interface';
 import { TrackItemComponent } from '../track-item/track-item.component';
@@ -12,17 +12,19 @@ import { TrackService } from '../../core/services/track.service';
 })
 export class TrackListComponent {
   @Input() tracks: Track[] = [];
-  @Output() trackDeleted = new EventEmitter<number>();
+  @Output() trackDeleted: EventEmitter<number> = new EventEmitter<number>();
 
-  constructor(private trackService: TrackService) {}
+  private readonly trackService: TrackService = inject(TrackService);
 
-  onDeleteTrack(track: Track): void {
-    if (confirm(`Are you sure you want to delete the track "${track.title}"?`)) {
+  public onDeleteTrack(track: Track): void {
+    const confirmMessage: string = `Are you sure you want to delete the track "${track.title}"?`;
+    
+    if (confirm(confirmMessage)) {
       this.trackService.deleteTrack(track.id).subscribe({
-        next: () => {
+        next: (): void => {
           this.trackDeleted.emit(track.id);
         },
-        error: () => {
+        error: (): void => {
           alert('Failed to delete track. Please try again.');
         }
       });
