@@ -11,16 +11,15 @@ import { Release } from '../../core/interfaces/release.interface';
 })
 export class ReleaseListComponent {
   @Input() releases: Release[] = [];
-  @Output() editRelease = new EventEmitter<Release>();
-  @Output() releaseDeleted = new EventEmitter<number>();
+  @Output() editRelease: EventEmitter<Release> = new EventEmitter<Release>();
+  @Output() releaseDeleted: EventEmitter<number> = new EventEmitter<number>();
 
-  onEdit(r: Release): void {
-    this.editRelease.emit(r);
+  public onEdit(release: Release): void {
+    this.editRelease.emit(release);
   }
   
-  onReleaseDeleted(releaseId: number): void {
+  public onReleaseDeleted(releaseId: number): void {
     this.releaseDeleted.emit(releaseId);
-    // Remove the release from the local array
-    this.releases = this.releases.filter(release => release.id !== releaseId);
+    this.releases = this.releases.filter((release: Release): boolean => release.id !== releaseId);
   }
 }
