@@ -1,4 +1,11 @@
-import { Component, Input, Output, EventEmitter, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  OnInit,
+  inject,
+} from '@angular/core';
 import { StatusBadgeComponent } from '../status-badge/status-badge.component';
 import { TrackListComponent } from '../track-list/track-list.component';
 import { Release } from '../../core/interfaces/release.interface';
@@ -10,22 +17,21 @@ import { ReleaseService } from '../../core/services/release.service';
   selector: 'app-release-item',
   imports: [StatusBadgeComponent, TrackListComponent],
   templateUrl: './release-item.component.html',
-  styleUrls: ['./release-item.component.scss']
+  styleUrls: ['./release-item.component.scss'],
 })
 export class ReleaseItemComponent implements OnInit {
   @Input({ required: true }) release!: Release;
-  @Output() edit = new EventEmitter<Release>();
-  @Output() deleted = new EventEmitter<number>();
+  @Output() edit: EventEmitter<Release> = new EventEmitter<Release>();
+  @Output() deleted: EventEmitter<number> = new EventEmitter<number>();
 
-  private trackService = inject(TrackService);
-  private releaseService = inject(ReleaseService);
-  
-  showTracks = false;
-  tracks: Track[] = [];
-  tracksLoaded = false;
+  private readonly trackService: TrackService = inject(TrackService);
+  private readonly releaseService: ReleaseService = inject(ReleaseService);
+
+  public showTracks: boolean = false;
+  public tracks: Track[] = [];
+  public tracksLoaded: boolean = false;
 
   ngOnInit(): void {
-    // If tracks are already available in the release, use them
     if (this.release.tracks && this.release.tracks.length > 0) {
       this.tracks = this.release.tracks;
       this.tracksLoaded = true;
@@ -33,50 +39,55 @@ export class ReleaseItemComponent implements OnInit {
   }
 
   public get formattedDate(): string {
-    const d: Date = new Date(this.release.releaseDate);
-    return d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+    const date: Date = new Date(this.release.releaseDate);
+    return date.toLocaleDateString(undefined, {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    });
   }
 
-  onEditClick(): void {
+  public onEditClick(): void {
     this.edit.emit(this.release);
   }
 
-  onDeleteClick(): void {
-    if (confirm(`Are you sure you want to delete the release "${this.release.title}"? This will also delete all associated tracks.`)) {
+  public onDeleteClick(): void {
+    const confirmMessage: string = `Are you sure you want to delete the release "${this.release.title}"? This will also delete all associated tracks.`;
+
+    if (confirm(confirmMessage)) {
       this.releaseService.deleteRelease(this.release.id).subscribe({
-        next: () => {
+        next: (): void => {
           this.deleted.emit(this.release.id);
         },
-        error: () => {
+        error: (): void => {
           alert('Failed to delete release. Please try again.');
-        }
+        },
       });
     }
   }
 
-  toggleTracks(): void {
+  public toggleTracks(): void {
     this.showTracks = !this.showTracks;
-    
-    // Load tracks if they haven't been loaded yet and the section is expanded
     if (this.showTracks && !this.tracksLoaded) {
       this.loadTracks();
     }
   }
 
-  onTrackDeleted(trackId: number): void {
-    // Remove the track from the local array
-    this.tracks = this.tracks.filter(track => track.id !== trackId);
+  public onTrackDeleted(trackId: number): void {
+    this.tracks = this.tracks.filter(
+      (track: Track): boolean => track.id !== trackId
+    );
   }
 
   private loadTracks(): void {
     this.trackService.getTracksByRelease(this.release.id).subscribe({
-      next: (tracks) => {
+      next: (tracks: Track[]): void => {
         this.tracks = tracks;
         this.tracksLoaded = true;
       },
-      error: () => {
+      error: (): void => {
         alert('Failed to load tracks. Please try again.');
-      }
+      },
     });
   }
 }
