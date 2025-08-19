@@ -52,6 +52,7 @@
       font-size: $font-md;
       background-color: $color-main-bg;
       transition: border-color 0.2s;
+      color: $color-text;
 
       &.invalid {
         border-color: $color-danger;
