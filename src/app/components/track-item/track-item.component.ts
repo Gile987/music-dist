@@ -8,15 +8,15 @@ import { Track } from '../../core/interfaces/track.interface';
 })
 export class TrackItemComponent {
   @Input({ required: true }) track!: Track;
-  @Output() deleteTrack = new EventEmitter<Track>();
+  @Output() deleteTrack: EventEmitter<Track> = new EventEmitter<Track>();
 
-  formatDuration(seconds: number): string {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = Math.floor(seconds % 60);
+  public formatDuration(seconds: number): string {
+    const minutes: number = Math.floor(seconds / 60);
+    const remainingSeconds: number = Math.floor(seconds % 60);
     return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
   }
 
-  onDeleteClick(): void {
+  public onDeleteClick(): void {
     this.deleteTrack.emit(this.track);
   }
 }
