@@ -2,7 +2,8 @@ import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../core/services/auth.service';
-import { Role } from '../../core/interfaces/auth.interface';
+import { Role, AuthUser } from '../../core/interfaces/auth.interface';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-layout',
@@ -11,15 +12,15 @@ import { Role } from '../../core/interfaces/auth.interface';
   styleUrls: ['./layout.component.scss'],
 })
 export class LayoutComponent {
-  private auth = inject(AuthService);
+  private readonly auth = inject(AuthService);
 
-  user$ = this.auth.user$;
-  isAuthenticated$ = this.auth.isAuthenticated$;
+  user$: Observable<AuthUser | null> = this.auth.user$;
+
+  isAuthenticated$: Observable<boolean> = this.auth.isAuthenticated$;
 
   logout(): void {
     this.auth.logout().subscribe({
       next: () => {
-        // TODO: probably a toast or notification here
         console.log('Logged out successfully');
       },
       error: (err) => {
