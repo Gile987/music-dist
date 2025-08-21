@@ -13,35 +13,28 @@ import { ButtonComponent } from '../../shared/button.component';
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
-  private authService = inject(AuthService);
-  private fb = inject(FormBuilder);
-  
+  private readonly authService = inject(AuthService);
+  private readonly fb = inject(FormBuilder);
+
   user = signal<UserProfile | null>(null);
   avatarUrl = signal<string>('https://www.gravatar.com/avatar/?d=mp');
   isEditing = signal<boolean>(false);
   isLoading = signal<boolean>(false);
-  editForm!: FormGroup;
-  passwordForm!: FormGroup;
+  editForm: FormGroup = this.fb.group({
+    name: ['', [Validators.required, Validators.minLength(2)]],
+    email: ['', [Validators.required, Validators.email]]
+  });
+  passwordForm: FormGroup = this.fb.group({
+    currentPassword: ['', [Validators.required, Validators.minLength(6)]],
+    confirmCurrentPassword: ['', [Validators.required, Validators.minLength(6)]],
+    newPassword: ['', [Validators.required, Validators.minLength(6)]]
+  });
   showPasswordForm = signal<boolean>(false);
   successMessage = signal<string>('');
   errorMessage = signal<string>('');
 
   ngOnInit(): void {
-    this.initForms();
     this.loadProfile();
-  }
-
-  private initForms(): void {
-    this.editForm = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(2)]],
-      email: ['', [Validators.required, Validators.email]]
-    });
-
-    this.passwordForm = this.fb.group({
-      currentPassword: ['', [Validators.required, Validators.minLength(6)]],
-      confirmCurrentPassword: ['', [Validators.required, Validators.minLength(6)]],
-      newPassword: ['', [Validators.required, Validators.minLength(6)]]
-    });
   }
 
   private loadProfile(): void {
@@ -70,7 +63,6 @@ export class ProfileComponent implements OnInit {
     this.isEditing.set(false);
     this.showPasswordForm.set(false);
     this.clearMessages();
-    // Reset form to original values
     const currentUser = this.user();
     if (currentUser) {
       this.editForm.patchValue({
@@ -98,7 +90,6 @@ export class ProfileComponent implements OnInit {
     this.clearMessages();
 
     const updates = this.editForm.value;
-    
     this.authService.updateUser(currentAuthUser.id.toString(), updates).subscribe({
       next: (updatedProfile) => {
         this.user.set(updatedProfile);
