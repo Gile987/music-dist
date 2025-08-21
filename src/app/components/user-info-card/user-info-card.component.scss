@@ -2,16 +2,18 @@
 
 :host {
   display: block;
-  background-color: $color-white;
+  background-color: $color-card-bg;
   border: 1px solid $color-border;
-  border-radius: 0.75rem;
+  border-radius: 1rem;
   padding: $spacing-lg;
-  transition: box-shadow 0.2s ease-in-out;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.2s ease-in-out, border-color 0.2s ease;
   cursor: default;
 }
 
 :host(:hover) {
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border-color: $color-primary;
 }
 
 .user-info-card {
@@ -20,27 +22,48 @@
   gap: $spacing-md;
 
   .avatar {
-    width: 80px;
-    height: 80px;
+    width: 90px;
+    height: 90px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid $color-primary;
-    transition: transform 0.3s ease;
+    border: 3px solid $color-primary;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    flex-shrink: 0;
+    
+    &:hover {
+      transform: scale(1.05);
+      border-color: $color-primary-dark;
+    }
   }
 
   .details {
     flex: 1;
+    min-width: 0;
 
     h2 {
-      margin: 0;
-      font-size: $font-lg;
+      margin: 0 0 $spacing-xs 0;
+      font-size: 1.75rem;
+      font-weight: 700;
       color: $color-text;
+      letter-spacing: 0.02em;
     }
 
     p {
-      margin: $spacing-xs 0 0;
-      font-size: $font-sm;
-      color: $color-text-secondary;
+      margin: $spacing-xs 0;
+      line-height: 1.4;
+      
+      &.email {
+        font-size: $font-md;
+        font-weight: 500;
+        color: $color-primary;
+      }
+      
+      &.meta {
+        font-size: $font-sm;
+        color: $color-muted;
+        margin: 2px 0;
+      }
     }
   }
 }
