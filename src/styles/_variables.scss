@@ -1,9 +1,12 @@
-// Colors - Professional Dark Theme
+// Colors - Dark Theme
 $color-bg: #0f172a;
 $color-main-bg: #1e293b;
-$color-sidebar-bg: #334155;
+$color-content-bg: #0f172a;
+$color-sidebar-bg: #1e293b;
+$color-topbar-bg: #334155;
 $color-card-bg: #1e293b;
 $color-border: #334155;
+$color-border-light: #475569;
 $color-shadow: rgba(0, 0, 0, 0.1);
 
 $color-text: #f8fafc;
@@ -12,12 +15,12 @@ $color-muted: #64748b;
 $color-muted-light: #475569;
 $color-white: #ffffff;
 
-// Primary accent: Professional indigo
+// Primary accent: indigo
 $color-primary: #6366f1;
 $color-primary-light: #a5b4fc;
 $color-primary-dark: #4f46e5;
 
-// Success/Warning/Danger (professional)
+// Success/Warning/Danger
 $color-success: #10b981;
 $color-success-bg: #ecfdf5;
 $color-warning: #f59e0b;
