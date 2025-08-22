@@ -1,5 +1,5 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
-import { ButtonComponent } from '../../shared/button.component';
+import { ButtonComponent } from '../../shared/button/button.component';
 import { ReleaseListComponent } from '../../components/release-list/release-list.component';
 import { StatCardComponent } from '../../components/stat-card/stat-card.component';
 import { ReleaseService } from '../../core/services/release.service';
