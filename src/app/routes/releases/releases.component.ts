@@ -14,41 +14,51 @@ import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angula
   styleUrls: ['./releases.component.scss']
 })
 export class ReleasesComponent implements OnInit {
-  private releaseService = inject(ReleaseService);
-  private authService = inject(AuthService);
+  private readonly releaseService = inject(ReleaseService);
+  private readonly authService = inject(AuthService);
 
   releases = signal<Release[]>([]);
-  loading = signal(false);
+  loading = signal<boolean>(false);
   error = signal<string | null>(null);
 
-  totalStreams = signal(0);
-  approvedReleases = signal(0);
-  pendingReleases = signal(0);
+  totalStreams = signal<number>(0);
+  approvedReleases = signal<number>(0);
+  pendingReleases = signal<number>(0);
 
   editedReleaseId = signal<number | null>(null);
 
-  releaseForm = new FormGroup({
+  releaseForm: FormGroup = new FormGroup({
     title: new FormControl('', [Validators.required, Validators.maxLength(255)]),
     releaseDate: new FormControl('', [Validators.required]),
     coverUrl: new FormControl('', []),
   });
 
   ngOnInit(): void {
+    this.initializeUserAndLoadReleases();
+  }
+
+  private initializeUserAndLoadReleases(): void {
     const user = this.authService.userValue;
     if (user) {
       this.fetchReleases(user.id);
     } else {
-      this.authService.user$.subscribe(u => {
-        if (u) this.fetchReleases(u.id);
-      });
+      this.subscribeToUserChanges();
     }
   }
 
-  fetchReleases(artistId: number): void {
+  private subscribeToUserChanges(): void {
+    this.authService.user$.subscribe((user) => {
+      if (user) {
+        this.fetchReleases(user.id);
+      }
+    });
+  }
+
+  private fetchReleases(artistId: number): void {
     this.loading.set(true);
     this.error.set(null);
     this.releaseService.getReleasesByArtist(artistId).subscribe({
-      next: (data) => {
+      next: (data: Release[]) => {
         this.releases.set(data);
         this.updateStats(data);
         this.loading.set(false);
@@ -60,46 +70,38 @@ export class ReleasesComponent implements OnInit {
     });
   }
 
-  updateStats(releases: Release[]): void {
-    // Check for the exact status values: APPROVED, PENDING, REJECTED
-    const approvedCount = releases.filter(r => r.status === 'APPROVED').length;
-    const pendingCount = releases.filter(r => r.status === 'PENDING'
-    ).length;
-    const totalStreamsCount = releases.reduce((acc, r) => acc + (r.streams ?? 0), 0);
+  private updateStats(releases: Release[]): void {
+    const approvedCount: number = releases.filter(r => r.status === 'APPROVED').length;
+    const pendingCount: number = releases.filter(r => r.status === 'PENDING').length;
+    const totalStreamsCount: number = releases.reduce((acc, r) => acc + (r.streams ?? 0), 0);
     
     this.totalStreams.set(totalStreamsCount);
     this.approvedReleases.set(approvedCount);
     this.pendingReleases.set(pendingCount);
   }
 
-  // 🔹 when user clicks "Edit" on a release
-  onEditRelease(r: Release): void {
+  public onEditRelease(r: Release): void {
     this.editedReleaseId.set(r.id);
     this.releaseForm.setValue({
       title: r.title,
-      // convert stored ISO/string to yyyy-MM-dd for <input type="date">
       releaseDate: this.toDateInputValue(r.releaseDate),
       coverUrl: r.coverUrl ?? ''
     });
     this.error.set(null);
   }
 
-  // 🔹 when a release is deleted
-  onReleaseDeleted(releaseId: number): void {
-    // Filter out the deleted release from the releases signal
+  public onReleaseDeleted(releaseId: number): void {
     this.releases.update(releases => releases.filter(r => r.id !== releaseId));
-    // Update statistics
     this.updateStats([...this.releases()]);
   }
 
-  // 🔹 cancel edit and reset to create mode
-  cancelEdit(): void {
+  public cancelEdit(): void {
     this.editedReleaseId.set(null);
     this.releaseForm.reset();
     this.error.set(null);
   }
 
-  onSubmit(): void {
+  public onSubmit(): void {
     if (this.releaseForm.invalid) return;
 
     const user = this.authService.userValue;
@@ -123,11 +125,10 @@ export class ReleasesComponent implements OnInit {
 
     this.loading.set(true);
 
-    const editingId = this.editedReleaseId();
+    const editingId: number | null = this.editedReleaseId();
     if (editingId) {
-      // 🔹 UPDATE
       this.releaseService.updateRelease(editingId, payload).subscribe({
-        next: (updated) => {
+        next: (updated: Release) => {
           this.releases.update(list =>
             list.map(r => (r.id === updated.id ? { ...r, ...updated } : r))
           );
@@ -143,9 +144,8 @@ export class ReleasesComponent implements OnInit {
         }
       });
     } else {
-      // 🔹 CREATE
       this.releaseService.createRelease(payload).subscribe({
-        next: (created) => {
+        next: (created: Release) => {
           this.releases.update(releases => [...releases, created]);
           this.updateStats([...this.releases()]);
           this.releaseForm.reset();
@@ -160,12 +160,11 @@ export class ReleasesComponent implements OnInit {
     }
   }
 
-  // helper: ISO/string -> yyyy-MM-dd for date input
   private toDateInputValue(d: string): string {
-    const date = new Date(d);
-    const y = date.getFullYear();
-    const m = `${date.getMonth() + 1}`.padStart(2, '0');
-    const day = `${date.getDate()}`.padStart(2, '0');
+    const date: Date = new Date(d);
+    const y: number = date.getFullYear();
+    const m: string = `${date.getMonth() + 1}`.padStart(2, '0');
+    const day: string = `${date.getDate()}`.padStart(2, '0');
     return `${y}-${m}-${day}`;
   }
 }
