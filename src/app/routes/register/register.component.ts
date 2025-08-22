@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { ButtonComponent } from '../../shared/button.component';
+import { ButtonComponent } from '../../shared/button/button.component';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';

@@ -7,7 +7,7 @@ import { ReleaseService } from '../../core/services/release.service';
 import { AuthService } from '../../core/services/auth.service';
 import { Release } from '../../core/interfaces/release.interface';
 import { firstValueFrom } from 'rxjs';
-import { ButtonComponent } from '../../shared/button.component';
+import { ButtonComponent } from '../../shared/button/button.component';
 
 @Component({
   selector: 'app-upload',

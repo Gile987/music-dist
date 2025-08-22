@@ -4,7 +4,7 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
 import { UserInfoCardComponent } from '../../components/user-info-card/user-info-card.component';
 import { AuthService } from '../../core/services/auth.service';
 import { UserProfile } from '../../core/interfaces/user-profile.interface';
-import { ButtonComponent } from '../../shared/button.component';
+import { ButtonComponent } from '../../shared/button/button.component';
 
 @Component({
   selector: 'app-profile',
