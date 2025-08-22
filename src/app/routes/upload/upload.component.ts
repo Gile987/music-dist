@@ -85,6 +85,20 @@ export class UploadComponent implements OnInit {
     if (!input.files?.length) return;
 
     const file = input.files[0];
+    
+    if (!this.isValidAudioFile(file)) {
+      this.uploadError.set('Please select a valid audio file (MP3, WAV, FLAC, AAC, OGG)');
+      input.value = '';
+      return;
+    }
+
+    const maxSize = 50 * 1024 * 1024;
+    if (file.size > maxSize) {
+      this.uploadError.set('File size must be less than 50MB');
+      input.value = '';
+      return;
+    }
+
     this.uploading.set(true);
     this.updateFormControlsBasedOnState();
 
@@ -155,6 +169,29 @@ export class UploadComponent implements OnInit {
       const estimatedMinutes = size / (1024 * 1024);
       resolve(estimatedMinutes * 60); // Convert to seconds
     });
+  }
+
+  private isValidAudioFile(file: File): boolean {
+    // Check MIME type
+    const validMimeTypes = [
+      'audio/mpeg',      // MP3
+      'audio/wav',       // WAV
+      'audio/wave',      // WAV (alternative)
+      'audio/x-wav',     // WAV (alternative)
+      'audio/flac',      // FLAC
+      'audio/x-flac',    // FLAC (alternative)
+      'audio/aac',       // AAC
+      'audio/mp4',       // M4A/AAC
+      'audio/ogg',       // OGG
+      'audio/vorbis',    // OGG Vorbis
+      'audio/webm'       // WebM audio
+    ];
+
+    // Check file extension as fallback
+    const validExtensions = ['.mp3', '.wav', '.flac', '.aac', '.m4a', '.ogg', '.webm'];
+    const fileExtension = file.name.toLowerCase().substring(file.name.lastIndexOf('.'));
+
+    return validMimeTypes.includes(file.type) || validExtensions.includes(fileExtension);
   }
 
   reset(): void {
