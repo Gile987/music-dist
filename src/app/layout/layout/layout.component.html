@@ -1,16 +1,36 @@
 <div class="layout-container">
   <!-- Sidebar -->
   <aside class="sidebar">
-    <div class="sidebar-header">🎵 ArtistPanel</div>
+    <div class="sidebar-header">
+      <div class="logo">
+        <span class="logo-icon">🎵</span>
+        <span class="logo-text">ArtistPanel</span>
+      </div>
+    </div>
     <nav class="sidebar-nav">
       @if (user$ | async; as user) {
-        <a routerLink="/dashboard" class="nav-link">Dashboard</a>
+        <a routerLink="/dashboard" routerLinkActive="active" class="nav-link">
+          <span class="nav-icon">📊</span>
+          <span class="nav-text">Dashboard</span>
+        </a>
         @if (canUpload(user.role)) {
-          <a routerLink="/upload" class="nav-link">Upload</a>
+          <a routerLink="/upload" routerLinkActive="active" class="nav-link">
+            <span class="nav-icon">⬆️</span>
+            <span class="nav-text">Upload</span>
+          </a>
         }
-        <a routerLink="/releases" class="nav-link">Releases</a>
-        <a routerLink="/royalties" class="nav-link">Royalties</a>
-        <a routerLink="/profile" class="nav-link">Profile</a>
+        <a routerLink="/releases" routerLinkActive="active" class="nav-link">
+          <span class="nav-icon">🎵</span>
+          <span class="nav-text">Releases</span>
+        </a>
+        <a routerLink="/royalties" routerLinkActive="active" class="nav-link">
+          <span class="nav-icon">💰</span>
+          <span class="nav-text">Royalties</span>
+        </a>
+        <a routerLink="/profile" routerLinkActive="active" class="nav-link">
+          <span class="nav-icon">👤</span>
+          <span class="nav-text">Profile</span>
+        </a>
       }
     </nav>
   </aside>
