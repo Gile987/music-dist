@@ -1,142 +1,205 @@
 @use "../../../styles/variables" as *;
+@use "../../../styles/mixins" as *;
 
 .upload-page {
-  padding: $spacing-xl;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: $spacing-lg;
-  min-height: calc(100vh - $header-height);
   background-color: $color-main-bg;
-  overflow-y: auto;
-
-  h2 {
-    font-size: 2rem;
-    font-weight: 700;
-    color: $color-primary;
-    margin-bottom: $spacing-lg;
-    letter-spacing: 0.01em;
-    display: flex;
-    align-items: center;
-    gap: $spacing-sm;
-  }
-}
-
-form {
-  width: 100%;
-  max-width: 480px;
-  background: $color-card-bg;
-  border-radius: 1rem;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
-  padding: $spacing-xl $spacing-lg;
-  display: flex;
-  flex-direction: column;
-  gap: $spacing-lg;
-  border: 1px solid $color-border;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: $spacing-xs;
-  width: 100%;
-
-  label {
-    font-weight: 600;
-    font-size: $font-sm;
-    color: $color-text;
-    margin-bottom: 2px;
-  }
-
-  input,
-  select {
-    padding: $spacing-md;
-    border: 1.5px solid $color-border;
-    border-radius: 0.5rem;
-    font-size: $font-md;
-    background-color: $color-main-bg;
-    transition: border-color 0.2s;
-    color: $color-text;
-
-    &:focus {
-      border-color: $color-primary;
-      outline: none;
-      box-shadow: 0 0 0 2px rgba($color-primary, 0.12);
-    }
-
-    &:disabled {
-      background-color: $color-muted-light;
-      cursor: not-allowed;
-    }
-  }
-
-  .loading-message {
-    font-size: $font-xs;
-    color: $color-muted;
-    margin-top: $spacing-xs;
-  }
-}
-
-.upload-button {
-  position: relative;
-  display: inline-block;
-  padding: $spacing-md $spacing-xl;
-  background: linear-gradient(90deg, $color-primary, $color-primary-dark);
-  color: $color-white;
-  font-weight: 600;
-  font-size: $font-md;
-  border-radius: 2rem;
-  cursor: pointer;
-  user-select: none;
-  transition: background 0.3s;
-  align-self: center;
-  margin: $spacing-md 0;
-  box-shadow: 0 2px 8px rgba($color-primary, 0.1);
-  border: none;
-
-  all: unset;
-}
-
-// Ensure .app-btn can be used on a label and looks like a button
-label.app-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  padding: $spacing-lg;
   font-family: $font-default;
-  font-weight: 600;
-  border: none;
-  border-radius: 0.5rem;
-  padding: 0.65em 2.2em;
-  font-size: $font-md;
-  cursor: pointer;
-  transition: background 0.18s, color 0.18s, box-shadow 0.18s,
-    border-color 0.18s;
-  box-shadow: 0 2px 8px 0 rgba($color-shadow, 0.1);
-  outline: none;
-  letter-spacing: 0.01em;
-  min-width: 120px;
-  min-height: 2.5em;
-  background: $color-primary;
-  color: $color-white;
-  border: 1.5px solid $color-primary-dark;
-  box-shadow: 0 2px 12px 0 rgba($color-primary, 0.1);
+  color: $color-text;
+  min-height: calc(100vh - $header-height);
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  
+  @media (max-width: 768px) {
+    padding: $spacing-md $spacing-sm;
+  }
+
+  // Page title section - matching releases page
+  .page-title {
+    margin-bottom: $spacing-lg;
+    position: relative;
+    
+    h1 {
+      font-weight: 700;
+      font-size: 1.8rem;
+      margin-bottom: $spacing-xs;
+      position: relative;
+      padding-left: $spacing-md;
+      display: flex;
+      align-items: center;
+      background: linear-gradient(90deg, $color-primary, $color-primary-dark);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      
+      &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        height: 70%;
+        width: 4px;
+        background: linear-gradient(180deg, $color-primary, $color-primary-dark);
+        border-radius: 2px;
+      }
+    }
+    
+    p {
+      color: $color-muted;
+      font-size: $font-sm;
+      margin-top: $spacing-xs;
+      padding-left: $spacing-md;
+    }
+  }
+
+  // Form section - matching releases page
+  .form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+  
+  .upload-form {
+    background-color: $color-sidebar-bg;
+    padding: $spacing-xl;
+    border-radius: 1rem;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    border: 1px solid $color-border;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-lg;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: $color-border;
+    }
+    
+    .form-title {
+      margin-bottom: $spacing-lg;
+      border-bottom: 1px solid $color-border;
+      padding-bottom: $spacing-md;
+      width: 100%;
+      color: $color-primary;
+      font-size: $font-lg;
+      font-weight: bold;
+    }
+    
+    @media (max-width: 768px) {
+      padding: $spacing-lg;
+    }
+    
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-sm;
+      position: relative;
+      width: 100%;
+      
+      label {
+        font-weight: 600;
+        font-size: $font-sm;
+        color: $color-text;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        margin-bottom: 2px;
+        letter-spacing: 0.01em;
+        width: 100%;
+      }
+
+      input,
+      select {
+        padding: $spacing-md $spacing-lg;
+        border: 2px solid $color-border;
+        border-radius: 0.75rem;
+        font-size: $font-md;
+        outline: none;
+        transition: all 0.2s ease;
+        background-color: $color-card-bg;
+        height: 3.5rem;
+        width: 100%;
+        box-sizing: border-box;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        color: $color-text;
+
+        &:focus {
+          border-color: $color-primary;
+          box-shadow: 0 0 0 4px rgba($color-primary, 0.15);
+        }
+        
+        &::placeholder {
+          color: $color-text;
+          font-size: $font-sm;
+        }
+
+        &:disabled {
+          background-color: $color-muted-light;
+          cursor: not-allowed;
+          opacity: 0.7;
+        }
+      }
+
+      .loading-message {
+        font-size: $font-xs;
+        color: $color-muted;
+        margin-top: $spacing-xs;
+      }
+    }
+
+    .form-actions {
+      display: flex;
+      gap: $spacing-md;
+      align-items: center;
+      margin-top: $spacing-lg;
+      
+      button, .app-btn {
+        padding: $spacing-md $spacing-xl;
+        background: linear-gradient(90deg, $color-primary, $color-primary-dark);
+        color: $color-white;
+        border: none;
+        border-radius: 3rem;
+        font-size: $font-md;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: $spacing-xs;
+        height: 3.5rem;
+        box-shadow: 0 4px 12px rgba($color-primary, 0.25);
+
+        &:hover:not(:disabled):not(.disabled) {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 15px rgba($color-primary, 0.35);
+        }
+
+        &:disabled, &.disabled {
+          background: $color-muted;
+          cursor: not-allowed;
+          opacity: 0.7;
+          box-shadow: none;
+          pointer-events: none;
+        }
+      }
+    }
+  }
 }
-label.app-btn.primary:hover:not(.disabled),
-label.app-btn.primary:focus-visible:not(.disabled) {
-  background: $color-primary-dark;
-  border: 1.5px solid $color-primary;
-  outline: 2px solid $color-primary-light;
-  outline-offset: 2px;
-  box-shadow: 0 2px 16px 0 rgba($color-primary, 0.13);
-  filter: brightness(0.98);
-}
-label.app-btn.primary.disabled,
-label.app-btn.primary[disabled] {
-  opacity: 0.55;
-  cursor: not-allowed;
-  pointer-events: none;
-  box-shadow: none;
-}
+
 
 .progress-container {
   position: relative;
@@ -167,12 +230,11 @@ label.app-btn.primary[disabled] {
 }
 
 .file-info {
-  background-color: $color-card-bg;
-  border: 1px solid $color-border;
-  border-radius: 0.5rem;
+  background-color: rgba($color-success, 0.1);
+  border: 1px solid rgba($color-success, 0.3);
+  border-radius: 0.75rem;
   padding: $spacing-md;
-  margin: $spacing-md 0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  color: $color-text;
 
   p {
     margin: $spacing-xs 0;
@@ -182,6 +244,34 @@ label.app-btn.primary[disabled] {
       font-weight: 600;
       color: $color-success;
     }
+  }
+}
+
+// Notifications - matching app design
+.notification {
+  padding: $spacing-md $spacing-lg;
+  border-radius: 0.75rem;
+  margin: $spacing-lg 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-sm;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 1px solid;
+  
+  &.error {
+    background-color: $color-card-bg;
+    color: $color-danger;
+    border-color: $color-danger;
+    border-left: 4px solid $color-danger;
+  }
+  
+  &.success {
+    background-color: $color-card-bg;
+    color: $color-success;
+    border-color: $color-success;
+    border-left: 4px solid $color-success;
   }
 }
 
@@ -208,42 +298,5 @@ label.app-btn.primary[disabled] {
     background: $color-muted;
     cursor: not-allowed;
     box-shadow: none;
-  }
-}
-
-.message {
-  padding: $spacing-md $spacing-lg;
-  border-radius: 0.5rem;
-  font-weight: 600;
-  font-size: $font-md;
-  display: flex;
-  align-items: center;
-  gap: $spacing-md;
-  width: 100%;
-
-  &.success {
-    background-color: $color-success-bg;
-    color: $color-success;
-  }
-
-  &.error {
-    background-color: $color-danger-bg;
-    color: $color-danger;
-  }
-
-  .reset-button {
-    margin-left: auto;
-    background: none;
-    border: none;
-    color: currentColor;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: $font-sm;
-    padding: 0;
-    text-decoration: underline;
-
-    &:hover {
-      opacity: 0.8;
-    }
   }
 }

@@ -1,95 +1,101 @@
 <section class="upload-page">
-  <h2>🎧 Upload New Track</h2>
+  <div class="page-title">
+    <h1>🎧 Upload New Track</h1>
+    <p>Add new tracks to your existing releases</p>
+  </div>
 
-  <form [formGroup]="uploadForm" (ngSubmit)="onSubmit()">
-    <div class="form-group">
-      <label for="releaseId">Select Release:</label>
-      <select formControlName="releaseId" id="releaseId">
-        <option value="">Select a release</option>
-        @for (release of releases(); track release.id) {
-        <option [value]="release.id">{{ release.title }}</option>
+  <div class="form-container">
+    <form [formGroup]="uploadForm" (ngSubmit)="onSubmit()" class="upload-form">
+      <div class="form-title">
+        <h2>Track Upload Details</h2>
+      </div>
+      
+      <div class="form-group">
+        <label for="releaseId">Select Release</label>
+        <select formControlName="releaseId" id="releaseId">
+          <option value="">Select a release</option>
+          @for (release of releases(); track release.id) {
+          <option [value]="release.id">{{ release.title }}</option>
+          }
+        </select>
+        @if (loadingReleases()) {
+        <div class="loading-message">Loading releases...</div>
         }
-      </select>
-      @if (loadingReleases()) {
-      <div class="loading-message">Loading releases...</div>
+      </div>
+
+      <div class="form-group">
+        <label for="title">Track Title</label>
+        <input
+          type="text"
+          formControlName="title"
+          id="title"
+          placeholder="Enter track title"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="isrc">ISRC (optional)</label>
+        <input
+          type="text"
+          formControlName="isrc"
+          id="isrc"
+          placeholder="Enter ISRC code"
+        />
+      </div>
+
+      <div class="form-actions">
+        <app-button
+          type="button"
+          [disabled]="!fileInputEnabled()"
+          (click)="fileInput.click()"
+        >
+          Select Audio File
+        </app-button>
+        <input
+          #fileInput
+          type="file"
+          accept=".mp3,.wav,.flac,.aac,.m4a,.ogg,.webm,audio/*"
+          (change)="onFileSelected($event)"
+          style="display: none"
+          [disabled]="!fileInputEnabled()"
+        />
+      </div>
+
+      @if (uploading()) {
+      <div class="progress-container">
+        <div class="progress-bar" [style.width.%]="progress()"></div>
+        <span class="progress-text">{{ progress() }}%</span>
+      </div>
+      } @if (uploadedFileUrl) {
+      <div class="file-info">
+        <p>File uploaded successfully!</p>
+        <p>Title: {{ uploadForm.get("title")?.value }}</p>
+        @if (uploadedFileMetadata) {
+        <p>
+          Duration: {{ uploadedFileMetadata.duration | number : "1.0-0" }} seconds
+        </p>
+        }
+      </div>
+
+      <div class="form-actions">
+        <app-button
+          type="submit"
+          [disabled]="uploadForm.invalid || !uploadedFileUrl"
+        >
+          Save Track
+        </app-button>
+      </div>
+      } @if (uploadSuccess()) {
+      <div class="notification success">
+        ✔ Track saved successfully!
+        <app-button variant="secondary" size="small" (click)="reset()">Upload Another</app-button>
+      </div>
+      } @if (uploadError()) {
+      <div class="notification error">
+        ⚠ {{ uploadError() }}
+        <app-button variant="secondary" (click)="reset()">Try Again</app-button>
+      </div>
       }
-    </div>
-
-    <div class="form-group">
-      <label for="title">Track Title:</label>
-      <input
-        type="text"
-        formControlName="title"
-        id="title"
-        placeholder="Enter track title"
-      />
-    </div>
-
-    <div class="form-group">
-      <label for="isrc">ISRC (optional):</label>
-      <input
-        type="text"
-        formControlName="isrc"
-        id="isrc"
-        placeholder="Enter ISRC code"
-      />
-    </div>
-
-    <label
-      class="app-btn primary"
-      [class.disabled]="!fileInputEnabled()"
-      tabindex="0"
-      style="width: fit-content; cursor: pointer"
-    >
-      <span>Select Audio File</span>
-      <input
-        type="file"
-        accept="audio/*"
-        (change)="onFileSelected($event)"
-        tabindex="-1"
-        style="
-          position: absolute;
-          opacity: 0;
-          width: 0;
-          height: 0;
-          pointer-events: none;
-        "
-        [disabled]="!fileInputEnabled()"
-      />
-    </label>
-
-    @if (uploading()) {
-    <div class="progress-container">
-      <div class="progress-bar" [style.width.%]="progress()"></div>
-      <span class="progress-text">{{ progress() }}%</span>
-    </div>
-    } @if (uploadedFileUrl) {
-    <div class="file-info">
-      <p>File uploaded successfully!</p>
-      <p>Title: {{ uploadForm.get("title")?.value }}</p>
-      @if (uploadedFileMetadata) {
-      <p>
-        Duration: {{ uploadedFileMetadata.duration | number : "1.0-0" }} seconds
-      </p>
-      }
-    </div>
-
-    <app-button
-      type="submit"
-      [disabled]="uploadForm.invalid || !uploadedFileUrl"
-    >
-      Save Track
-    </app-button>
-    } @if (uploadSuccess()) {
-    <div class="message success">
-      ✔ Track saved successfully!
-  <app-button variant="secondary" size="small" (click)="reset()">Upload Another</app-button>
-    </div>
-    } @if (uploadError()) {
-    <div class="message error">
-      ⚠ {{ uploadError() }}
-      <app-button variant="secondary" (click)="reset()">Try Again</app-button>
-    </div>
-    }
-  </form>
+    </form>
+  </div>
 </section>
