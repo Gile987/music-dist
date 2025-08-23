@@ -2,8 +2,18 @@ export interface SignedUrlResponse {
   url: string;
 }
 
-export interface UploadProgressEvent {
-  loaded: number;
-  total: number;
-  lengthComputable: boolean;
+export interface FileMetadata {
+  name: string;
+  duration: number;
+}
+
+export interface UploadFormValue {
+  title: string;
+  releaseId: string;
+  isrc: string;
+}
+
+export interface ValidationResult {
+  readonly isValid: boolean;
+  readonly error?: string;
 }
