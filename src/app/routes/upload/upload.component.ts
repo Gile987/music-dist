@@ -23,6 +23,7 @@ import {
 import { ReleaseService } from '../../core/services/release.service';
 import { AuthService } from '../../core/services/auth.service';
 import { FileValidationService } from '../../core/services/file-validation.service';
+import { UrlUtilsService } from '../../core/services/url-utils.service';
 import { Release } from '../../core/interfaces/release.interface';
 import {
   FileMetadata,
@@ -64,6 +65,7 @@ export class UploadComponent implements OnInit, OnDestroy {
   private readonly releaseService: ReleaseService = inject(ReleaseService);
   private readonly authService: AuthService = inject(AuthService);
   private readonly fileValidationService: FileValidationService = inject(FileValidationService);
+  private readonly urlUtilsService: UrlUtilsService = inject(UrlUtilsService);
   private readonly fb: FormBuilder = inject(FormBuilder);
 
   private readonly destroy$ = new Subject<void>();
@@ -181,7 +183,7 @@ export class UploadComponent implements OnInit, OnDestroy {
       const uploadUrl = await this.getUploadUrl(file);
       await this.uploadFile(uploadUrl, file);
       
-      this.uploadedFileUrl = this.cleanUploadUrl(uploadUrl);
+      this.uploadedFileUrl = this.urlUtilsService.cleanUrl(uploadUrl);
       this.fileInputEnabled.set(false);
       this.updateFormControlsBasedOnState();
     } catch (err: unknown) {
@@ -212,10 +214,6 @@ export class UploadComponent implements OnInit, OnDestroy {
 
   private async uploadFile(url: string, file: File): Promise<void> {
     await this.uploadService.uploadFile(url, file, this.progress);
-  }
-
-  private cleanUploadUrl(url: string): string {
-    return url.split('?')[0];
   }
 
   onSubmit(): void {

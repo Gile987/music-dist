@@ -9,7 +9,7 @@
     <p class="release-title">{{ release.title }}</p>
     <p class="release-date">
       <span class="material-icons">calendar_today</span>
-      {{ formattedDate }}
+      {{ release.releaseDate | dateFormat:'short' }}
     </p>
   </div>
 

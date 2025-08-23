@@ -1,11 +1,15 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal } from '@angular/core';
 import { ButtonComponent } from '../../shared/button/button.component';
 import { ReleaseListComponent } from '../../components/release-list/release-list.component';
 import { StatCardComponent } from '../../components/stat-card/stat-card.component';
 import { ReleaseService } from '../../core/services/release.service';
 import { AuthService } from '../../core/services/auth.service';
+import { ReleaseStatsService } from '../../core/services/release-stats.service';
+import { DateUtilsService } from '../../core/services/date-utils.service';
 import { Release } from '../../core/interfaces/release.interface';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-releases',
@@ -13,9 +17,12 @@ import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angula
   templateUrl: './releases.component.html',
   styleUrls: ['./releases.component.scss']
 })
-export class ReleasesComponent implements OnInit {
+export class ReleasesComponent implements OnInit, OnDestroy {
   private readonly releaseService = inject(ReleaseService);
   private readonly authService = inject(AuthService);
+  private readonly releaseStatsService = inject(ReleaseStatsService);
+  private readonly dateUtilsService = inject(DateUtilsService);
+  private readonly destroy$ = new Subject<void>();
 
   releases = signal<Release[]>([]);
   loading = signal<boolean>(false);
@@ -37,6 +44,11 @@ export class ReleasesComponent implements OnInit {
     this.initializeUserAndLoadReleases();
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   private initializeUserAndLoadReleases(): void {
     const user = this.authService.userValue;
     if (user) {
@@ -47,17 +59,21 @@ export class ReleasesComponent implements OnInit {
   }
 
   private subscribeToUserChanges(): void {
-    this.authService.user$.subscribe((user) => {
-      if (user) {
-        this.fetchReleases(user.id);
-      }
-    });
+    this.authService.user$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((user) => {
+        if (user) {
+          this.fetchReleases(user.id);
+        }
+      });
   }
 
   private fetchReleases(artistId: number): void {
     this.loading.set(true);
     this.error.set(null);
-    this.releaseService.getReleasesByArtist(artistId).subscribe({
+    this.releaseService.getReleasesByArtist(artistId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
       next: (data: Release[]) => {
         this.releases.set(data);
         this.updateStats(data);
@@ -71,20 +87,17 @@ export class ReleasesComponent implements OnInit {
   }
 
   private updateStats(releases: Release[]): void {
-    const approvedCount: number = releases.filter(r => r.status === 'APPROVED').length;
-    const pendingCount: number = releases.filter(r => r.status === 'PENDING').length;
-    const totalStreamsCount: number = releases.reduce((acc, r) => acc + (r.streams ?? 0), 0);
-    
-    this.totalStreams.set(totalStreamsCount);
-    this.approvedReleases.set(approvedCount);
-    this.pendingReleases.set(pendingCount);
+    const stats = this.releaseStatsService.calculateStats(releases);
+    this.totalStreams.set(stats.totalStreams);
+    this.approvedReleases.set(stats.approvedReleases);
+    this.pendingReleases.set(stats.pendingReleases);
   }
 
   public onEditRelease(r: Release): void {
     this.editedReleaseId.set(r.id);
     this.releaseForm.setValue({
       title: r.title,
-      releaseDate: this.toDateInputValue(r.releaseDate),
+      releaseDate: this.dateUtilsService.toInputValue(r.releaseDate),
       coverUrl: r.coverUrl ?? ''
     });
     this.error.set(null);
@@ -127,7 +140,9 @@ export class ReleasesComponent implements OnInit {
 
     const editingId: number | null = this.editedReleaseId();
     if (editingId) {
-      this.releaseService.updateRelease(editingId, payload).subscribe({
+      this.releaseService.updateRelease(editingId, payload)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
         next: (updated: Release) => {
           this.releases.update(list =>
             list.map(r => (r.id === updated.id ? { ...r, ...updated } : r))
@@ -144,7 +159,9 @@ export class ReleasesComponent implements OnInit {
         }
       });
     } else {
-      this.releaseService.createRelease(payload).subscribe({
+      this.releaseService.createRelease(payload)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
         next: (created: Release) => {
           this.releases.update(releases => [...releases, created]);
           this.updateStats([...this.releases()]);
@@ -158,13 +175,5 @@ export class ReleasesComponent implements OnInit {
         },
       });
     }
-  }
-
-  private toDateInputValue(d: string): string {
-    const date: Date = new Date(d);
-    const y: number = date.getFullYear();
-    const m: string = `${date.getMonth() + 1}`.padStart(2, '0');
-    const day: string = `${date.getDate()}`.padStart(2, '0');
-    return `${y}-${m}-${day}`;
   }
 }
