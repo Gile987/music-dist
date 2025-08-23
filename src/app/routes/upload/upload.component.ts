@@ -106,24 +106,21 @@ export class UploadComponent implements OnInit {
       // Get file duration (example, in a real app you'd use the Web Audio API)
       const duration = await this.getAudioDuration(file);
       this.uploadedFileMetadata = {
-        name: file.name.replace(/\.[^/.]+$/, ""), // Remove extension for title suggestion
+        name: file.name.replace(/\.[^/.]+$/, ""), 
         duration
       };
       
-      // Prefill the title field with the file name
       this.uploadForm.patchValue({
         title: this.uploadedFileMetadata.name
       });
 
-      // Upload the file
       const { url } = await firstValueFrom(
         this.uploadService.getSignedUrl(file.name, file.type)
       );
       await this.uploadService.uploadFile(url, file, this.progress);
       
-      // Save the URL for later submission
-      this.uploadedFileUrl = url.split('?')[0]; // Remove query parameters to get the base URL
-      this.fileInputEnabled.set(false); // Disable file input after upload
+      this.uploadedFileUrl = url.split('?')[0];
+      this.fileInputEnabled.set(false); 
       this.updateFormControlsBasedOnState();
     } catch (err: any) {
       this.uploadError.set(err?.message ?? 'Upload failed');
@@ -165,29 +162,27 @@ export class UploadComponent implements OnInit {
     return new Promise<number>((resolve) => {
       // Mock duration calculation - in a real app use Web Audio API
       const size = file.size;
-      // Rough estimate: 1MB ≈ 1 minute of audio at moderate quality
       const estimatedMinutes = size / (1024 * 1024);
-      resolve(estimatedMinutes * 60); // Convert to seconds
+      resolve(estimatedMinutes * 60);
     });
   }
 
   private isValidAudioFile(file: File): boolean {
     // Check MIME type
     const validMimeTypes = [
-      'audio/mpeg',      // MP3
-      'audio/wav',       // WAV
-      'audio/wave',      // WAV (alternative)
-      'audio/x-wav',     // WAV (alternative)
-      'audio/flac',      // FLAC
-      'audio/x-flac',    // FLAC (alternative)
-      'audio/aac',       // AAC
-      'audio/mp4',       // M4A/AAC
-      'audio/ogg',       // OGG
-      'audio/vorbis',    // OGG Vorbis
-      'audio/webm'       // WebM audio
+      'audio/mpeg',
+      'audio/wav',
+      'audio/wave',
+      'audio/x-wav',
+      'audio/flac',
+      'audio/x-flac',
+      'audio/aac',
+      'audio/mp4',
+      'audio/ogg',
+      'audio/vorbis',
+      'audio/webm'
     ];
 
-    // Check file extension as fallback
     const validExtensions = ['.mp3', '.wav', '.flac', '.aac', '.m4a', '.ogg', '.webm'];
     const fileExtension = file.name.toLowerCase().substring(file.name.lastIndexOf('.'));
 
@@ -202,7 +197,7 @@ export class UploadComponent implements OnInit {
     this.uploadForm.reset();
     this.uploadedFileUrl = null;
     this.uploadedFileMetadata = null;
-    this.fileInputEnabled.set(true); // Re-enable file input on reset
+    this.fileInputEnabled.set(true);
     this.updateFormControlsBasedOnState();
   }
 }
