@@ -4,6 +4,7 @@ import {
   Output,
   EventEmitter,
   OnInit,
+  OnDestroy,
   inject,
 } from '@angular/core';
 import { StatusBadgeComponent } from '../status-badge/status-badge.component';
@@ -12,20 +13,24 @@ import { Release } from '../../core/interfaces/release.interface';
 import { Track } from '../../core/interfaces/track.interface';
 import { TrackService } from '../../core/services/track.service';
 import { ReleaseService } from '../../core/services/release.service';
+import { DateFormatPipe } from '../../shared/pipes/date-format.pipe';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-release-item',
-  imports: [StatusBadgeComponent, TrackListComponent],
+  imports: [StatusBadgeComponent, TrackListComponent, DateFormatPipe],
   templateUrl: './release-item.component.html',
   styleUrls: ['./release-item.component.scss'],
 })
-export class ReleaseItemComponent implements OnInit {
+export class ReleaseItemComponent implements OnInit, OnDestroy {
   @Input({ required: true }) release!: Release;
   @Output() edit: EventEmitter<Release> = new EventEmitter<Release>();
   @Output() deleted: EventEmitter<number> = new EventEmitter<number>();
 
   private readonly trackService: TrackService = inject(TrackService);
   private readonly releaseService: ReleaseService = inject(ReleaseService);
+  private readonly destroy$ = new Subject<void>();
 
   public showTracks: boolean = false;
   public tracks: Track[] = [];
@@ -38,13 +43,9 @@ export class ReleaseItemComponent implements OnInit {
     }
   }
 
-  public get formattedDate(): string {
-    const date: Date = new Date(this.release.releaseDate);
-    return date.toLocaleDateString(undefined, {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    });
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   public onEditClick(): void {
@@ -55,7 +56,9 @@ export class ReleaseItemComponent implements OnInit {
     const confirmMessage: string = `Are you sure you want to delete the release "${this.release.title}"? This will also delete all associated tracks.`;
 
     if (confirm(confirmMessage)) {
-      this.releaseService.deleteRelease(this.release.id).subscribe({
+      this.releaseService.deleteRelease(this.release.id)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
         next: (): void => {
           this.deleted.emit(this.release.id);
         },
@@ -80,7 +83,9 @@ export class ReleaseItemComponent implements OnInit {
   }
 
   private loadTracks(): void {
-    this.trackService.getTracksByRelease(this.release.id).subscribe({
+    this.trackService.getTracksByRelease(this.release.id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
       next: (tracks: Track[]): void => {
         this.tracks = tracks;
         this.tracksLoaded = true;
