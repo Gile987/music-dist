@@ -1,10 +1,12 @@
-import { Component, signal, OnInit, inject } from '@angular/core';
+import { Component, signal, OnInit, OnDestroy, inject, WritableSignal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserInfoCardComponent } from '../../components/user-info-card/user-info-card.component';
 import { AuthService } from '../../core/services/auth.service';
 import { UserProfile } from '../../core/interfaces/user-profile.interface';
 import { ButtonComponent } from '../../shared/button/button.component';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-profile',
@@ -12,33 +14,43 @@ import { ButtonComponent } from '../../shared/button/button.component';
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
-export class ProfileComponent implements OnInit {
-  private readonly authService = inject(AuthService);
-  private readonly fb = inject(FormBuilder);
+export class ProfileComponent implements OnInit, OnDestroy {
+  private readonly authService: AuthService = inject(AuthService);
+  private readonly fb: FormBuilder = inject(FormBuilder);
+  private readonly destroy$: Subject<void> = new Subject<void>();
 
-  user = signal<UserProfile | null>(null);
-  avatarUrl = signal<string>('https://www.gravatar.com/avatar/?d=mp');
-  isEditing = signal<boolean>(false);
-  isLoading = signal<boolean>(false);
-  editForm: FormGroup = this.fb.group({
+  readonly editForm: FormGroup = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(2)]],
     email: ['', [Validators.required, Validators.email]]
   });
-  passwordForm: FormGroup = this.fb.group({
+  
+  readonly passwordForm: FormGroup = this.fb.group({
     currentPassword: ['', [Validators.required, Validators.minLength(6)]],
     confirmCurrentPassword: ['', [Validators.required, Validators.minLength(6)]],
     newPassword: ['', [Validators.required, Validators.minLength(6)]]
   });
-  showPasswordForm = signal<boolean>(false);
-  successMessage = signal<string>('');
-  errorMessage = signal<string>('');
+
+  user: WritableSignal<UserProfile | null> = signal<UserProfile | null>(null);
+  avatarUrl: WritableSignal<string> = signal<string>('https://www.gravatar.com/avatar/?d=mp');
+  isEditing: WritableSignal<boolean> = signal<boolean>(false);
+  isLoading: WritableSignal<boolean> = signal<boolean>(false);
+  showPasswordForm: WritableSignal<boolean> = signal<boolean>(false);
+  successMessage: WritableSignal<string> = signal<string>('');
+  errorMessage: WritableSignal<string> = signal<string>('');
 
   ngOnInit(): void {
     this.loadProfile();
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   private loadProfile(): void {
-    this.authService.getProfile().subscribe({
+    this.authService.getProfile()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
       next: (profile) => {
         this.user.set(profile);
         this.avatarUrl.set(`https://i.pravatar.cc/150?u=${encodeURIComponent(profile.email)}`);
@@ -90,7 +102,9 @@ export class ProfileComponent implements OnInit {
     this.clearMessages();
 
     const updates = this.editForm.value;
-    this.authService.updateUser(currentAuthUser.id.toString(), updates).subscribe({
+    this.authService.updateUser(currentAuthUser.id.toString(), updates)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
       next: (updatedProfile) => {
         this.user.set(updatedProfile);
         this.avatarUrl.set(`https://i.pravatar.cc/150?u=${encodeURIComponent(updatedProfile.email)}`);
@@ -131,7 +145,9 @@ export class ProfileComponent implements OnInit {
     this.isLoading.set(true);
     this.clearMessages();
 
-    this.authService.updateUser(currentAuthUser.id.toString(), { password: this.passwordForm.value.newPassword }).subscribe({
+    this.authService.updateUser(currentAuthUser.id.toString(), { password: this.passwordForm.value.newPassword })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
       next: () => {
         this.isLoading.set(false);
         this.showPasswordForm.set(false);
