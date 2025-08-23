@@ -1,199 +1,278 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  inject,
+  signal,
+  computed,
+  WritableSignal,
+  Signal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { UploadService } from '../../core/services/upload.service';
-import { TrackService, CreateTrackDto } from '../../core/services/track.service';
+import {
+  TrackService,
+  CreateTrackDto,
+} from '../../core/services/track.service';
 import { ReleaseService } from '../../core/services/release.service';
 import { AuthService } from '../../core/services/auth.service';
+import { FileValidationService } from '../../core/services/file-validation.service';
 import { Release } from '../../core/interfaces/release.interface';
-import { firstValueFrom } from 'rxjs';
+import {
+  FileMetadata,
+  UploadFormValue,
+  ValidationResult,
+} from '../../core/interfaces/upload.interface';
+import { firstValueFrom, Subscription, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { ButtonComponent } from '../../shared/button/button.component';
 
 @Component({
   selector: 'app-upload',
   imports: [ReactiveFormsModule, ButtonComponent, CommonModule],
   templateUrl: './upload.component.html',
-  styleUrl: './upload.component.scss'
+  styleUrl: './upload.component.scss',
 })
-export class UploadComponent implements OnInit {
-  fileInputEnabled = signal(true);
-  private uploadService = inject(UploadService);
-  private trackService = inject(TrackService);
-  private releaseService = inject(ReleaseService);
-  private authService = inject(AuthService);
-  private fb = inject(FormBuilder);
+export class UploadComponent implements OnInit, OnDestroy {
+  readonly fileInputEnabled: WritableSignal<boolean> = signal(true);
+  readonly uploading: WritableSignal<boolean> = signal(false);
+  readonly progress: WritableSignal<number> = signal(0);
+  readonly uploadSuccess: WritableSignal<boolean> = signal(false);
+  readonly uploadError: WritableSignal<string> = signal('');
+  readonly releases: WritableSignal<Release[]> = signal<Release[]>([]);
+  readonly loadingReleases: WritableSignal<boolean> = signal(false);
 
-  uploading = signal(false);
-  progress = signal(0);
-  uploadSuccess = signal(false);
-  uploadError = signal('');
-  releases = signal<Release[]>([]);
-  loadingReleases = signal(false);
+  readonly isFormDisabled: Signal<boolean> = computed(() => 
+    this.loadingReleases() || this.uploading()
+  );
 
-  uploadForm: FormGroup = this.fb.group({
+  readonly canSubmit: Signal<boolean> = computed(() => 
+    !this.uploadForm.invalid && 
+    !!this.uploadedFileUrl && 
+    !!this.uploadedFileMetadata &&
+    !this.uploading()
+  );
+
+  private readonly uploadService: UploadService = inject(UploadService);
+  private readonly trackService: TrackService = inject(TrackService);
+  private readonly releaseService: ReleaseService = inject(ReleaseService);
+  private readonly authService: AuthService = inject(AuthService);
+  private readonly fileValidationService: FileValidationService = inject(FileValidationService);
+  private readonly fb: FormBuilder = inject(FormBuilder);
+
+  private readonly destroy$ = new Subject<void>();
+
+  readonly uploadForm: FormGroup = this.fb.group({
     title: ['', [Validators.required]],
     releaseId: ['', [Validators.required]],
-    isrc: ['']
+    isrc: [''],
   });
 
   uploadedFileUrl: string | null = null;
-  uploadedFileMetadata: { name: string, duration: number } | null = null;
+  uploadedFileMetadata: FileMetadata | null = null;
 
   ngOnInit(): void {
     this.loadReleases();
+    this.resetUploadState();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private resetUploadState(): void {
     this.uploading.set(false);
     this.uploadSuccess.set(false);
+    this.progress.set(0);
     this.updateFormControlsBasedOnState();
   }
-  
+
   private updateFormControlsBasedOnState(): void {
-    if (this.loadingReleases()) {
-      this.uploadForm.get('releaseId')?.disable();
+    const releaseIdControl = this.uploadForm.get('releaseId');
+    if (!releaseIdControl) return;
+
+    if (this.isFormDisabled()) {
+      releaseIdControl.disable();
     } else {
-      this.uploadForm.get('releaseId')?.enable();
+      releaseIdControl.enable();
     }
   }
 
-  loadReleases(): void {
+  private loadReleases(): void {
     this.loadingReleases.set(true);
     this.updateFormControlsBasedOnState();
-    
+
     const user = this.authService.userValue;
-    if (user) {
-      this.releaseService.getReleasesByArtist(user.id).subscribe({
-        next: (data) => {
+    if (!user) {
+      this.handleLoadReleasesError('User not authenticated');
+      return;
+    }
+
+    const releases$ = this.releaseService.getReleasesByArtist(user.id);
+    
+    releases$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (data: Release[]): void => {
           this.releases.set(data);
           this.loadingReleases.set(false);
           this.updateFormControlsBasedOnState();
         },
-        error: (err) => {
-          this.uploadError.set('Failed to load releases');
-          this.loadingReleases.set(false);
-          this.updateFormControlsBasedOnState();
-        }
+        error: (): void => {
+          this.handleLoadReleasesError('Failed to load releases');
+        },
       });
-    }
+  }
+
+  private handleLoadReleasesError(message: string): void {
+    this.uploadError.set(message);
+    this.loadingReleases.set(false);
+    this.updateFormControlsBasedOnState();
   }
 
   async onFileSelected(event: Event): Promise<void> {
+    this.clearErrors();
+    this.progress.set(0);
+
+    const file = this.extractFileFromEvent(event);
+    if (!file) return;
+
+    const validation: ValidationResult = this.fileValidationService.validateAudioFile(file);
+    if (!validation.isValid) {
+      this.handleFileError(validation.error!, event.target as HTMLInputElement);
+      return;
+    }
+
+    await this.processFileUpload(file);
+  }
+
+  private extractFileFromEvent(event: Event): File | null {
+    const input = event.target as HTMLInputElement;
+    return input.files?.[0] ?? null;
+  }
+
+  private clearErrors(): void {
     this.uploadError.set('');
     this.uploadSuccess.set(false);
     this.updateFormControlsBasedOnState();
-    this.progress.set(0);
+  }
 
-    const input = event.target as HTMLInputElement;
-    if (!input.files?.length) return;
+  private handleFileError(error: string, input: HTMLInputElement): void {
+    this.uploadError.set(error);
+    input.value = '';
+  }
 
-    const file = input.files[0];
-    
-    if (!this.isValidAudioFile(file)) {
-      this.uploadError.set('Please select a valid audio file (MP3, WAV, FLAC, AAC, OGG)');
-      input.value = '';
-      return;
-    }
-
-    const maxSize = 50 * 1024 * 1024;
-    if (file.size > maxSize) {
-      this.uploadError.set('File size must be less than 50MB');
-      input.value = '';
-      return;
-    }
-
+  private async processFileUpload(file: File): Promise<void> {
     this.uploading.set(true);
     this.updateFormControlsBasedOnState();
 
     try {
-      // Get file duration (example, in a real app you'd use the Web Audio API)
-      const duration = await this.getAudioDuration(file);
-      this.uploadedFileMetadata = {
-        name: file.name.replace(/\.[^/.]+$/, ""), 
-        duration
-      };
-      
-      this.uploadForm.patchValue({
-        title: this.uploadedFileMetadata.name
-      });
+      const metadata = await this.createFileMetadata(file);
+      this.uploadedFileMetadata = metadata;
+      this.updateFormTitle(metadata.name);
 
-      const { url } = await firstValueFrom(
-        this.uploadService.getSignedUrl(file.name, file.type)
-      );
-      await this.uploadService.uploadFile(url, file, this.progress);
+      const uploadUrl = await this.getUploadUrl(file);
+      await this.uploadFile(uploadUrl, file);
       
-      this.uploadedFileUrl = url.split('?')[0];
-      this.fileInputEnabled.set(false); 
+      this.uploadedFileUrl = this.cleanUploadUrl(uploadUrl);
+      this.fileInputEnabled.set(false);
       this.updateFormControlsBasedOnState();
-    } catch (err: any) {
-      this.uploadError.set(err?.message ?? 'Upload failed');
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Upload failed';
+      this.uploadError.set(errorMessage);
     } finally {
       this.uploading.set(false);
       this.updateFormControlsBasedOnState();
     }
   }
 
+  private async createFileMetadata(file: File): Promise<FileMetadata> {
+    const duration = await this.fileValidationService.getAudioDuration(file);
+    const name = this.fileValidationService.extractFileNameWithoutExtension(file.name);
+    return { name, duration };
+  }
+
+  private updateFormTitle(title: string): void {
+    this.uploadForm.patchValue({ title });
+  }
+
+  private async getUploadUrl(file: File): Promise<string> {
+    const { url } = await firstValueFrom(
+      this.uploadService.getSignedUrl(file.name, file.type)
+    );
+    return url;
+  }
+
+  private async uploadFile(url: string, file: File): Promise<void> {
+    await this.uploadService.uploadFile(url, file, this.progress);
+  }
+
+  private cleanUploadUrl(url: string): string {
+    return url.split('?')[0];
+  }
+
   onSubmit(): void {
-    if (this.uploadForm.invalid || !this.uploadedFileUrl || !this.uploadedFileMetadata) {
+    if (!this.canSubmit()) {
       this.uploadError.set('Please fill all required fields and upload a file');
       return;
     }
 
-    const trackData: CreateTrackDto = {
-      title: this.uploadForm.value.title,
-      releaseId: parseInt(this.uploadForm.value.releaseId),
-      fileUrl: this.uploadedFileUrl,
-      duration: this.uploadedFileMetadata.duration,
-      isrc: this.uploadForm.value.isrc || undefined
+    const formValue = this.uploadForm.value as UploadFormValue;
+    const releaseId = this.parseReleaseId(formValue.releaseId);
+    
+    if (releaseId === null) {
+      this.uploadError.set('Invalid release selection');
+      return;
+    }
+
+    const trackData = this.createTrackData(formValue, releaseId);
+    this.submitTrack(trackData);
+  }
+
+  private parseReleaseId(releaseIdString: string): number | null {
+    const releaseId = parseInt(releaseIdString, 10);
+    return Number.isNaN(releaseId) ? null : releaseId;
+  }
+
+  private createTrackData(formValue: UploadFormValue, releaseId: number): CreateTrackDto {
+    return {
+      title: formValue.title,
+      releaseId,
+      fileUrl: this.uploadedFileUrl!,
+      duration: this.uploadedFileMetadata!.duration,
+      isrc: formValue.isrc || undefined,
     };
-
-    this.trackService.createTrack(trackData).subscribe({
-      next: () => {
-        this.uploadSuccess.set(true);
-        this.uploadForm.reset();
-        this.uploadedFileUrl = null;
-        this.uploadedFileMetadata = null;
-      },
-      error: (err) => {
-        this.uploadError.set('Failed to save track information');
-      }
-    });
   }
 
-  // This is a mock function. In a real app, you'd use the Web Audio API to get the duration
-  private async getAudioDuration(file: File): Promise<number> {
-    return new Promise<number>((resolve) => {
-      // Mock duration calculation - in a real app use Web Audio API
-      const size = file.size;
-      const estimatedMinutes = size / (1024 * 1024);
-      resolve(estimatedMinutes * 60);
-    });
+  private submitTrack(trackData: CreateTrackDto): void {
+    this.trackService.createTrack(trackData)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (): void => {
+          this.handleSubmitSuccess();
+        },
+        error: (): void => {
+          this.uploadError.set('Failed to save track information');
+        },
+      });
   }
 
-  private isValidAudioFile(file: File): boolean {
-    // Check MIME type
-    const validMimeTypes = [
-      'audio/mpeg',
-      'audio/wav',
-      'audio/wave',
-      'audio/x-wav',
-      'audio/flac',
-      'audio/x-flac',
-      'audio/aac',
-      'audio/mp4',
-      'audio/ogg',
-      'audio/vorbis',
-      'audio/webm'
-    ];
-
-    const validExtensions = ['.mp3', '.wav', '.flac', '.aac', '.m4a', '.ogg', '.webm'];
-    const fileExtension = file.name.toLowerCase().substring(file.name.lastIndexOf('.'));
-
-    return validMimeTypes.includes(file.type) || validExtensions.includes(fileExtension);
+  private handleSubmitSuccess(): void {
+    this.uploadSuccess.set(true);
+    this.uploadForm.reset();
+    this.uploadedFileUrl = null;
+    this.uploadedFileMetadata = null;
   }
 
   reset(): void {
-    this.uploading.set(false);
-    this.progress.set(0);
-    this.uploadSuccess.set(false);
-    this.uploadError.set('');
+    this.resetUploadState();
     this.uploadForm.reset();
     this.uploadedFileUrl = null;
     this.uploadedFileMetadata = null;
