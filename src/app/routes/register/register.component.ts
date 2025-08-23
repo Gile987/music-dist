@@ -1,4 +1,4 @@
-import { Component, signal, inject, OnDestroy } from '@angular/core';
+import { Component, signal, inject, OnDestroy, WritableSignal } from '@angular/core';
 import { ButtonComponent } from '../../shared/button/button.component';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -13,10 +13,10 @@ import { takeUntil } from 'rxjs/operators';
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnDestroy {
-  private readonly fb = inject(FormBuilder);
-  private readonly http = inject(HttpClient);
-  private readonly router = inject(Router);
-  private readonly destroy$ = new Subject<void>();
+  private readonly fb: FormBuilder = inject(FormBuilder);
+  private readonly http: HttpClient = inject(HttpClient);
+  private readonly router: Router = inject(Router);
+  private readonly destroy$: Subject<void> = new Subject<void>();
   private redirectTimeout?: number;
 
   readonly form: FormGroup = this.fb.group({
@@ -25,9 +25,9 @@ export class RegisterComponent implements OnDestroy {
     password: ['', [Validators.required, Validators.minLength(6)]],
   });
 
-  loading = signal(false);
-  error = signal<string | null>(null);
-  success = signal(false);
+  loading: WritableSignal<boolean> = signal<boolean>(false);
+  error: WritableSignal<string | null> = signal<string | null>(null);
+  success: WritableSignal<boolean> = signal<boolean>(false);
 
   ngOnDestroy(): void {
     this.destroy$.next();
@@ -37,7 +37,7 @@ export class RegisterComponent implements OnDestroy {
     }
   }
 
-  submit() {
+  submit(): void {
     if (this.form.invalid) return;
     this.loading.set(true);
     this.error.set(null);

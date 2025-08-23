@@ -1,4 +1,4 @@
-import { Component, inject, signal, OnDestroy } from '@angular/core';
+import { Component, inject, signal, OnDestroy, WritableSignal } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
@@ -13,18 +13,18 @@ import { takeUntil } from 'rxjs/operators';
   styleUrl: './login.component.scss',
 })
 export class LoginComponent implements OnDestroy {
-  private readonly fb = inject(FormBuilder);
-  private readonly auth = inject(AuthService);
-  private readonly router = inject(Router);
-  private readonly destroy$ = new Subject<void>();
+  private readonly fb: FormBuilder = inject(FormBuilder);
+  private readonly auth: AuthService = inject(AuthService);
+  private readonly router: Router = inject(Router);
+  private readonly destroy$: Subject<void> = new Subject<void>();
 
   readonly form: FormGroup = this.fb.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required]],
   });
 
-  loading = signal<boolean>(false);
-  error = signal<string | null>(null);
+  loading: WritableSignal<boolean> = signal<boolean>(false);
+  error: WritableSignal<string | null> = signal<string | null>(null);
 
   ngOnDestroy(): void {
     this.destroy$.next();
