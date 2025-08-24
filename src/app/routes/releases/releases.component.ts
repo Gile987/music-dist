@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject, signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal, WritableSignal } from '@angular/core';
 import { ButtonComponent } from '../../shared/button/button.component';
 import { ReleaseListComponent } from '../../components/release-list/release-list.component';
 import { StatCardComponent } from '../../components/stat-card/stat-card.component';
@@ -18,21 +18,21 @@ import { takeUntil } from 'rxjs/operators';
   styleUrls: ['./releases.component.scss']
 })
 export class ReleasesComponent implements OnInit, OnDestroy {
-  private readonly releaseService = inject(ReleaseService);
-  private readonly authService = inject(AuthService);
-  private readonly releaseStatsService = inject(ReleaseStatsService);
-  private readonly dateUtilsService = inject(DateUtilsService);
-  private readonly destroy$ = new Subject<void>();
+  private readonly releaseService: ReleaseService = inject(ReleaseService);
+  private readonly authService: AuthService = inject(AuthService);
+  private readonly releaseStatsService: ReleaseStatsService = inject(ReleaseStatsService);
+  private readonly dateUtilsService: DateUtilsService = inject(DateUtilsService);
+  private readonly destroy$: Subject<void> = new Subject<void>();
 
-  releases = signal<Release[]>([]);
-  loading = signal<boolean>(false);
-  error = signal<string | null>(null);
+  releases: WritableSignal<Release[]> = signal<Release[]>([]);
+  loading: WritableSignal<boolean> = signal<boolean>(false);
+  error: WritableSignal<string | null> = signal<string | null>(null);
 
-  totalStreams = signal<number>(0);
-  approvedReleases = signal<number>(0);
-  pendingReleases = signal<number>(0);
+  totalStreams: WritableSignal<number> = signal<number>(0);
+  approvedReleases: WritableSignal<number> = signal<number>(0);
+  pendingReleases: WritableSignal<number> = signal<number>(0);
 
-  editedReleaseId = signal<number | null>(null);
+  editedReleaseId: WritableSignal<number | null> = signal<number | null>(null);
 
   releaseForm: FormGroup = new FormGroup({
     title: new FormControl('', [Validators.required, Validators.maxLength(255)]),
