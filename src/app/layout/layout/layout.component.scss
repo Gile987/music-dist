@@ -25,6 +25,7 @@
 
     .sidebar-header {
       height: $header-height;
+      
       @include flex-center;
       border-bottom: 1px solid $color-border;
       padding: 0 $spacing-md;
@@ -99,6 +100,29 @@
             opacity: 1;
           }
         }
+
+        &.admin-link {
+          background-color: rgba(#dc3545, 0.1);
+          border: 1px solid rgba(#dc3545, 0.2);
+          
+          &:hover {
+            background-color: rgba(#dc3545, 0.15);
+            color: #dc3545;
+            border-color: rgba(#dc3545, 0.3);
+          }
+
+          &.active {
+            background-color: rgba(#dc3545, 0.2);
+            color: #dc3545;
+            border-left: 3px solid #dc3545;
+          }
+        }
+      }
+
+      .nav-divider {
+        height: 1px;
+        background-color: rgba($color-text, 0.1);
+        margin: $spacing-sm 0;
       }
     }
   }

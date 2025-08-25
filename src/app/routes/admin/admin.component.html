@@ -1,0 +1,142 @@
+<div class="admin-page">
+  <header class="admin-header">
+    <h1>Admin Panel</h1>
+    <p>Manage all artists, releases, and tracks</p>
+    <app-button (click)="refreshData()" [disabled]="loading()">
+      <span class="material-icons">refresh</span>
+      Refresh Data
+    </app-button>
+  </header>
+
+  @if (loading()) {
+    <div class="loading">
+      <div class="spinner"></div>
+      <p>Loading artists data...</p>
+    </div>
+  }
+
+  @if (error()) {
+    <div class="error-message">
+      <span class="material-icons">error</span>
+      {{ error() }}
+    </div>
+  }
+
+  @if (!loading() && artists().length === 0) {
+    <div class="empty-state">
+      <span class="material-icons">people_outline</span>
+      <h3>No Artists Found</h3>
+      <p>There are no artists in the system yet.</p>
+    </div>
+  }
+
+  <div class="artists-list">
+    @for (artist of artists(); track $index) {
+      <div class="artist-card">
+        <div class="artist-header" (click)="toggleArtistExpansion(artist.id)">
+          <div class="artist-info">
+            <h3>{{ artist.name }}</h3>
+            <p class="artist-email">{{ artist.email }}</p>
+            <div class="artist-stats">
+              <span class="stat">
+                <span class="material-icons">album</span>
+                {{ artist.releases.length }} releases
+              </span>
+              <span class="stat">
+                <span class="material-icons">library_music</span>
+                {{ artist.totalTracks }} tracks
+              </span>
+              <span class="stat">
+                <span class="material-icons">play_arrow</span>
+                {{ artist.totalStreams }} streams
+              </span>
+            </div>
+          </div>
+          <div class="artist-actions">
+            <button 
+              class="delete-artist-btn"
+              (click)="$event.stopPropagation(); onDeleteArtist(artist.id, artist.name)"
+              [disabled]="deletingArtistId() === artist.id"
+              title="Delete Artist">
+              @if (deletingArtistId() === artist.id) {
+                <div class="mini-spinner"></div>
+              } @else {
+                <span class="material-icons">delete</span>
+              }
+            </button>
+            <span class="expand-icon material-icons">
+              {{ expandedArtistId() === artist.id ? 'expand_less' : 'expand_more' }}
+            </span>
+          </div>
+        </div>
+
+        @if (expandedArtistId() === artist.id) {
+          <div class="artist-details">
+            @if (artist.releases.length === 0) {
+              <p class="no-releases">This artist has no releases yet.</p>
+            } @else {
+              <div class="releases-list">
+                @for (release of artist.releases; track $index) {
+                  <div class="release-item">
+                    <div class="release-header">
+                      <div class="release-info">
+                        @if (release.coverUrl) {
+                          <img [src]="release.coverUrl" [alt]="release.title" class="release-cover" />
+                        } @else {
+                          <div class="release-cover placeholder"></div>
+                        }
+                        <div class="release-details">
+                          <h4>{{ release.title }}</h4>
+                          <p class="release-date">{{ release.releaseDate | date:'short' }}</p>
+                          <p class="release-status">Status: {{ release.status }}</p>
+                          @if (release.streams) {
+                            <p class="release-streams">{{ release.streams }} streams</p>
+                          }
+                        </div>
+                      </div>
+                      <button 
+                        class="delete-release-btn"
+                        (click)="onDeleteRelease(release.id, release.title, artist.id)"
+                        [disabled]="deletingReleaseId() === release.id"
+                        title="Delete Release">
+                        @if (deletingReleaseId() === release.id) {
+                          <div class="mini-spinner"></div>
+                        } @else {
+                          <span class="material-icons">delete</span>
+                        }
+                      </button>
+                    </div>
+
+                    @if (release.tracks && release.tracks.length > 0) {
+                      <div class="tracks-list">
+                        <h5>Tracks:</h5>
+                        @for (track of release.tracks; track $index) {
+                          <div class="track-item">
+                            <div class="track-info">
+                              <span class="track-title">{{ track.title }}</span>
+                            </div>
+                            <button 
+                              class="delete-track-btn"
+                              (click)="onDeleteTrack(track.id, track.title, artist.id, release.id)"
+                              [disabled]="deletingTrackId() === track.id"
+                              title="Delete Track">
+                              @if (deletingTrackId() === track.id) {
+                                <div class="mini-spinner"></div>
+                              } @else {
+                                <span class="material-icons">delete</span>
+                              }
+                            </button>
+                          </div>
+                        }
+                      </div>
+                    }
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>
