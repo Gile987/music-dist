@@ -11,6 +11,10 @@
       <span class="material-icons">calendar_today</span>
       {{ release.releaseDate | dateFormat:'short' }}
     </p>
+    <p class="release-streams">
+      <span class="material-icons">headphones</span>
+      {{ (release.totalStreams ?? release.streams) | number }} streams
+    </p>
   </div>
 
   <app-status-badge [status]="release.status"></app-status-badge>

@@ -7,6 +7,7 @@ import {
   OnDestroy,
   inject,
 } from '@angular/core';
+import { DecimalPipe } from '@angular/common';
 import { StatusBadgeComponent } from '../status-badge/status-badge.component';
 import { TrackListComponent } from '../track-list/track-list.component';
 import { Release } from '../../core/interfaces/release.interface';
@@ -19,7 +20,7 @@ import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-release-item',
-  imports: [StatusBadgeComponent, TrackListComponent, DateFormatPipe],
+  imports: [DecimalPipe, StatusBadgeComponent, TrackListComponent, DateFormatPipe],
   templateUrl: './release-item.component.html',
   styleUrls: ['./release-item.component.scss'],
 })

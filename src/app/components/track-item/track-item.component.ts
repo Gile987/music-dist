@@ -1,8 +1,10 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { DecimalPipe } from '@angular/common';
 import { Track } from '../../core/interfaces/track.interface';
 
 @Component({
   selector: 'app-track-item',
+  imports: [DecimalPipe],
   templateUrl: './track-item.component.html',
   styleUrls: ['./track-item.component.scss']
 })
