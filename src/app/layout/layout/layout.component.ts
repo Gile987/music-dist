@@ -1,9 +1,9 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, WritableSignal } from '@angular/core';
 import { RouterOutlet, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../core/services/auth.service';
 import { Role, AuthUser } from '../../core/interfaces/auth.interface';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
 @Component({
   selector: 'app-layout',
@@ -12,24 +12,23 @@ import { Observable } from 'rxjs';
   styleUrls: ['./layout.component.scss'],
 })
 export class LayoutComponent {
-  private readonly auth = inject(AuthService);
+  private readonly auth: AuthService = inject(AuthService);
 
   user$: Observable<AuthUser | null> = this.auth.user$;
-
   isAuthenticated$: Observable<boolean> = this.auth.isAuthenticated$;
+  isAdmin$: Observable<boolean> = this.auth.user$.pipe(
+    map((user: AuthUser | null) => user?.role === 'admin')
+  );
 
   logout(): void {
     this.auth.logout().subscribe({
       next: () => {
-        console.log('Logged out successfully');
+        // Logout successful
       },
-      error: (err) => {
-        console.error('Logout failed', err);
+      error: () => {
+        // Logout failed
       },
     });
   }
 
-  canUpload(role: Role | undefined): boolean {
-    return role === 'artist';
-  }
 }

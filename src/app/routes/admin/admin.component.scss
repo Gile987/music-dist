@@ -1,0 +1,358 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+@use 'sass:color';
+
+.admin-page {
+  padding: $spacing-lg;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.admin-header {
+  margin-bottom: $spacing-lg;
+  text-align: center;
+
+  h1 {
+    color: $color-text;
+    margin-bottom: $spacing-xs;
+    font-size: $font-lg;
+    font-weight: 600;
+  }
+
+  p {
+    color: $color-muted;
+    margin-bottom: $spacing-md;
+    font-size: $font-sm;
+  }
+}
+
+.loading {
+  @include flex-center;
+  flex-direction: column;
+  padding: $spacing-xl;
+  color: $color-muted;
+
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid $color-border;
+    border-top: 4px solid $color-primary;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: $spacing-md;
+  }
+}
+
+.error-message {
+  background-color: rgba($color-danger, 0.1);
+  color: $color-danger;
+  padding: $spacing-md;
+  border-radius: $border-radius;
+  margin-bottom: $spacing-md;
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+  border: 1px solid rgba($color-danger, 0.2);
+
+  .material-icons {
+    color: $color-danger;
+  }
+}
+
+.empty-state {
+  text-align: center;
+  padding: $spacing-xl;
+  color: $color-muted;
+
+  .material-icons {
+    font-size: 4rem;
+    margin-bottom: $spacing-md;
+    color: $color-border;
+  }
+
+  h3 {
+    margin-bottom: $spacing-xs;
+    color: $color-text;
+  }
+}
+
+.artists-list {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.artist-card {
+  background: $color-card-bg;
+  border-radius: $border-radius;
+  box-shadow: 0 1px 3px $color-shadow;
+  overflow: hidden;
+  transition: box-shadow 0.2s ease;
+  border: 1px solid $color-border;
+
+  &:hover {
+    box-shadow: 0 4px 12px $color-shadow;
+  }
+}
+
+.artist-header {
+  padding: $spacing-md;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: $color-bg;
+  border-bottom: 1px solid $color-border;
+
+  &:hover {
+    background: rgba($color-primary, 0.02);
+  }
+}
+
+.artist-info {
+  h3 {
+    margin: 0 0 $spacing-xs 0;
+    color: $color-text;
+    font-size: $font-md;
+    font-weight: 600;
+  }
+
+  .artist-email {
+    margin: 0 0 $spacing-sm 0;
+    color: $color-muted;
+    font-size: $font-sm;
+  }
+
+  .artist-stats {
+    display: flex;
+    gap: $spacing-md;
+    flex-wrap: wrap;
+
+    .stat {
+      display: flex;
+      align-items: center;
+      gap: $spacing-xs;
+      color: $color-muted;
+      font-size: $font-sm;
+
+      .material-icons {
+        font-size: 1rem;
+        color: $color-primary;
+      }
+    }
+  }
+}
+
+.artist-actions {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+
+  .delete-artist-btn {
+    background: $color-danger;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    @include flex-center;
+    transition: all 0.2s ease;
+
+    &:hover:not(:disabled) {
+      background: color.adjust($color-danger, $lightness: -10%);
+      transform: scale(1.05);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .material-icons {
+      font-size: 1.1rem;
+    }
+  }
+
+  .expand-icon {
+    color: $color-muted;
+    font-size: 1.5rem;
+    transition: transform 0.2s ease;
+  }
+}
+
+.artist-details {
+  padding: 0 $spacing-md $spacing-md $spacing-md;
+  background: $color-card-bg;
+}
+
+.no-releases {
+  text-align: center;
+  color: $color-muted;
+  font-style: italic;
+  padding: $spacing-lg;
+}
+
+.releases-list {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  margin-top: $spacing-sm;
+}
+
+.release-item {
+  border: 1px solid $color-border;
+  border-radius: $border-radius;
+  overflow: hidden;
+  background: $color-card-bg;
+}
+
+.release-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $spacing-sm;
+  background: $color-bg;
+  border-bottom: 1px solid $color-border;
+}
+
+.release-info {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+}
+
+.release-cover {
+  width: 60px;
+  height: 60px;
+  border-radius: $border-radius;
+  object-fit: cover;
+
+  &.placeholder {
+    background: $color-border;
+    @include flex-center;
+  }
+}
+
+.release-details {
+  h4 {
+    margin: 0 0 $spacing-xs 0;
+    color: $color-text;
+    font-size: $font-sm;
+    font-weight: 600;
+  }
+
+  p {
+    margin: $spacing-xs 0;
+    color: $color-muted;
+    font-size: $font-xs;
+  }
+
+  .release-streams {
+    color: $color-primary;
+    font-weight: 500;
+  }
+}
+
+.delete-release-btn, .delete-track-btn {
+  background: $color-danger;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  @include flex-center;
+  transition: all 0.2s ease;
+
+  &:hover:not(:disabled) {
+    background: color.adjust($color-danger, $lightness: -10%);
+    transform: scale(1.05);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .material-icons {
+    font-size: 0.9rem;
+  }
+}
+
+.tracks-list {
+  padding: $spacing-sm;
+  background: $color-card-bg;
+  border-top: 1px solid $color-border;
+
+  h5 {
+    margin: 0 0 $spacing-xs 0;
+    color: $color-text;
+    font-size: $font-xs;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+}
+
+.track-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $spacing-xs $spacing-sm;
+  background: $color-bg;
+  border-radius: $border-radius;
+  margin-bottom: $spacing-xs;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.track-info {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+
+  .track-title {
+    color: $color-text;
+    font-weight: 500;
+    font-size: $font-sm;
+  }
+}
+
+.mini-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@include respond(md) {
+  .admin-page {
+    padding: $spacing-xl;
+  }
+
+  .artist-header {
+    padding: $spacing-lg;
+  }
+
+  .artist-stats {
+    gap: $spacing-lg;
+  }
+
+  .release-info {
+    gap: $spacing-md;
+  }
+
+  .release-header {
+    padding: $spacing-md;
+  }
+}

@@ -9,28 +9,36 @@
     </div>
     <nav class="sidebar-nav">
       @if (user$ | async; as user) {
-        <a routerLink="/dashboard" routerLinkActive="active" class="nav-link">
-          <span class="nav-icon">📊</span>
-          <span class="nav-text">Dashboard</span>
+      <a routerLink="/dashboard" routerLinkActive="active" class="nav-link">
+        <span class="nav-icon">📊</span>
+        <span class="nav-text">Dashboard</span>
+      </a>
+
+      <a routerLink="/upload" routerLinkActive="active" class="nav-link">
+        <span class="nav-icon">⬆️</span>
+        <span class="nav-text">Upload</span>
+      </a>
+
+      <a routerLink="/releases" routerLinkActive="active" class="nav-link">
+        <span class="nav-icon">🎵</span>
+        <span class="nav-text">Releases</span>
+      </a>
+      <a routerLink="/royalties" routerLinkActive="active" class="nav-link">
+        <span class="nav-icon">💰</span>
+        <span class="nav-text">Royalties</span>
+      </a>
+      <a routerLink="/profile" routerLinkActive="active" class="nav-link">
+        <span class="nav-icon">👤</span>
+        <span class="nav-text">Profile</span>
+      </a>
+      
+      @if (isAdmin$ | async) {
+        <div class="nav-divider"></div>
+        <a routerLink="/admin" routerLinkActive="active" class="nav-link admin-link">
+          <span class="nav-icon">⚙️</span>
+          <span class="nav-text">Admin Panel</span>
         </a>
-        @if (canUpload(user.role)) {
-          <a routerLink="/upload" routerLinkActive="active" class="nav-link">
-            <span class="nav-icon">⬆️</span>
-            <span class="nav-text">Upload</span>
-          </a>
-        }
-        <a routerLink="/releases" routerLinkActive="active" class="nav-link">
-          <span class="nav-icon">🎵</span>
-          <span class="nav-text">Releases</span>
-        </a>
-        <a routerLink="/royalties" routerLinkActive="active" class="nav-link">
-          <span class="nav-icon">💰</span>
-          <span class="nav-text">Royalties</span>
-        </a>
-        <a routerLink="/profile" routerLinkActive="active" class="nav-link">
-          <span class="nav-icon">👤</span>
-          <span class="nav-text">Profile</span>
-        </a>
+      }
       }
     </nav>
   </aside>
@@ -42,13 +50,11 @@
       <div class="mobile-logo">🎵</div>
 
       <div class="user-section">
-        @if (isAuthenticated$ | async) {
-          @if (user$ | async; as user) {
-            <span class="welcome-text">Welcome, {{ user.name }}</span>
-            <button class="logout-btn" (click)="logout()">Logout</button>
-          }
-        } @else {
-          <a routerLink="/login" class="login-btn">Login</a>
+        @if (isAuthenticated$ | async) { @if (user$ | async; as user) {
+        <span class="welcome-text">Welcome, {{ user.name }}</span>
+        <button class="logout-btn" (click)="logout()">Logout</button>
+        } } @else {
+        <a routerLink="/login" class="login-btn">Login</a>
         }
       </div>
     </header>
