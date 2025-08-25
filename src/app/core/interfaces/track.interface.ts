@@ -4,4 +4,5 @@ export interface Track {
   duration: number;
   fileUrl: string;
   isrc?: string;
+  streams?: number;
 }

@@ -7,6 +7,7 @@ export interface Release {
   status: ReleaseStatusType;
   releaseDate: string;
   streams: number;
+  totalStreams?: number;
   coverUrl?: string;
   tracks?: Track[];
 }
