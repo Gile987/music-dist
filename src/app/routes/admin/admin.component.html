@@ -114,6 +114,13 @@
                           <div class="track-item">
                             <div class="track-info">
                               <span class="track-title">{{ track.title }}</span>
+                              <input 
+                                type="number" 
+                                class="track-streams-input" 
+                                [value]="track.streams" 
+                                (change)="handleStreamChange($event, track.id)"
+                                placeholder="Update streams" 
+                              />
                             </div>
                             <button 
                               class="delete-track-btn"

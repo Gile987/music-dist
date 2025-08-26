@@ -73,4 +73,8 @@ export class AdminService {
   deleteTrack(trackId: number): Observable<void> {
     return this.http.delete<void>(`/api/tracks/${trackId}`, { withCredentials: true });
   }
+
+  updateTrackStreams(trackId: number, streams: number): Observable<Track> {
+    return this.http.patch<Track>(`/api/tracks/${trackId}`, { streams }, { withCredentials: true });
+  }
 }
