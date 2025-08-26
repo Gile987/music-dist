@@ -113,13 +113,17 @@
                         @for (track of release.tracks; track $index) {
                           <div class="track-item">
                             <div class="track-info">
+                              <span class="track-name-label">Track name:</span>
                               <span class="track-title">{{ track.title }}</span>
+                              <label for="track-streams-{{ track.id }}" class="track-streams-label">Streams:</label>
                               <input 
+                                id="track-streams-{{ track.id }}"
                                 type="number" 
                                 class="track-streams-input" 
                                 [value]="track.streams" 
                                 (change)="handleStreamChange($event, track.id)"
                                 placeholder="Update streams" 
+                                min="0"
                               />
                             </div>
                             <button 

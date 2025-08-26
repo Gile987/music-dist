@@ -313,12 +313,26 @@
   display: flex;
   flex-direction: column;
   gap: $spacing-xs;
+}
 
-  .track-title {
-    color: $color-text;
-    font-weight: 500;
-    font-size: $font-sm;
-  }
+.track-name-label {
+  color: $color-muted;
+  font-size: $font-xs;
+  font-weight: 400;
+  margin-right: $spacing-xs;
+}
+
+.track-title {
+  color: $color-text;
+  font-weight: 600;
+  font-size: $font-sm;
+  margin-bottom: $spacing-xs;
+}
+
+.track-streams-label {
+  color: $color-muted;
+  font-size: $font-xs;
+  margin-right: $spacing-sm;
 }
 
 .mini-spinner {
@@ -328,6 +342,26 @@
   border-top: 2px solid white;
   border-radius: 50%;
   animation: spin 1s linear infinite;
+}
+
+.track-streams-input {
+  border: 1px solid $color-primary;
+  border-radius: $border-radius;
+  padding: $spacing-sm;
+  color: $color-text-secondary;
+  background-color: $color-main-bg;
+  font-weight: bold;
+  text-align: right;
+  width: 100px;
+
+  &::-webkit-inner-spin-button, 
+  &::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  appearance: textfield; /* Standard property */
+  -moz-appearance: textfield; /* For Firefox */
 }
 
 @keyframes spin {
