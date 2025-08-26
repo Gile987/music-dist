@@ -159,6 +159,43 @@ export class AdminComponent implements OnInit, OnDestroy {
     }
   }
 
+  public onUpdateTrackStreams(trackId: number, streams: number): void {
+    this.error.set(null);
+
+    this.adminService.updateTrackStreams(trackId, streams)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (updatedTrack: Track) => {
+          this.artists.update(artists => 
+            artists.map(artist => ({
+              ...artist,
+              releases: artist.releases.map(release => ({
+                ...release,
+                tracks: (release.tracks || []).map(track => 
+                  track.id === trackId ? { ...track, streams: updatedTrack.streams } : track
+                )
+              }))
+            }))
+          );
+          
+          this.loadAllArtists();
+        },
+        error: () => {
+          this.error.set('Failed to update track streams');
+        }
+      });
+  }
+
+  public handleStreamChange(event: Event, trackId: number): void {
+    const inputElement = event.target as HTMLInputElement | null;
+    if (inputElement && inputElement.value) {
+      const streams = parseInt(inputElement.value, 10) || 0;
+      this.onUpdateTrackStreams(trackId, streams);
+    } else {
+      this.error.set('Invalid input element or value');
+    }
+  }
+
   public refreshData(): void {
     this.loadAllArtists();
   }
