@@ -3,22 +3,17 @@
     <app-stat-card
       icon="🎵"
       title="Total Releases"
-      value="24"
+      [value]="totalReleases"
     />
     <app-stat-card
       icon="💰"
-      title="Monthly Revenue"
-      value="$1,248"
+      title="Monthly Revenue ($)"
+      [value]="monthlyRevenue"
     />
     <app-stat-card
       icon="📈"
       title="Streams"
-      value="89.2k"
-    />
-    <app-stat-card
-      icon="👤"
-      title="Followers"
-      value="3,500"
+      [value]="totalStreams"
     />
   </div>
 
