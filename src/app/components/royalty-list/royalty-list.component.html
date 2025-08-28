@@ -1,5 +1,17 @@
 <div class="royalty-list">
-  @for (royalty of royalties; track royalty.title) {
-    <app-royalty-item [royalty]="royalty"></app-royalty-item>
+  @if (grouped.length > 0) {
+    @for (group of grouped; track group.releaseId) {
+      <div class="release-header">
+        <h3>{{ group.releaseTitle }}</h3>
+        <p>Total royalties: {{ group.totalRoyalty | appCurrency }}</p>
+      </div>
+      <div class="tracks-list">
+        @for (royalty of group.royalties; track royalty.id) {
+          <app-royalty-item [royalty]="royalty"></app-royalty-item>
+        }
+      </div>
+    }
+  } @else {
+    <p>No royalties to display.</p>
   }
 </div>

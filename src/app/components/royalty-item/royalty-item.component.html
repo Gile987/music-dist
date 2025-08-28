@@ -1,16 +1,10 @@
 <div class="royalty-item">
   <div class="details">
-    <p class="title">{{ royalty.title }}</p>
-    <p class="date">{{ royalty.date }}</p>
+    <p class="title">{{ royalty.track?.title ?? 'Unknown Track' }}</p>
+    <p class="date">{{ royalty.period }}</p>
   </div>
 
   <div class="metrics">
-    <p>
-      <strong>{{ royalty.streams }}</strong> streams
-    </p>
-    <p>${{ royalty.rate.toFixed(4) }} / stream</p>
-    <p class="total">{{ royalty.total | appCurrency }}</p>
+    <p><strong>{{ royalty.amount | appCurrency }}</strong> royalty</p>
   </div>
-
-  <app-status-badge [status]="royalty.status"></app-status-badge>
 </div>
