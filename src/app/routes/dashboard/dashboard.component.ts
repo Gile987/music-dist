@@ -35,37 +35,52 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   private loadDashboardData(): void {
-    this.authService.user$.pipe(takeUntil(this.destroy$)).subscribe((user) => {
-      const artistId = user?.id;
-      if (!artistId) return;
-      forkJoin([
-        this.releaseService.getReleasesByArtist(artistId),
-        this.royaltyService.getRoyaltiesByArtist(artistId),
-      ])
-        .pipe(takeUntil(this.destroy$))
-        .subscribe(([releases, royalties]) => {
-          this.totalReleases = releases.length;
-          this.totalStreams = releases.reduce(
-            (sum, release) =>
-              sum +
-              (release.tracks?.reduce(
-                (tSum, t) => tSum + (t.streams || 0),
-                0
-              ) || 0),
-            0
-          );
-          const now = new Date();
-          const month = now.getMonth() + 1;
-          const year = now.getFullYear();
-          this.monthlyRevenue = royalties
-            .filter((r) => {
-              const [royaltyYear, royaltyMonth] = r.period
-                .split('-')
-                .map(Number);
-              return royaltyYear === year && royaltyMonth === month;
-            })
-            .reduce((sum, r) => sum + r.amount, 0);
-        });
-    });
+    this.authService.user$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((user) => {
+        const artistId = user?.id;
+        if (!artistId) return;
+        this.fetchReleasesAndRoyalties(artistId);
+      });
+  }
+
+  private fetchReleasesAndRoyalties(artistId: number): void {
+    forkJoin([
+      this.releaseService.getReleasesByArtist(artistId),
+      this.royaltyService.getRoyaltiesByArtist(artistId),
+    ])
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(([releases, royalties]) => {
+        this.setTotalReleases(releases);
+        this.setTotalStreams(releases);
+        this.setMonthlyRevenue(royalties);
+      });
+  }
+
+  private setTotalReleases(releases: Release[]): void {
+    this.totalReleases = releases.length;
+  }
+
+  private setTotalStreams(releases: Release[]): void {
+    this.totalStreams = releases.reduce(
+      (sum, release) =>
+        sum +
+        (release.tracks?.reduce((tSum, t) => tSum + (t.streams || 0), 0) || 0),
+      0
+    );
+  }
+
+  private setMonthlyRevenue(royalties: Royalty[]): void {
+    const now = new Date();
+    const month = now.getMonth() + 1;
+    const year = now.getFullYear();
+    this.monthlyRevenue = royalties
+      .filter((r) => {
+        const [royaltyYear, royaltyMonth] = r.period
+          .split('-')
+          .map(Number);
+        return royaltyYear === year && royaltyMonth === month;
+      })
+      .reduce((sum, r) => sum + r.amount, 0);
   }
 }
