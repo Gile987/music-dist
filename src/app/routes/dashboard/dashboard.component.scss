@@ -22,7 +22,7 @@
   .content-grid {
     display: flex;
     flex-direction: row;
-    gap: 2rem;
+    gap: 1.5rem;
     margin-bottom: 2rem;
   }
 
@@ -64,6 +64,13 @@
 
     .revenue-by-release-chart {
       width: 350px;
+      height: 350px;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .top-tracks-chart {
+      width: 400px;
       height: 350px;
       display: block;
       margin: 0 auto;
