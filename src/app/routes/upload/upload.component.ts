@@ -16,10 +16,8 @@ import {
   Validators,
 } from '@angular/forms';
 import { UploadService } from '../../core/services/upload.service';
-import {
-  TrackService,
-  CreateTrackDto,
-} from '../../core/services/track.service';
+import { TrackService } from '../../core/services/track.service';
+import { CreateTrackDto } from '../../core/interfaces/create-track-dto.interface';
 import { ReleaseService } from '../../core/services/release.service';
 import { AuthService } from '../../core/services/auth.service';
 import { FileValidationService } from '../../core/services/file-validation.service';
