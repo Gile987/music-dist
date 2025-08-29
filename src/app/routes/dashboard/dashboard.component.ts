@@ -26,6 +26,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   @ViewChild('revenueChart') revenueChartRef!: ElementRef<HTMLCanvasElement>;
   @ViewChild('revenueByReleaseChart')
   revenueByReleaseChartRef!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('topTracksChart') topTracksChartRef!: ElementRef<HTMLCanvasElement>;
+  
+  private topTracksChart: Chart<'bar'> | null = null;
   private readonly destroy$ = new Subject<void>();
   private chart: Chart<'line'> | null = null;
   private revenueByReleaseChart: Chart<'doughnut'> | null = null;
@@ -70,7 +73,61 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.setMonthlyRevenue(royalties);
         this.renderRevenueChart(royalties);
         this.renderRevenueByReleaseChart(releases, royalties);
+        this.renderTopTracksChart(releases);
       });
+  }
+
+  private renderTopTracksChart(releases: Release[]): void {
+    if (!this.topTracksChartRef || !this.topTracksChartRef.nativeElement) return;
+
+    const trackStats: { title: string; streams: number }[] = [];
+    for (const release of releases) {
+      if (release.tracks) {
+        for (const track of release.tracks) {
+          trackStats.push({ title: track.title, streams: track.streams || 0 });
+        }
+      }
+    }
+    const topTracks = trackStats
+      .sort((a, b) => b.streams - a.streams)
+      .slice(0, 5);
+    const labels = topTracks.map(t => t.title);
+    const data = topTracks.map(t => t.streams);
+
+    const config: ChartConfiguration<'bar'> = {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [
+          {
+            label: 'Top 5 Tracks by Streams',
+            data,
+            backgroundColor: [
+              '#42a5f5', '#66bb6a', '#ffd600', '#ef5350', '#ab47bc'
+            ],
+            borderRadius: 8,
+            borderSkipped: false,
+          },
+        ],
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: { enabled: true },
+        },
+        scales: {
+          x: { beginAtZero: true, title: { display: true, text: 'Streams' } },
+          y: { title: { display: true, text: 'Track' } },
+        },
+      },
+    };
+
+    if (this.topTracksChart) {
+      this.topTracksChart.destroy();
+    }
+    this.topTracksChart = new Chart(this.topTracksChartRef.nativeElement, config);
   }
   private renderRevenueByReleaseChart(
     releases: Release[],
