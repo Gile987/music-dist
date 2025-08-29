@@ -6,7 +6,10 @@ import {
   ViewChild,
   ElementRef,
 } from '@angular/core';
-import Chart, { ChartConfiguration } from 'chart.js/auto';
+import Chart from 'chart.js/auto';
+import { getRevenueLineConfig } from '../../core/chart-configs/revenue-line.config';
+import { getRevenueByReleaseDoughnutConfig } from '../../core/chart-configs/revenue-by-release-doughnut.config';
+import { getTopTracksBarConfig } from '../../core/chart-configs/top-tracks-bar.config';
 import { StatCardComponent } from '../../components/stat-card/stat-card.component';
 import { ReleaseService } from '../../core/services/release.service';
 import { RoyaltyService } from '../../core/services/royalty.service';
@@ -26,8 +29,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   @ViewChild('revenueChart') revenueChartRef!: ElementRef<HTMLCanvasElement>;
   @ViewChild('revenueByReleaseChart')
   revenueByReleaseChartRef!: ElementRef<HTMLCanvasElement>;
-  @ViewChild('topTracksChart') topTracksChartRef!: ElementRef<HTMLCanvasElement>;
-  
+  @ViewChild('topTracksChart')
+  topTracksChartRef!: ElementRef<HTMLCanvasElement>;
+
   private topTracksChart: Chart<'bar'> | null = null;
   private readonly destroy$ = new Subject<void>();
   private chart: Chart<'line'> | null = null;
@@ -78,7 +82,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   private renderTopTracksChart(releases: Release[]): void {
-    if (!this.topTracksChartRef || !this.topTracksChartRef.nativeElement) return;
+    if (!this.topTracksChartRef || !this.topTracksChartRef.nativeElement)
+      return;
 
     const trackStats: { title: string; streams: number }[] = [];
     for (const release of releases) {
@@ -91,43 +96,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
     const topTracks = trackStats
       .sort((a, b) => b.streams - a.streams)
       .slice(0, 5);
-    const labels = topTracks.map(t => t.title);
-    const data = topTracks.map(t => t.streams);
+    const labels = topTracks.map((t) => t.title);
+    const data = topTracks.map((t) => t.streams);
 
-    const config: ChartConfiguration<'bar'> = {
-      type: 'bar',
-      data: {
-        labels,
-        datasets: [
-          {
-            label: 'Top 5 Tracks by Streams',
-            data,
-            backgroundColor: [
-              '#42a5f5', '#66bb6a', '#ffd600', '#ef5350', '#ab47bc'
-            ],
-            borderRadius: 8,
-            borderSkipped: false,
-          },
-        ],
-      },
-      options: {
-        indexAxis: 'y',
-        responsive: false,
-        plugins: {
-          legend: { display: false },
-          tooltip: { enabled: true },
-        },
-        scales: {
-          x: { beginAtZero: true, title: { display: true, text: 'Streams' } },
-          y: { title: { display: true, text: 'Track' } },
-        },
-      },
-    };
+    const config = getTopTracksBarConfig(labels, data);
 
     if (this.topTracksChart) {
       this.topTracksChart.destroy();
     }
-    this.topTracksChart = new Chart(this.topTracksChartRef.nativeElement, config);
+    this.topTracksChart = new Chart(
+      this.topTracksChartRef.nativeElement,
+      config
+    );
   }
   private renderRevenueByReleaseChart(
     releases: Release[],
@@ -162,39 +142,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       }
     }
 
-    const config: ChartConfiguration<'doughnut'> = {
-      type: 'doughnut',
-      data: {
-        labels,
-        datasets: [
-          {
-            label: 'Revenue by Release',
-            data,
-            backgroundColor: [
-              '#42a5f5',
-              '#66bb6a',
-              '#ffd600',
-              '#ef5350',
-              '#ab47bc',
-              '#ffa726',
-              '#26a69a',
-              '#8d6e63',
-              '#789262',
-              '#d4e157',
-            ],
-            borderColor: '#232b36',
-            borderWidth: 2,
-          },
-        ],
-      },
-      options: {
-        responsive: false,
-        plugins: {
-          legend: { display: true, position: 'bottom' },
-          tooltip: { enabled: true },
-        },
-      },
-    };
+    const config = getRevenueByReleaseDoughnutConfig(labels, data);
 
     if (this.revenueByReleaseChart) {
       this.revenueByReleaseChart.destroy();
@@ -255,38 +203,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
     const data: number[] = monthKeys.map((key) => revenueByMonth[key] || 0);
 
-    const config: ChartConfiguration<'line'> = {
-      type: 'line',
-      data: {
-        labels,
-        datasets: [
-          {
-            label: 'Monthly Revenue',
-            data,
-            borderColor: '#42a5f5',
-            backgroundColor: 'rgba(66,165,245,0.2)',
-            fill: true,
-            tension: 0.3,
-            pointRadius: 4,
-            pointHoverRadius: 6,
-          },
-        ],
-      },
-      options: {
-        responsive: false,
-        plugins: {
-          legend: { display: false },
-          tooltip: { enabled: true },
-        },
-        scales: {
-          y: {
-            beginAtZero: true,
-            title: { display: true, text: 'Revenue ($)' },
-          },
-          x: { title: { display: true, text: 'Month' } },
-        },
-      },
-    };
+    const config = getRevenueLineConfig(labels, data);
 
     if (this.chart) {
       this.chart.destroy();

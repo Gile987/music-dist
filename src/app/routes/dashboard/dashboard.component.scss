@@ -15,7 +15,7 @@
     > * {
       flex: 1 1 220px;
       min-width: 220px;
-      max-width: 1fr;
+      max-width: 520px;
     }
   }
 
@@ -33,8 +33,11 @@
     border: 1px solid $color-border;
     box-shadow: 0 1px 2px $color-shadow;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    min-width: 0;
+    min-height: 0;
   }
 
   .chart-panel {
@@ -75,5 +78,22 @@
       display: block;
       margin: 0 auto;
     }
+  }
+
+  .chart-title {
+    font-size: $font-md;
+    font-weight: 600;
+    color: $color-primary;
+    margin-bottom: $spacing-md;
+    letter-spacing: 0.01em;
+    text-align: center;
+    background: none;
+    border-radius: 0;
+    padding: 0;
+    box-shadow: none;
+    width: 100%;
+    display: block;
+    line-height: 1.2;
+    word-break: break-word;
   }
 }
