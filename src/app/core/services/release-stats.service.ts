@@ -1,11 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Release } from '../interfaces/release.interface';
-
-export interface ReleaseStats {
-  totalStreams: number;
-  approvedReleases: number;
-  pendingReleases: number;
-}
+import { ReleaseStats } from '../interfaces/release-stats.interface';
 
 @Injectable({
   providedIn: 'root'

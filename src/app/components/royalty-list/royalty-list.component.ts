@@ -3,13 +3,7 @@ import { RoyaltyItemComponent } from '../royalty-item/royalty-item.component';
 import { AppCurrencyPipe } from '../../shared/pipes/currency.pipe';
 import { Royalty } from '../../core/interfaces/royalty.interface';
 import { Release } from '../../core/interfaces/release.interface';
-
-interface GroupedRoyalty {
-  releaseId: number;
-  releaseTitle: string;
-  royalties: Royalty[];
-  totalRoyalty: number;
-}
+import { GroupedRoyalty } from '../../core/interfaces/grouped-royalty.interface';
 
 @Component({
   selector: 'app-royalty-list',

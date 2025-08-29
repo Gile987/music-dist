@@ -2,14 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs';
 import { Track } from '../interfaces/track.interface';
-
-export interface CreateTrackDto {
-  title: string;
-  duration: number;
-  releaseId: number;
-  fileUrl: string;
-  isrc?: string;
-}
+import { CreateTrackDto } from '../interfaces/create-track-dto.interface';
 
 @Injectable({ providedIn: 'root' })
 export class TrackService {
