@@ -1,4 +1,5 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, ViewChild, ElementRef } from '@angular/core';
+import Chart, { ChartConfiguration } from 'chart.js/auto';
 import { StatCardComponent } from '../../components/stat-card/stat-card.component';
 import { ReleaseService } from '../../core/services/release.service';
 import { RoyaltyService } from '../../core/services/royalty.service';
@@ -15,7 +16,9 @@ import { takeUntil } from 'rxjs/operators';
   templateUrl: './dashboard.component.html',
 })
 export class DashboardComponent implements OnInit, OnDestroy {
+  @ViewChild('revenueChart') revenueChartRef!: ElementRef<HTMLCanvasElement>;
   private readonly destroy$ = new Subject<void>();
+  private chart: Chart<'line'> | null = null;
 
   totalReleases: number = 0;
   monthlyRevenue: number = 0;
@@ -32,6 +35,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+    if (this.chart) {
+      this.chart.destroy();
+    }
   }
 
   private loadDashboardData(): void {
@@ -54,6 +60,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.setTotalReleases(releases);
         this.setTotalStreams(releases);
         this.setMonthlyRevenue(royalties);
+        this.renderRevenueChart(royalties);
       });
   }
 
@@ -82,5 +89,61 @@ export class DashboardComponent implements OnInit, OnDestroy {
         return royaltyYear === year && royaltyMonth === month;
       })
       .reduce((sum, r) => sum + r.amount, 0);
+  }
+
+  private renderRevenueChart(royalties: Royalty[]): void {
+    if (!this.revenueChartRef || !this.revenueChartRef.nativeElement) return;
+
+    const now = new Date();
+    const labels: string[] = [];
+    const monthKeys: string[] = [];
+    for (let i = 11; i >= 0; i--) {
+      const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+      monthKeys.push(key);
+      labels.push(d.toLocaleString('default', { month: 'short', year: '2-digit' }));
+    }
+
+    const revenueByMonth: Record<string, number> = {};
+    for (const r of royalties) {
+      if (!revenueByMonth[r.period]) revenueByMonth[r.period] = 0;
+      revenueByMonth[r.period] += r.amount;
+    }
+    const data: number[] = monthKeys.map(key => revenueByMonth[key] || 0);
+
+    const config: ChartConfiguration<'line'> = {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [
+          {
+            label: 'Monthly Revenue',
+            data,
+            borderColor: '#42a5f5',
+            backgroundColor: 'rgba(66,165,245,0.2)',
+            fill: true,
+            tension: 0.3,
+            pointRadius: 4,
+            pointHoverRadius: 6,
+          },
+        ],
+      },
+      options: {
+        responsive: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: { enabled: true },
+        },
+        scales: {
+          y: { beginAtZero: true, title: { display: true, text: 'Revenue ($)' } },
+          x: { title: { display: true, text: 'Month' } },
+        },
+      },
+    };
+
+    if (this.chart) {
+      this.chart.destroy();
+    }
+    this.chart = new Chart(this.revenueChartRef.nativeElement, config);
   }
 }
