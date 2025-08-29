@@ -1,26 +1,23 @@
 <section class="dashboard">
   <div class="stats">
-    <app-stat-card
-      icon="🎵"
-      title="Total Releases"
-      [value]="totalReleases"
-    />
+    <app-stat-card icon="🎵" title="Total Releases" [value]="totalReleases" />
     <app-stat-card
       icon="💰"
       title="Monthly Revenue ($)"
       [value]="monthlyRevenue"
     />
-    <app-stat-card
-      icon="📈"
-      title="Streams"
-      [value]="totalStreams"
-    />
+    <app-stat-card icon="📈" title="Streams" [value]="totalStreams" />
   </div>
 
   <div class="content-grid">
-    <div class="panel">
-  <canvas #revenueChart class="revenue-chart" width="500" height="250"></canvas>
+    <div class="panel chart-panel">
+      <canvas
+        #revenueChart
+        class="revenue-chart"
+        width="500"
+        height="250"
+      ></canvas>
     </div>
-    <div class="panel">[Recent Activity Placeholder]</div>
+    <!-- <div class="panel activity-panel">[Recent Activity Placeholder]</div> -->
   </div>
 </section>
