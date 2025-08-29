@@ -15,20 +15,26 @@
     padding: $spacing-md $spacing-sm;
   }
 
-  // Stats section
   .stats {
     width: 100%;
     margin: 0 auto $spacing-lg;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
     gap: $spacing-md;
     
+    > * {
+      flex: 1 1 200px;
+      min-width: 200px;
+      box-sizing: border-box;
+    }
     @media (max-width: 480px) {
-      grid-template-columns: 1fr;
+      gap: $spacing-md;
+      > * {
+        min-width: 100%;
+      }
     }
   }
   
-  // Section title styling - shared across all sections
   .section-title, .page-title, .form-title, .releases-header {
     margin-bottom: $spacing-md;
     position: relative;
@@ -71,7 +77,6 @@
     }
   }
   
-  // Page title section
   .page-title {
     margin-bottom: $spacing-lg;
     
@@ -83,7 +88,6 @@
     }
   }
 
-  // Form section
   .form-container {
     display: flex;
     flex-direction: column;
@@ -226,7 +230,6 @@
     }
   }
 
-  // Notifications
   .notification {
     padding: $spacing-md;
     border-radius: 0.5rem;
@@ -259,7 +262,6 @@
     }
   }
   
-  // Releases list container
   .releases-container {
     margin-top: $spacing-xl;
     
