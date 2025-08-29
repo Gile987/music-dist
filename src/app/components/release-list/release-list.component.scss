@@ -3,39 +3,49 @@
 
 .release-list {
   width: 100%;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: $spacing-lg;
   padding: $spacing-md 0;
-  
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-    gap: $spacing-md;
+
+  > * {
+    flex: 1 1 350px;
+    min-width: 350px;
+    max-width: 400px;
+    box-sizing: border-box;
   }
-  
+
   .empty-state {
-    grid-column: 1 / -1;
+    width: 100%;
+    flex-basis: 100%;
     text-align: center;
     padding: $spacing-xl;
     background-color: $color-card-bg;
     border-radius: 0.5rem;
     border: 1px dashed $color-border;
-    
+
     h3 {
       font-size: $font-md;
       color: $color-muted;
       margin-bottom: $spacing-md;
     }
-    
+
     p {
       color: $color-text-secondary;
       margin-bottom: $spacing-md;
     }
-    
+
     .material-icons {
       font-size: 48px;
       color: $color-muted-light;
       margin-bottom: $spacing-md;
+    }
+  }
+
+  @media (max-width: 768px) {
+    gap: $spacing-md;
+    > * {
+      min-width: 100%;
     }
   }
 }
