@@ -1,17 +1,70 @@
 @use "../../../styles/variables" as *;
 
 .profile-page {
-  max-width: 600px;
-  margin: 0 auto;
+  background-color: $color-main-bg;
   padding: $spacing-lg;
-
   font-family: $font-default;
   color: $color-text;
+  min-height: calc(100vh - 7rem);
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
 
-  background-color: $color-main-bg;
-  border: 1px solid $color-border;
-  border-radius: 0.75rem;
-  box-shadow: 0 1px 2px $color-shadow;
+  @media (max-width: 768px) {
+    padding: $spacing-md $spacing-sm;
+  }
+
+  .page-title {
+    margin-bottom: $spacing-lg;
+    position: relative;
+
+    h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      position: relative;
+      padding-left: $spacing-md;
+      display: flex;
+      align-items: center;
+      color: $color-primary;
+      letter-spacing: 0.01em;
+      background: linear-gradient(90deg, $color-primary, $color-primary-dark);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+
+      &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        height: 70%;
+        width: 4px;
+        background: linear-gradient(180deg, $color-primary, $color-primary-dark);
+        border-radius: 2px;
+      }
+    }
+
+    p {
+      color: $color-muted;
+      font-size: $font-sm;
+      margin-top: $spacing-xs;
+      padding-left: $spacing-md;
+    }
+  }
+
+  .profile-content {
+    background: $color-content-bg;
+    border-radius: $border-radius;
+    box-shadow: 0 1px 2px $color-shadow;
+    padding: $spacing-lg;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-lg;
+  }
 
   .profile-header {
     display: flex;
