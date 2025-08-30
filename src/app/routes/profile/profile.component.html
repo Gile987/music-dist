@@ -1,160 +1,166 @@
 <section class="profile-page">
-  @if (user()) {
-    <app-user-info-card
-      [name]="user()!.name"
-      [email]="user()!.email"
-      [avatarUrl]="avatarUrl()"
-      [role]="user()!.role"
-      [joinedDate]="user()!.createdAt"
-    />
+  <div class="page-title">
+    <h1>Profile</h1>
+    <p>View and manage your account details and personal information.</p>
+  </div>
+  <div class="profile-content">
+    @if (user()) {
+      <app-user-info-card
+        [name]="user()!.name"
+        [email]="user()!.email"
+        [avatarUrl]="avatarUrl()"
+        [role]="user()!.role"
+        [joinedDate]="user()!.createdAt"
+      />
 
-    @if (successMessage()) {
-      <div class="message success-message">{{ successMessage() }}</div>
-    }
-    @if (errorMessage()) {
-      <div class="message error-message">{{ errorMessage() }}</div>
-    }
+      @if (successMessage()) {
+        <div class="message success-message">{{ successMessage() }}</div>
+      }
+      @if (errorMessage()) {
+        <div class="message error-message">{{ errorMessage() }}</div>
+      }
 
-    @if (!isEditing()) {
-      <section class="profile-actions">
-        <app-button (click)="startEditing()">Edit Profile</app-button>
-        <app-button variant="secondary" (click)="togglePasswordForm()">Change Password</app-button>
-      </section>
-    } @else {
-      <section class="edit-profile-form">
-        <h3>Edit Profile</h3>
-        <form [formGroup]="editForm" (ngSubmit)="saveProfile()">
-          <div class="form-group">
-            <label for="name">Name</label>
-            <input
-              id="name"
-              type="text"
-              formControlName="name"
-              class="form-input"
-              [class.error]="editForm.get('name')?.touched && editForm.get('name')?.errors"
-            />
-            @if (editForm.get('name')?.touched && editForm.get('name')?.errors) {
-              <div class="form-error">
-                @if (editForm.get('name')?.errors?.['required']) {
-                  Name is required
-                }
-                @if (editForm.get('name')?.errors?.['minlength']) {
-                  Name must be at least 2 characters
-                }
-              </div>
-            }
-          </div>
-
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input
-              id="email"
-              type="email"
-              formControlName="email"
-              class="form-input"
-              [class.error]="editForm.get('email')?.touched && editForm.get('email')?.errors"
-            />
-            @if (editForm.get('email')?.touched && editForm.get('email')?.errors) {
-              <div class="form-error">
-                @if (editForm.get('email')?.errors?.['required']) {
-                  Email is required
-                }
-                @if (editForm.get('email')?.errors?.['email']) {
-                  Please enter a valid email address
-                }
-              </div>
-            }
-          </div>
-
-          <div class="form-actions">
-            <app-button 
-              type="submit" 
-              [disabled]="isLoading() || editForm.invalid"
-            >
-              @if (isLoading()) {
-                Saving...
-              } @else {
-                Save Changes
+      @if (!isEditing()) {
+        <section class="profile-actions">
+          <app-button (click)="startEditing()">Edit Profile</app-button>
+          <app-button variant="secondary" (click)="togglePasswordForm()">Change Password</app-button>
+        </section>
+      } @else {
+        <section class="edit-profile-form">
+          <h3>Edit Profile</h3>
+          <form [formGroup]="editForm" (ngSubmit)="saveProfile()">
+            <div class="form-group">
+              <label for="name">Name</label>
+              <input
+                id="name"
+                type="text"
+                formControlName="name"
+                class="form-input"
+                [class.error]="editForm.get('name')?.touched && editForm.get('name')?.errors"
+              />
+              @if (editForm.get('name')?.touched && editForm.get('name')?.errors) {
+                <div class="form-error">
+                  @if (editForm.get('name')?.errors?.['required']) {
+                    Name is required
+                  }
+                  @if (editForm.get('name')?.errors?.['minlength']) {
+                    Name must be at least 2 characters
+                  }
+                </div>
               }
-            </app-button>
-            <app-button 
-              variant="secondary" 
-              type="button" 
-              (click)="cancelEditing()"
-              [disabled]="isLoading()"
-            >
-              Cancel
-            </app-button>
-          </div>
-        </form>
-      </section>
-    }
+            </div>
 
-    @if (showPasswordForm()) {
-      <section class="password-form">
-        <h3>Change Password</h3>
-        <form [formGroup]="passwordForm" (ngSubmit)="updatePassword()">
-          <div class="form-group">
-            <label for="currentPassword">Current Password</label>
-            <input
-              id="currentPassword"
-              type="password"
-              formControlName="currentPassword"
-              class="form-input"
-              [class.error]="passwordForm.get('currentPassword')?.touched && passwordForm.get('currentPassword')?.errors"
-            />
-            @if (passwordForm.get('currentPassword')?.touched && passwordForm.get('currentPassword')?.errors) {
-              <div class="form-error">
-                @if (passwordForm.get('currentPassword')?.errors?.['required']) { Current password is required }
-                @if (passwordForm.get('currentPassword')?.errors?.['minlength']) { Current password must be at least 6 characters }
-              </div>
-            }
-          </div>
-          <div class="form-group">
-            <label for="confirmCurrentPassword">Confirm Current Password</label>
-            <input
-              id="confirmCurrentPassword"
-              type="password"
-              formControlName="confirmCurrentPassword"
-              class="form-input"
-              [class.error]="passwordForm.get('confirmCurrentPassword')?.touched && passwordForm.get('confirmCurrentPassword')?.errors"
-            />
-            @if (passwordForm.get('confirmCurrentPassword')?.touched && passwordForm.get('confirmCurrentPassword')?.errors) {
-              <div class="form-error">
-                @if (passwordForm.get('confirmCurrentPassword')?.errors?.['required']) { Confirmation is required }
-                @if (passwordForm.get('confirmCurrentPassword')?.errors?.['minlength']) { Must be at least 6 characters }
-              </div>
-            }
-          </div>
-          <div class="form-group">
-            <label for="newPassword">New Password</label>
-            <input
-              id="newPassword"
-              type="password"
-              formControlName="newPassword"
-              class="form-input"
-              [class.error]="passwordForm.get('newPassword')?.touched && passwordForm.get('newPassword')?.errors"
-            />
-            @if (passwordForm.get('newPassword')?.touched && passwordForm.get('newPassword')?.errors) {
-              <div class="form-error">
-                @if (passwordForm.get('newPassword')?.errors?.['required']) { New password is required }
-                @if (passwordForm.get('newPassword')?.errors?.['minlength']) { New password must be at least 6 characters }
-              </div>
-            }
-          </div>
-          <div class="form-actions">
-            <app-button type="submit" [disabled]="isLoading() || passwordForm.invalid">
-              @if (isLoading()) { Updating... } @else { Update Password }
-            </app-button>
-            <app-button variant="secondary" type="button" (click)="togglePasswordForm()" [disabled]="isLoading()">
-              Cancel
-            </app-button>
-          </div>
-        </form>
-      </section>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input
+                id="email"
+                type="email"
+                formControlName="email"
+                class="form-input"
+                [class.error]="editForm.get('email')?.touched && editForm.get('email')?.errors"
+              />
+              @if (editForm.get('email')?.touched && editForm.get('email')?.errors) {
+                <div class="form-error">
+                  @if (editForm.get('email')?.errors?.['required']) {
+                    Email is required
+                  }
+                  @if (editForm.get('email')?.errors?.['email']) {
+                    Please enter a valid email address
+                  }
+                </div>
+              }
+            </div>
+
+            <div class="form-actions">
+              <app-button 
+                type="submit" 
+                [disabled]="isLoading() || editForm.invalid"
+              >
+                @if (isLoading()) {
+                  Saving...
+                } @else {
+                  Save Changes
+                }
+              </app-button>
+              <app-button 
+                variant="secondary" 
+                type="button" 
+                (click)="cancelEditing()"
+                [disabled]="isLoading()"
+              >
+                Cancel
+              </app-button>
+            </div>
+          </form>
+        </section>
+      }
+
+      @if (showPasswordForm()) {
+        <section class="password-form">
+          <h3>Change Password</h3>
+          <form [formGroup]="passwordForm" (ngSubmit)="updatePassword()">
+            <div class="form-group">
+              <label for="currentPassword">Current Password</label>
+              <input
+                id="currentPassword"
+                type="password"
+                formControlName="currentPassword"
+                class="form-input"
+                [class.error]="passwordForm.get('currentPassword')?.touched && passwordForm.get('currentPassword')?.errors"
+              />
+              @if (passwordForm.get('currentPassword')?.touched && passwordForm.get('currentPassword')?.errors) {
+                <div class="form-error">
+                  @if (passwordForm.get('currentPassword')?.errors?.['required']) { Current password is required }
+                  @if (passwordForm.get('currentPassword')?.errors?.['minlength']) { Current password must be at least 6 characters }
+                </div>
+              }
+            </div>
+            <div class="form-group">
+              <label for="confirmCurrentPassword">Confirm Current Password</label>
+              <input
+                id="confirmCurrentPassword"
+                type="password"
+                formControlName="confirmCurrentPassword"
+                class="form-input"
+                [class.error]="passwordForm.get('confirmCurrentPassword')?.touched && passwordForm.get('confirmCurrentPassword')?.errors"
+              />
+              @if (passwordForm.get('confirmCurrentPassword')?.touched && passwordForm.get('confirmCurrentPassword')?.errors) {
+                <div class="form-error">
+                  @if (passwordForm.get('confirmCurrentPassword')?.errors?.['required']) { Confirmation is required }
+                  @if (passwordForm.get('confirmCurrentPassword')?.errors?.['minlength']) { Must be at least 6 characters }
+                </div>
+              }
+            </div>
+            <div class="form-group">
+              <label for="newPassword">New Password</label>
+              <input
+                id="newPassword"
+                type="password"
+                formControlName="newPassword"
+                class="form-input"
+                [class.error]="passwordForm.get('newPassword')?.touched && passwordForm.get('newPassword')?.errors"
+              />
+              @if (passwordForm.get('newPassword')?.touched && passwordForm.get('newPassword')?.errors) {
+                <div class="form-error">
+                  @if (passwordForm.get('newPassword')?.errors?.['required']) { New password is required }
+                  @if (passwordForm.get('newPassword')?.errors?.['minlength']) { New password must be at least 6 characters }
+                </div>
+              }
+            </div>
+            <div class="form-actions">
+              <app-button type="submit" [disabled]="isLoading() || passwordForm.invalid">
+                @if (isLoading()) { Updating... } @else { Update Password }
+              </app-button>
+              <app-button variant="secondary" type="button" (click)="togglePasswordForm()" [disabled]="isLoading()">
+                Cancel
+              </app-button>
+            </div>
+          </form>
+        </section>
+      }
     }
-  }
-  @else {
-    <div class="profile-loading">Loading profile...</div>
-  }
+    @else {
+      <div class="profile-loading">Loading profile...</div>
+    }
+  </div>
 </section>
