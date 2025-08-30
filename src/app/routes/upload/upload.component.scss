@@ -6,7 +6,7 @@
   padding: $spacing-lg;
   font-family: $font-default;
   color: $color-text;
-  min-height: calc(100vh - $header-height);
+  min-height: calc(100vh - 7rem);
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
@@ -15,7 +15,6 @@
     padding: $spacing-md $spacing-sm;
   }
 
-  // Page title section - matching releases page
   .page-title {
     margin-bottom: $spacing-lg;
     position: relative;
@@ -54,7 +53,6 @@
     }
   }
 
-  // Form section - matching releases page
   .form-container {
     display: flex;
     flex-direction: column;
@@ -247,7 +245,6 @@
   }
 }
 
-// Notifications - matching app design
 .notification {
   padding: $spacing-md $spacing-lg;
   border-radius: 0.75rem;
