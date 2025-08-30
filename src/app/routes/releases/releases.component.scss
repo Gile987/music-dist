@@ -6,7 +6,7 @@
   padding: $spacing-lg;
   font-family: $font-default;
   color: $color-text;
-  min-height: calc(100vh - $header-height);
+  min-height: calc(100vh - 7rem);
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
