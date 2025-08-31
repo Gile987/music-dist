@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { ReleasesComponent } from './releases.component';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('ReleasesComponent', () => {
   let component: ReleasesComponent;
@@ -8,7 +8,7 @@ describe('ReleasesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ReleasesComponent]
+      imports: [ReleasesComponent, HttpClientTestingModule]
     })
     .compileComponents();
 
