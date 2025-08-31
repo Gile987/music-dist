@@ -1,0 +1,22 @@
+.app-dropdown {
+  width: 100%;
+  padding: $spacing-sm $spacing-md;
+  font-size: $font-md;
+  border: 1px solid $color-border;
+  border-radius: $border-radius;
+  background: $color-card-bg;
+  color: $color-text;
+  transition: border-color 0.2s;
+  outline: none;
+  appearance: none;
+  cursor: pointer;
+
+  &:focus {
+    border-color: $color-primary;
+  }
+  &:disabled {
+    background: $color-content-bg;
+    color: $color-muted;
+    cursor: not-allowed;
+  }
+}
