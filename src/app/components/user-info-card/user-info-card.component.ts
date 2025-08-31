@@ -11,7 +11,11 @@ import { DateFormatPipe } from '../../shared/pipes/date-format.pipe';
 export class UserInfoCardComponent {
   @Input({ required: true }) name!: string;
   @Input({ required: true }) email!: string;
-  @Input() avatarUrl: string = 'https://www.gravatar.com/avatar/?d=mp';
+  @Input() avatarUrl?: string;
   @Input() role?: Role;
   @Input() joinedDate?: string;
+
+  get displayAvatarUrl(): string {
+    return this.avatarUrl || 'https://www.gravatar.com/avatar/?d=mp';
+  }
 }
