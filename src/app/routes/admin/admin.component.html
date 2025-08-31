@@ -88,7 +88,19 @@
                         <div class="release-details">
                           <h4>{{ release.title }}</h4>
                           <p class="release-date">{{ release.releaseDate | date:'short' }}</p>
-                          <p class="release-status">Status: {{ release.status }}</p>
+                          <div class="release-status">
+                            <label for="release-status-{{release.id}}">Status:</label>
+                            <app-dropdown
+                              [value]="release.status"
+                              (valueChange)="onReleaseStatusChange($event, release, artist)"
+                              [disabled]="deletingReleaseId() === release.id"
+                              id="release-status-{{release.id}}"
+                            >
+                              @for (status of releaseStatuses; track status) {
+                                <option [value]="status" [selected]="release.status === status">{{ status }}</option>
+                              }
+                            </app-dropdown>
+                          </div>
                           @if (release.streams) {
                             <p class="release-streams">{{ release.streams }} streams</p>
                           }

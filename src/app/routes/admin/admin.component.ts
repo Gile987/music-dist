@@ -1,4 +1,11 @@
-import { Component, OnInit, OnDestroy, inject, signal, WritableSignal } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  inject,
+  signal,
+  WritableSignal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AdminService } from '../../core/services/admin.service';
 import { ArtistWithData } from '../../core/interfaces/artist.interface';
@@ -8,14 +15,15 @@ import { AuthService } from '../../core/services/auth.service';
 import { ReleaseService } from '../../core/services/release.service';
 import { TrackService } from '../../core/services/track.service';
 import { ButtonComponent } from '../../shared/button/button.component';
+import { DropdownComponent } from '../../shared/dropdown/dropdown.component';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-admin',
-  imports: [CommonModule, ButtonComponent],
+  imports: [CommonModule, ButtonComponent, DropdownComponent],
   templateUrl: './admin.component.html',
-  styleUrl: './admin.component.scss'
+  styleUrl: './admin.component.scss',
 })
 export class AdminComponent implements OnInit, OnDestroy {
   private readonly adminService: AdminService = inject(AdminService);
@@ -29,8 +37,16 @@ export class AdminComponent implements OnInit, OnDestroy {
   error: WritableSignal<string | null> = signal<string | null>(null);
   expandedArtistId: WritableSignal<number | null> = signal<number | null>(null);
   deletingArtistId: WritableSignal<number | null> = signal<number | null>(null);
-  deletingReleaseId: WritableSignal<number | null> = signal<number | null>(null);
+  deletingReleaseId: WritableSignal<number | null> = signal<number | null>(
+    null
+  );
   deletingTrackId: WritableSignal<number | null> = signal<number | null>(null);
+
+  releaseStatuses: string[] = [
+    'pending',
+    'approved',
+    'rejected',
+  ];
 
   ngOnInit(): void {
     this.loadAllArtists();
@@ -45,7 +61,8 @@ export class AdminComponent implements OnInit, OnDestroy {
     this.loading.set(true);
     this.error.set(null);
 
-    this.adminService.getAllArtistsWithData()
+    this.adminService
+      .getAllArtistsWithData()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (artists: ArtistWithData[]) => {
@@ -55,7 +72,7 @@ export class AdminComponent implements OnInit, OnDestroy {
         error: () => {
           this.error.set('Failed to load artists data');
           this.loading.set(false);
-        }
+        },
       });
   }
 
@@ -66,44 +83,54 @@ export class AdminComponent implements OnInit, OnDestroy {
 
   public onDeleteArtist(artistId: number, artistName: string): void {
     const confirmMessage = `Are you sure you want to delete artist "${artistName}"? This will permanently delete all their releases and tracks.`;
-    
+
     if (confirm(confirmMessage)) {
       this.deletingArtistId.set(artistId);
       this.error.set(null);
 
-      this.adminService.deleteUser(artistId)
+      this.adminService
+        .deleteUser(artistId)
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: () => {
-            this.artists.update(artists => artists.filter(artist => artist.id !== artistId));
+            this.artists.update((artists) =>
+              artists.filter((artist) => artist.id !== artistId)
+            );
             this.deletingArtistId.set(null);
             this.expandedArtistId.set(null);
           },
           error: () => {
             this.error.set('Failed to delete artist');
             this.deletingArtistId.set(null);
-          }
+          },
         });
     }
   }
 
-  public onDeleteRelease(releaseId: number, releaseTitle: string, artistId: number): void {
+  public onDeleteRelease(
+    releaseId: number,
+    releaseTitle: string,
+    artistId: number
+  ): void {
     const confirmMessage = `Are you sure you want to delete release "${releaseTitle}"? This will also delete all associated tracks.`;
-    
+
     if (confirm(confirmMessage)) {
       this.deletingReleaseId.set(releaseId);
       this.error.set(null);
 
-      this.adminService.deleteRelease(releaseId)
+      this.adminService
+        .deleteRelease(releaseId)
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: () => {
-            this.artists.update(artists => 
-              artists.map(artist => {
+            this.artists.update((artists) =>
+              artists.map((artist) => {
                 if (artist.id === artistId) {
                   return {
                     ...artist,
-                    releases: artist.releases.filter((release: Release) => release.id !== releaseId)
+                    releases: artist.releases.filter(
+                      (release: Release) => release.id !== releaseId
+                    ),
                   };
                 }
                 return artist;
@@ -114,24 +141,30 @@ export class AdminComponent implements OnInit, OnDestroy {
           error: () => {
             this.error.set('Failed to delete release');
             this.deletingReleaseId.set(null);
-          }
+          },
         });
     }
   }
 
-  public onDeleteTrack(trackId: number, trackTitle: string, artistId: number, releaseId: number): void {
+  public onDeleteTrack(
+    trackId: number,
+    trackTitle: string,
+    artistId: number,
+    releaseId: number
+  ): void {
     const confirmMessage = `Are you sure you want to delete track "${trackTitle}"?`;
-    
+
     if (confirm(confirmMessage)) {
       this.deletingTrackId.set(trackId);
       this.error.set(null);
 
-      this.adminService.deleteTrack(trackId)
+      this.adminService
+        .deleteTrack(trackId)
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: () => {
-            this.artists.update(artists => 
-              artists.map(artist => {
+            this.artists.update((artists) =>
+              artists.map((artist) => {
                 if (artist.id === artistId) {
                   return {
                     ...artist,
@@ -139,11 +172,13 @@ export class AdminComponent implements OnInit, OnDestroy {
                       if (release.id === releaseId && release.tracks) {
                         return {
                           ...release,
-                          tracks: release.tracks.filter((track: Track) => track.id !== trackId)
+                          tracks: release.tracks.filter(
+                            (track: Track) => track.id !== trackId
+                          ),
                         };
                       }
                       return release;
-                    })
+                    }),
                   };
                 }
                 return artist;
@@ -154,7 +189,7 @@ export class AdminComponent implements OnInit, OnDestroy {
           error: () => {
             this.error.set('Failed to delete track');
             this.deletingTrackId.set(null);
-          }
+          },
         });
     }
   }
@@ -162,27 +197,67 @@ export class AdminComponent implements OnInit, OnDestroy {
   public onUpdateTrackStreams(trackId: number, streams: number): void {
     this.error.set(null);
 
-    this.adminService.updateTrackStreams(trackId, streams)
+    this.adminService
+      .updateTrackStreams(trackId, streams)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (updatedTrack: Track) => {
-          this.artists.update(artists => 
-            artists.map(artist => ({
+          this.artists.update((artists) =>
+            artists.map((artist) => ({
               ...artist,
-              releases: artist.releases.map(release => ({
+              releases: artist.releases.map((release) => ({
                 ...release,
-                tracks: (release.tracks || []).map(track => 
-                  track.id === trackId ? { ...track, streams: updatedTrack.streams } : track
-                )
-              }))
+                tracks: (release.tracks || []).map((track) =>
+                  track.id === trackId
+                    ? { ...track, streams: updatedTrack.streams }
+                    : track
+                ),
+              })),
             }))
           );
-          
+
           this.loadAllArtists();
         },
         error: () => {
           this.error.set('Failed to update track streams');
-        }
+        },
+      });
+  }
+
+  public onReleaseStatusChange(
+    newStatus: string | number,
+    release: Release,
+    artist: ArtistWithData
+  ): void {
+    const statusStr = String(newStatus);
+    if (release.status === statusStr) return;
+    this.deletingReleaseId.set(release.id);
+    this.adminService
+      .updateReleaseStatus(release.id, statusStr)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (updatedRelease: Release) => {
+          this.artists.update((artists) =>
+            artists.map((a) => {
+              if (a.id === artist.id) {
+                return {
+                  ...a,
+                  releases: a.releases.map((r) =>
+                    r.id === release.id
+                      ? { ...r, status: updatedRelease.status }
+                      : r
+                  ),
+                };
+              }
+              return a;
+            })
+          );
+          this.deletingReleaseId.set(null);
+        },
+        error: () => {
+          this.error.set('Failed to update release status');
+          this.deletingReleaseId.set(null);
+        },
       });
   }
 

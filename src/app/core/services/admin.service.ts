@@ -7,7 +7,7 @@ import { AuthUser } from '../interfaces/auth.interface';
 import { ArtistWithData } from '../interfaces/artist.interface';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AdminService {
   private readonly http: HttpClient = inject(HttpClient);
@@ -17,16 +17,18 @@ export class AdminService {
   }
 
   getUser(userId: number): Observable<AuthUser> {
-    return this.http.get<AuthUser>(`/api/users/${userId}`, { withCredentials: true });
+    return this.http.get<AuthUser>(`/api/users/${userId}`, {
+      withCredentials: true,
+    });
   }
 
   getAllArtistsWithData(): Observable<ArtistWithData[]> {
     return this.getAllUsers().pipe(
-      map(users => users.filter(user => user.role === 'artist')),
-      switchMap(artists => {
+      map((users) => users.filter((user) => user.role === 'artist')),
+      switchMap((artists) => {
         if (artists.length === 0) return of([]);
         return forkJoin(
-          artists.map(artist => this.getArtistWithData(artist.id))
+          artists.map((artist) => this.getArtistWithData(artist.id))
         );
       })
     );
@@ -35,12 +37,18 @@ export class AdminService {
   getArtistWithData(artistId: number): Observable<ArtistWithData> {
     return forkJoin({
       user: this.getUser(artistId),
-      releases: this.getArtistReleases(artistId)
+      releases: this.getArtistReleases(artistId),
     }).pipe(
       map(({ user, releases }) => {
-        const totalTracks = releases.reduce((sum, release) => sum + (release.tracks?.length || 0), 0);
-        const totalStreams = releases.reduce((sum, release) => sum + (release.streams || 0), 0);
-        
+        const totalTracks = releases.reduce(
+          (sum, release) => sum + (release.tracks?.length || 0),
+          0
+        );
+        const totalStreams = releases.reduce(
+          (sum, release) => sum + (release.streams || 0),
+          0
+        );
+
         return {
           id: user.id,
           name: user.name,
@@ -48,33 +56,55 @@ export class AdminService {
           role: user.role,
           releases,
           totalTracks,
-          totalStreams
+          totalStreams,
         };
       })
     );
   }
 
   getArtistReleases(artistId: number): Observable<Release[]> {
-    return this.http.get<Release[]>(`/api/releases/artist/${artistId}`, { withCredentials: true });
+    return this.http.get<Release[]>(`/api/releases/artist/${artistId}`, {
+      withCredentials: true,
+    });
   }
 
   getReleaseTracks(releaseId: number): Observable<Track[]> {
-    return this.http.get<Track[]>(`/api/tracks/release/${releaseId}`, { withCredentials: true });
+    return this.http.get<Track[]>(`/api/tracks/release/${releaseId}`, {
+      withCredentials: true,
+    });
   }
 
   deleteUser(userId: number): Observable<void> {
-    return this.http.delete<void>(`/api/users/${userId}`, { withCredentials: true });
+    return this.http.delete<void>(`/api/users/${userId}`, {
+      withCredentials: true,
+    });
   }
 
   deleteRelease(releaseId: number): Observable<void> {
-    return this.http.delete<void>(`/api/releases/${releaseId}`, { withCredentials: true });
+    return this.http.delete<void>(`/api/releases/${releaseId}`, {
+      withCredentials: true,
+    });
   }
 
   deleteTrack(trackId: number): Observable<void> {
-    return this.http.delete<void>(`/api/tracks/${trackId}`, { withCredentials: true });
+    return this.http.delete<void>(`/api/tracks/${trackId}`, {
+      withCredentials: true,
+    });
   }
 
   updateTrackStreams(trackId: number, streams: number): Observable<Track> {
-    return this.http.patch<Track>(`/api/tracks/${trackId}`, { streams }, { withCredentials: true });
+    return this.http.patch<Track>(
+      `/api/tracks/${trackId}`,
+      { streams },
+      { withCredentials: true }
+    );
+  }
+
+  updateReleaseStatus(releaseId: number, status: string): Observable<Release> {
+    return this.http.patch<Release>(
+      `/api/releases/${releaseId}`,
+      { status },
+      { withCredentials: true }
+    );
   }
 }

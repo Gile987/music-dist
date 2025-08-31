@@ -1,3 +1,5 @@
+@use '../../../styles/variables' as *;
+
 .app-dropdown {
   width: 100%;
   padding: $spacing-sm $spacing-md;
