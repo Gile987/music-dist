@@ -138,4 +138,126 @@
       }
     }
   }
+
+  .how-it-works {
+    background: $color-card-bg;
+    border-radius: $border-radius;
+    margin: $spacing-xl auto $spacing-lg auto;
+    max-width: 800px;
+    padding: $spacing-lg $spacing-md $spacing-lg $spacing-md;
+    box-shadow: 0 4px 16px $color-shadow;
+    h2 {
+      color: $color-primary;
+      font-size: $font-lg;
+      margin-bottom: $spacing-lg;
+      font-weight: 700;
+      text-align: center;
+    }
+    .steps {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-md;
+      li {
+        background: $color-content-bg;
+        border-radius: $border-radius;
+        padding: $spacing-md $spacing-lg;
+        font-size: $font-md;
+        display: flex;
+        align-items: flex-start;
+        box-shadow: 0 2px 8px $color-shadow;
+        .step-icon {
+          font-size: $font-lg;
+          margin-right: $spacing-md;
+          color: $color-primary;
+          flex-shrink: 0;
+        }
+        strong {
+          color: $color-primary;
+          font-weight: 600;
+        }
+      }
+    }
+  }
+
+  .testimonials {
+    background: $color-card-bg;
+    border-radius: $border-radius;
+    margin: $spacing-xl auto $spacing-lg auto;
+    max-width: 800px;
+    padding: $spacing-lg $spacing-md $spacing-lg $spacing-md;
+    box-shadow: 0 4px 16px $color-shadow;
+    h2 {
+      color: $color-primary;
+      font-size: $font-lg;
+      margin-bottom: $spacing-lg;
+      font-weight: 700;
+      text-align: center;
+    }
+    .testimonial-list {
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-lg;
+      blockquote {
+        background: $color-content-bg;
+        border-left: 4px solid $color-primary;
+        border-radius: $border-radius;
+        margin: 0;
+        padding: $spacing-md $spacing-lg $spacing-md $spacing-md;
+        font-size: $font-md;
+        color: $color-text;
+        box-shadow: 0 2px 8px $color-shadow;
+        p {
+          margin: 0 0 0.5rem 0;
+          font-style: italic;
+        }
+        footer {
+          color: $color-muted;
+          font-size: $font-sm;
+          font-style: normal;
+          margin-top: 0.2rem;
+        }
+      }
+    }
+  }
+
+  .faq {
+    background: $color-card-bg;
+    border-radius: $border-radius;
+    margin: $spacing-xl auto $spacing-lg auto;
+    max-width: 800px;
+    padding: $spacing-lg $spacing-md $spacing-lg $spacing-md;
+    box-shadow: 0 4px 16px $color-shadow;
+    h2 {
+      color: $color-primary;
+      font-size: $font-lg;
+      margin-bottom: $spacing-lg;
+      font-weight: 700;
+      text-align: center;
+    }
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-lg;
+      .faq-item {
+        background: $color-content-bg;
+        border-radius: $border-radius;
+        box-shadow: 0 2px 8px $color-shadow;
+        padding: $spacing-md $spacing-lg;
+        h3 {
+          color: $color-primary;
+          font-size: $font-md;
+          margin: 0 0 0.5rem 0;
+          font-weight: 600;
+        }
+        p {
+          color: $color-text;
+          margin: 0;
+          font-size: $font-sm;
+        }
+      }
+    }
+  }
 }
