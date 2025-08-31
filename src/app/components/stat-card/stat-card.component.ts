@@ -10,5 +10,9 @@ import { CommonModule } from '@angular/common';
 export class StatCardComponent {
   @Input({ required: true }) title!: string;
   @Input({ required: true }) value!: string | number;
-  @Input() icon: string = '📊';
+  @Input() icon?: string;
+
+  get displayIcon(): string {
+    return this.icon || '📊';
+  }
 }
