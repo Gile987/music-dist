@@ -28,4 +28,27 @@ describe('RoyaltyItemComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should render track title, period, and amount', () => {
+    fixture.detectChanges();
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.textContent).toContain('Test Track');
+    expect(compiled.textContent).toContain('2025-08');
+    expect(compiled.textContent).toContain('royalty');
+  });
+
+  it('should render "Unknown Track" if royalty.track is missing', () => {
+    component.royalty = {
+      id: 2,
+      amount: 50,
+      period: '2025-07',
+      trackId: 2,
+      artistId: 2,
+      artist: { id: 2, name: 'Other Artist' }
+    } as any;
+    fixture.detectChanges();
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.textContent).toContain('Unknown Track');
+    expect(compiled.textContent).toContain('2025-07');
+  });
 });
