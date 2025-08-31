@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AdminService } from '../../core/services/admin.service';
+import { RELEASE_STATUSES, ReleaseStatusType } from '../../core/interfaces/release-status.interface';
 import { ArtistWithData } from '../../core/interfaces/artist.interface';
 import { Release } from '../../core/interfaces/release.interface';
 import { Track } from '../../core/interfaces/track.interface';
@@ -41,12 +42,7 @@ export class AdminComponent implements OnInit, OnDestroy {
     null
   );
   deletingTrackId: WritableSignal<number | null> = signal<number | null>(null);
-
-  releaseStatuses: string[] = [
-    'pending',
-    'approved',
-    'rejected',
-  ];
+  releaseStatuses: ReleaseStatusType[] = RELEASE_STATUSES;
 
   ngOnInit(): void {
     this.loadAllArtists();
