@@ -115,7 +115,10 @@ export class ReleasesComponent implements OnInit, OnDestroy {
   }
 
   public onSubmit(): void {
-    if (this.releaseForm.invalid) return;
+    if (this.releaseForm.invalid) {
+      this.error.set('Title and release date are required');
+      return;
+    }
 
     const user = this.authService.userValue;
     if (!user) {
