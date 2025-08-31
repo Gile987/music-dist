@@ -96,9 +96,9 @@
                               [disabled]="deletingReleaseId() === release.id"
                               id="release-status-{{release.id}}"
                             >
-                              @for (status of releaseStatuses; track status) {
-                                <option [value]="status" [selected]="release.status === status">{{ status }}</option>
-                              }
+                              <option value="PENDING" [selected]="release.status === 'PENDING'">pending</option>
+                              <option value="APPROVED" [selected]="release.status === 'APPROVED'">approved</option>
+                              <option value="REJECTED" [selected]="release.status === 'REJECTED'">rejected</option>
                             </app-dropdown>
                           </div>
                           @if (release.streams) {
