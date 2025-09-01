@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { LandingComponent } from './landing.component';
 import { RouterTestingModule } from '@angular/router/testing';
-import { StatCardComponent } from '../../components/stat-card/stat-card.component';
+import { StatCardComponent } from '../../shared/stat-card/stat-card.component';
 import { ButtonComponent } from '../../shared/button/button.component';
 
 describe('LandingComponent', () => {

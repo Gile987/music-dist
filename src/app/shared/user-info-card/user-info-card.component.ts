@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Role } from '../../core/interfaces/auth.interface';
-import { DateFormatPipe } from '../../shared/pipes/date-format.pipe';
+import { DateFormatPipe } from '../pipes/date-format.pipe';
 
 @Component({
   selector: 'app-user-info-card',
