@@ -21,9 +21,12 @@ describe('DashboardComponent', () => {
     { id: 1, title: 'Release 1', status: 'APPROVED', releaseDate: '', streams: 100, tracks: [ { id: 10, title: 'T1', duration: 100, fileUrl: 'f', streams: 50 } ] },
     { id: 2, title: 'Release 2', status: 'APPROVED', releaseDate: '', streams: 200, tracks: [ { id: 20, title: 'T2', duration: 100, fileUrl: 'f', streams: 150 } ] }
   ];
+  const now = new Date();
+  const thisMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+  const lastMonth = `${now.getFullYear()}-${String(now.getMonth() === 0 ? 12 : now.getMonth()).padStart(2, '0')}`;
   const mockRoyalties: Royalty[] = [
-    { id: 1, amount: 50, period: '2025-08', trackId: 10, artistId: 1 },
-    { id: 2, amount: 30, period: '2025-08', trackId: 20, artistId: 1 }
+    { id: 1, amount: 50, period: thisMonth, trackId: 10, artistId: 1 },
+    { id: 2, amount: 30, period: thisMonth, trackId: 20, artistId: 1 }
   ];
   const mockUser = { id: 1 };
 
@@ -88,11 +91,9 @@ describe('DashboardComponent', () => {
   });
 
   it('should set monthlyRevenue for current month/year only', () => {
-    const now = new Date();
-    const thisMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
-    const royalties = [
-      { id: 1, amount: 10, period: thisMonth, trackId: 1, artistId: 1 },
-      { id: 2, amount: 20, period: '2000-01', trackId: 2, artistId: 1 }
+    const royalties: Royalty[] = [
+      { id: 1, amount: 10, period: thisMonth, trackId: 10, artistId: 1 },
+      { id: 2, amount: 70, period: lastMonth, trackId: 20, artistId: 1 }
     ];
     component['setMonthlyRevenue'](royalties as any);
     expect(component.monthlyRevenue).toBe(10);
