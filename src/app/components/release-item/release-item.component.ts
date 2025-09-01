@@ -8,7 +8,7 @@ import {
   inject,
 } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
-import { StatusBadgeComponent } from '../status-badge/status-badge.component';
+import { StatusBadgeComponent } from '../../shared/status-badge/status-badge.component';
 import { TrackListComponent } from '../track-list/track-list.component';
 import { Release } from '../../core/interfaces/release.interface';
 import { Track } from '../../core/interfaces/track.interface';

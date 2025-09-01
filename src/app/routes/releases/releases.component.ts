@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, inject, signal, WritableSignal } from '@angular/core';
 import { ButtonComponent } from '../../shared/button/button.component';
 import { ReleaseListComponent } from '../../components/release-list/release-list.component';
-import { StatCardComponent } from '../../components/stat-card/stat-card.component';
+import { StatCardComponent } from '../../shared/stat-card/stat-card.component';
 import { ReleaseService } from '../../core/services/release.service';
 import { AuthService } from '../../core/services/auth.service';
 import { ReleaseStatsService } from '../../core/services/release-stats.service';

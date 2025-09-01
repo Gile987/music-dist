@@ -10,7 +10,7 @@ import Chart from 'chart.js/auto';
 import { getRevenueLineConfig } from '../../core/chart-configs/revenue-line.config';
 import { getRevenueByReleaseDoughnutConfig } from '../../core/chart-configs/revenue-by-release-doughnut.config';
 import { getTopTracksBarConfig } from '../../core/chart-configs/top-tracks-bar.config';
-import { StatCardComponent } from '../../components/stat-card/stat-card.component';
+import { StatCardComponent } from '../../shared/stat-card/stat-card.component';
 import { ReleaseService } from '../../core/services/release.service';
 import { RoyaltyService } from '../../core/services/royalty.service';
 import { AuthService } from '../../core/services/auth.service';
