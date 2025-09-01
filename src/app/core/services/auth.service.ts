@@ -17,7 +17,6 @@ export class AuthService {
   public readonly isAuthenticated$: Observable<boolean> = this.user$.pipe(map((user: AuthUser | null): boolean => !!user));
 
   constructor() {
-    // On service init, try to refresh user from backend, but keep localStorage as fallback
     this.me().subscribe({
       next: (): void => {},
       error: (): void => {
@@ -33,7 +32,6 @@ export class AuthService {
       .pipe(
         switchMap((): Observable<AuthUser> => this.me()),
         tap(() => {
-          // userSubject will be set by me(), which will also update localStorage
         }),
         map((): void => void 0),
         catchError((error: HttpErrorResponse) => throwError((): Error => error))
@@ -66,7 +64,6 @@ export class AuthService {
     );
   }
 
-  // --- LocalStorage helpers ---
   private static readonly STORAGE_KEY = 'authUser';
 
   private static storeUser(user: AuthUser): void {
